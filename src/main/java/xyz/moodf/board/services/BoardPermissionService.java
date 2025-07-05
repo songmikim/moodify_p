@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import xyz.moodf.board.entities.BoardData;
 import xyz.moodf.board.entities.GuestAuth;
-import xyz.moodf.global.exceptions.UnAuthorizedException;
 import xyz.moodf.member.entities.Member;
 import xyz.moodf.member.libs.MemberUtil;
 
@@ -109,10 +108,4 @@ public class BoardPermissionService {
         // trim()으로 공백 제거 후 비교
         return guestPw.trim().equals(data.getGuestPw().trim());
     }
-
-
-
-
-
-
 }
