@@ -8,7 +8,7 @@
     <form name="frmSave" method="POST" th:action="@{/board/save}" autocomplete="off">
         <input type="hidden" name="mode" value="register">
         <th:block th:replace="~{front/board/_form::common}"></th:block>
-        <div class="button-group">
+        <div class="button-group flex">
             <button type="reset" th:text="#{다시입력}" class="btn"></button>
             <button type="submit" th:text="#{작성하기}" class="btn"></button>
         </div>
