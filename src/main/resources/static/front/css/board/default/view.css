@@ -1,12 +1,102 @@
+/* 게시판 상단 제목 블럭 */
+main {
+    background-color: #fdf3f3;
+    margin: 5%;
+    padding: 5%;
+    margin-bottom: 2em;
+    border-radius: 0.6em;
+}
 
-    display: inline-block;
-    background-color: var(--mainc);
-    color: var(--fontc);
-    border: none;
-    padding: 10px 16px;
-    font-size: 14px;
-    border-radius: 6px;
-    margin-top: 12px;
-    cursor: pointer;
-    transition: background 0.3s;
-    text-decoration: none;
+/* 전체 제목 */
+h2 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #2e2e2e;
+}
+
+/* 게시글 작성자 정보 */
+.post-info {
+    color: #666;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 1.5em;
+}
+
+/* 내용 박스 */
+.post-content {
+    background-color: #fff;
+    padding: 1.5em;
+    border-radius: 0.8em;
+    border: 1px solid #eee;
+    line-height: 1.8;
+    color: #333;
+}
+.post-actions {
+    text-align:right;
+}
+/* 첨부파일 제목 */
+.attach-files h4 {
+    font-size: 1em;
+    margin-bottom: 0.8em;
+}
+
+/* 파일 목록 */
+.files-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75em;
+}
+
+/* 댓글 wrapper */
+.comments-wrapper {
+    margin-top: 2.5em;
+}
+
+textarea {
+    width: 100%;
+    min-height: 5em;
+    padding: 0.9em;
+    border-radius: 0.6em;
+    border: 1px solid #ccc;
+    resize: none;
+    font-size: 1em;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* 버튼 공통 스타일 */
+.btn {
+   display: inline-block;
+   background-color: var(--mainc);
+   color: var(--fontc);
+   border: none;
+   padding: 10px 16px;
+   font-size: 14px;
+   border-radius: 6px;
+   margin-top: 12px;
+   cursor: pointer;
+   transition: background 0.3s;
+   text-decoration: none;
+}
+
+.btn:hover {
+    background-color: #ff9ea2;
+}
+
+.btn-list {
+    background-color: #ccc;
+    color: #333;
+}
+
+.btn-edit {
+    background-color: #ffb6b9;
+}
+
+.btn-delete {
+    background-color: #f26868;
+}
+
+.form-actions {
+    justify-content:space-between;
+}
