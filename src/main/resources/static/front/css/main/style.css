@@ -1,0 +1,30 @@
+main{position:relative;}
+.buttons{
+    flex-direction:column;
+    width:200px; height:132px;
+    position:absolute;
+    top:45%; left:50%;
+    transform: translate(-50%, -50%);
+}
+.buttons a{
+    width:200px; height:60px;
+    line-height:40px;
+    font-size:1.5em;
+    text-align:center;
+    display: inline-block;
+    background-color: var(--mainc);
+    color: var(--fontc);
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    margin-top: 12px;
+    cursor: pointer;
+    transition: background 0.3s;
+    text-decoration: none;
+}
+
+.buttons a:hover {
+    background-color: #ffe3e4; /* hover 시 연한 핑크 배경 */
+    color: #2e2e2e;
+    border-color: #ff9ea2;
+}
