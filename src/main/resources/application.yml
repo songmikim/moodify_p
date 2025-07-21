@@ -1,0 +1,59 @@
+server:
+  port: 5000
+  servlet:
+    session.cookie.name: b8a5f3fb
+  forward-headers-strategy: native
+
+spring:
+  # 데이터베이스 설정
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${db.url}
+    username: ${db.username}
+    password: ${db.password}
+
+  # JPA 설정
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        use_sql_comments: true
+    hibernate:
+      ddlAuto: ${ddl.auto}
+
+  # 타임리프 설정
+  thymeleaf:
+    cache: false
+    prefix: file:src/main/resources/templates/
+
+  # 파일 업로드 용량 설정
+  servlet:
+    multipart:
+      maxFileSize: 20MB
+      maxRequestSize: 60MB
+      fileSizeThreshold: 30MB
+
+# 로깅 설정
+logging:
+  level:
+    org.hibernate.type: trace
+    org.hibernate.orm.jdbc.bind: trace
+
+# 파일 업로드 경로 설정
+file:
+  upload:
+    url: ${file.url}
+    path: ${file.path}
+
+
+# 파이썬 설정
+python:
+  path:
+    base: ${python.base}
+    emotion: ${python.emotion}
+
+# 소셜 로그인
+social:
+  kakao.apikey: ${kakao.apikey}
+  naver.apikey: ${naver.apikey}
