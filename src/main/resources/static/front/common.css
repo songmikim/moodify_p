@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+* {
+    box-sizing: border-box;
+    outline: none;
+    font-family: "Nanum Gothic", sans-serif;
+}
+
+html {
+    font-size: 13px;
+}
+
+body {
+    margin: 0;
+    color: #003049;
+}
+
+a {
+    color: #003049;
+    text-decoration: none;
+}
+
+ol, ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+li, dl, dt, dd {
+    padding: 0;
+    margin: 0;
+}
+
+img {
+    border: 0;
+}
+/* 헤더 */
+header .left{
+    display:flex;
+    justify-content:left;
+}
+header .left a{
+    font-size:20px;
+    margin:10px 0 0 20px;
+    text-align:center
+}
+/* 푸터 */
+footer>*{
+    display:block;
+    width:80%;
+    height:20px;
+    line-height:20px;
+    margin:0 auto;
+    text-align:center
+}
