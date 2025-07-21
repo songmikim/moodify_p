@@ -33,6 +33,7 @@ li, dl, dt, dd {
 img {
     border: 0;
 }
+
 /* 헤더 */
 header .left{
     display:flex;
