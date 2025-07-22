@@ -52,7 +52,7 @@ public class MemberController {
         form.setSocialType(type);
         form.setSocialToken(socialToken);
 
-        return utils.tpl("join");
+        return utils.tpl("member/join");
     }
 
     // 회원가입 처리
@@ -63,7 +63,7 @@ public class MemberController {
         joinValidator.validate(form, errors);
 
         if (errors.hasErrors()) {
-            return utils.tpl("join");
+            return utils.tpl("member/join");
         }
 
         joinService.process(form);
