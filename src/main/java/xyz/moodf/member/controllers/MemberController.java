@@ -12,6 +12,7 @@ import xyz.moodf.global.libs.Utils;
 import xyz.moodf.member.services.JoinService;
 import xyz.moodf.member.social.constants.SocialType;
 import xyz.moodf.member.social.services.KakaoLoginService;
+import xyz.moodf.member.social.services.NaverLoginService;
 import xyz.moodf.member.validators.JoinValidator;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class MemberController {
     private final JoinValidator joinValidator;
     private final JoinService joinService;
     private final KakaoLoginService kakaoLoginService;
+    private final NaverLoginService naverLoginService;
 
     @ModelAttribute("addCss")
     public List<String> addCss() {
@@ -92,6 +94,7 @@ public class MemberController {
 
         /* 소셜 로그인 URL */
         model.addAttribute("kakaoLoginUrl", kakaoLoginService.getLoginUrl(form.getRedirectUrl()));
+        model.addAttribute("naverLoginUrl", naverLoginService.getLoginUrl(form.getRedirectUrl()));
 
         return utils.tpl("member/login");
     }

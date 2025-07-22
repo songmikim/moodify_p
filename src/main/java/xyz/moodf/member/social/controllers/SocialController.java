@@ -24,10 +24,16 @@ public class SocialController {
     private final NaverLoginService naverLoginService;
 
     @GetMapping("/callback/{channel}")
-    public String callback(@PathVariable("channel") String type, @RequestParam("code") String code, @RequestParam(name="state", required = false) String redirectUrl) {
+    public String callback(@PathVariable("channel") String type, @RequestParam(value = "code", required = false) String code, @RequestParam(name="state", required = false) String redirectUrl) {
+
+        // channel이나 code가 null일 때 메인으로 리턴
+        if (!StringUtils.hasText(type) || !StringUtils.hasText(code)){
+            return "redirect:/";
+        }
 
         SocialType socialType = SocialType.valueOf(type.toUpperCase());
 
+        if (socialType == SocialType.NONE)return "redirect:/";
         SocialLoginService service = socialType == SocialType.NAVER ? naverLoginService : kakaoLoginService;
 
 
