@@ -20,7 +20,7 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 @ApplyCommonController
-@RequestMapping("/member")
+@RequestMapping
 @SessionAttributes("requestLogin")
 public class MemberController {
 

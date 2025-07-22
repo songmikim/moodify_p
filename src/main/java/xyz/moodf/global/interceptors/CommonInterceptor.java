@@ -26,7 +26,7 @@ public class CommonInterceptor implements HandlerInterceptor {
 
     private void clearSocialToken(HttpServletRequest request) {
         String url = request.getRequestURI();
-        if (!url.contains("/member/join")) {
+        if (!url.contains("/join")) {
             HttpSession session = request.getSession();
             session.removeAttribute("socialType");
             session.removeAttribute("socialToken");

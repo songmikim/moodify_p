@@ -4,7 +4,7 @@
       layout:decorate="~{front/layouts/main}">
 <main layout:fragment="content">
     <h1 th:text="${pageTitle}"></h1>
-    <form name="frmLogin" method="post" th:action="@{/member/login}" autocomplete="off" th:object="${requestLogin}">
+    <form name="frmLogin" method="post" th:action="@{/login}" autocomplete="off" th:object="${requestLogin}">
         <input type="hidden" name="redirectUrl" th:field="*{redirectUrl}">
         <ul>
             <li>
@@ -32,7 +32,7 @@
             <img th:src="@{/common/images/kakao_login.png}" alt="카카오 로그인 버튼">
         </a>
 
-        <a th:href="@{/member/join}" th:text="#{회원가입}"></a>
+        <a th:href="@{/join}" th:text="#{회원가입}"></a>
     </form>
 </main>
 </html>
