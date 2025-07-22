@@ -2,11 +2,14 @@ package xyz.moodf.member.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import xyz.moodf.diary.entities.Diary;
 import xyz.moodf.global.entities.BaseEntity;
 import xyz.moodf.member.constants.Authority;
 import xyz.moodf.member.social.constants.SocialType;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -35,6 +38,9 @@ public class Member extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private Authority authority = Authority.MEMBER;
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private List<Diary> diaries = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
