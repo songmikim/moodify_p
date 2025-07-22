@@ -1,2 +1,14 @@
+:root {
+  --font-color: #2E2E2E;
+  --main-color: #FFB6B9;
+  --sub-color: #FF8C42;
+  --hl-color: #FFFACD;
+  --font-family: 'Pretendard', sans-serif;
+  /* 살구핑크 (#FFB6B9) → 메인 포인트
+   * 선셋 오렌지 (#FF8C42) → 서브 포인트
+   * 차콜 블랙 (#2E2E2E) → 텍스트/배경
+   * 라이트 옐로우 (#FFFACD) → 하이라이트 */
+}
 .flex{display:flex;}
 *{margin:0; padding:0; text-decoration:none; color:#2E2E2E; font-size:13px; list-style:none;}
+aside{position:fixed; left:0; width:200px; background:#}
