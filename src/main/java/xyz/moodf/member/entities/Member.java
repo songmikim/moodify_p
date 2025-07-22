@@ -34,7 +34,7 @@ public class Member extends BaseEntity {
     private String mobile;
 
     @Enumerated(EnumType.STRING)
-    private Authority authority = Authority.MEMBER;
+    private Authority authority = Authority.USER;
 
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
