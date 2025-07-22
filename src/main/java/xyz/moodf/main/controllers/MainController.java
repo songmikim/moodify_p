@@ -17,7 +17,7 @@ public class MainController {
 
     private final Utils utils;
 
-    @GetMapping
+    @GetMapping("/a")
     public String index(Model model) {
         model.addAttribute("requestLogin", new RequestLogin());  // ← 로그인 DTO
         return utils.tpl("main/login");

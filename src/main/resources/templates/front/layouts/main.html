@@ -19,11 +19,11 @@
         <th:block layout:fragment="addCss"></th:block>
 
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script th:src="@{/common/js/common.js?v={v}(v=${@utils.version()})}"></script>
+<!--        <script th:src="@{/common/js/common.js?v={v}(v=${@utils.version()})}"></script>-->
         <script th:each="jsFile : ${addCommonScript}" th:src="@{/common/js/{js}.js?v={v}(js=${jsFile}, v=${@utils.version()})}"></script>
         <th:block layout:fragment="addCommonScript"></th:block>
 
-        <script th:src="@{/front/js/common.js?v={v}(v=${@utils.version()})}"></script>
+<!--        <script th:src="@{/front/js/common.js?v={v}(v=${@utils.version()})}"></script>-->
         <script th:each="jsFile : ${addScript}" th:src="@{/front/js/{js}.js?v={v}(js=${jsFile}, v=${@utils.version()})}"></script>
         <th:block layout:fragment="addScript"></th:block>
         <title th:if="${pageTitle != null}" th:text="${pageTitle}"></title>
