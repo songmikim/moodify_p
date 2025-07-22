@@ -35,7 +35,7 @@ public class BoardController extends CommonController {
     public String list(Model model) {
         commonProcess("list", model);
 
-        return "admin/board/list";
+        return "front/board/list";
     }
 
     /**
@@ -57,7 +57,7 @@ public class BoardController extends CommonController {
         form.setRowsForPage(20);
         form.setPageCount(10);
 
-        return "admin/board/register";
+        return "front/board/register";
     }
 
     @PostMapping("/save")
@@ -69,10 +69,10 @@ public class BoardController extends CommonController {
         boardValidator.validate(form, errors);
 
         if (errors.hasErrors()) {
-            return "admin/board/" + mode;
+            return "front/board/" + mode;
         }
 
-        return "redirect:/admin/board";
+        return "redirect:/front/board";
     }
 
     /**
