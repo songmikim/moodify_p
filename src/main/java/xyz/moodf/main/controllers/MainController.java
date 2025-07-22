@@ -8,16 +8,22 @@ import xyz.moodf.global.annotations.ApplyCommonController;
 import xyz.moodf.global.libs.Utils;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping
 @ApplyCommonController
 @RequiredArgsConstructor
 public class MainController {
 
     private final Utils utils;
 
-    @GetMapping
+    @GetMapping("/join")
     public String index() {
 
         return utils.tpl("member/join");
     }
+
+    @GetMapping("/")
+    public String login() {
+        return utils.tpl("member/login");
+    }
+
 }
