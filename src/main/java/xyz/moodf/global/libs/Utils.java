@@ -8,13 +8,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
+import org.springframework.web.servlet.LocaleResolver;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static jdk.tools.jlink.internal.plugins.PluginsResourceBundle.getMessage;
 
 @Component
 @RequiredArgsConstructor
@@ -23,6 +24,7 @@ public class Utils {
 
     private final HttpServletRequest request;
     private final MessageSource messageSource;
+    private final LocaleResolver localeResolver;
     //private final FileProperties fileProperties;
     //private final FileInfoService inforservice;
 
@@ -47,6 +49,12 @@ public class Utils {
         String prefix = isMobile() ? "mobile" : "front";
 
         return String.format("%s/%s", prefix, path);
+    }
+
+    public String getMessage(String code) {
+        Locale locale = localeResolver.resolveLocale(request);
+
+        return messageSource.getMessage(code, null, locale);
     }
 
     // 메세지를 코드로 조회
@@ -87,4 +95,88 @@ public class Utils {
         return messages;
     }
 
+    public String getParam(String name) {
+        return request.getParameter(name);
+    }
+
+    /**
+     * Thumbnail 이미지를 템플릿에서 출력하는 함수
+     *
+     * @param seq 파일 번호..?
+     * @param width 이미지 너비
+     * @param height 이미지 높이
+     * @param addClass img 태그에 추가할 클래스 이름
+     * @param crop 크롭 여부
+     * @return
+     */
+    public String printThumb(Long seq, int width, int height, String addClass, boolean crop) {
+        String url = null;
+        try {
+//            FileInfo item = infoService.get(seq);
+            long folder = seq % 10L;
+            url = String.format("%s/file/thumb?seq=%s&width=%s&height=%s&crop=true", request.getContextPath(), seq, width, height);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        url = StringUtils.hasText(url) ? url : request.getContextPath() + "/common/images/no_image.jpg";
+
+        return String.format("<img src='%s' class='%s%s'>", url, "image-" + seq, StringUtils.hasText(addClass) ? " " + addClass : "");
+    }
+
+    /**
+     * Thumbnail 이미지를 템플릿에서 출력하는 함수
+     * - crop=true
+     *
+     * @param seq
+     * @param width
+     * @param height
+     * @param addClass
+     * @return
+     */
+    public String printThumb(Long seq, int width, int height, String addClass) {
+        return printThumb(seq, width, height, addClass, true);
+    }
+
+    /**
+     c
+     *
+     * @param seq
+     * @param width
+     * @param height
+     * @return
+     */
+    private String printThumb(Long seq, int width, int height) {
+        return printThumb(seq, width, height, null);
+    }
+
+    /**
+     * Thumbnail 이미지를 템플릿에서 출력하는 함수
+     * - crop=true
+     * - addClass=null
+     * - width=100
+     * - height=100
+     *
+     * @param seq
+     * @return
+     */
+    public String printThumb(Long seq) {
+        return printThumb(seq, 100, 100);
+    }
+
+    public String printNoImage(){
+        String url= request.getContextPath() + "/common/images/no_image,jpg";
+
+        return String.format("<img src='%s'>",url);
+
+    }
+
+    public String getUrl(String url){
+        String protocol = request.getScheme(); // http, https,ftp ....
+        String domain = request.getServerName();
+        int _port = request.getServerPort();
+        String port = List.of(80, 443).contains(_port) ? "":":"+_port;
+
+        return String.format("%s://%s%s%s%s", protocol, domain, port, request.getContextPath(), url);
+    }
 }
