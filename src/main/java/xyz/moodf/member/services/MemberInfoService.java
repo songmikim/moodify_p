@@ -41,7 +41,7 @@ public class MemberInfoService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Member member = repository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(username));
 
-        Authority authority = Objects.requireNonNullElse(member.getAuthority(), Authority.MEMBER);
+        Authority authority = Objects.requireNonNullElse(member.getAuthority(), Authority.USER);
 
         List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(authority.name()));
 
