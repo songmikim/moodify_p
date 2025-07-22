@@ -53,6 +53,6 @@ public class SocialController {
         session.setAttribute("socialType", socialType);
         session.setAttribute("socialToken", token);
 
-        return "redirect:/member/join";
+        return "redirect:/join";
     }
 }

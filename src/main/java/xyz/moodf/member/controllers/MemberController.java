@@ -72,7 +72,7 @@ public class MemberController {
         return "redirect:/main/login";
     }
 
-    @GetMapping({"/login", "/"})
+    @GetMapping("/login")
     public String login(@ModelAttribute RequestLogin form, Errors errors, Model model) {
         commonProcess("login", model);
 
