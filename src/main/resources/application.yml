@@ -58,3 +58,4 @@ python:
 social:
   kakao.apikey: ${kakao.apikey}
   naver.apikey: ${naver.apikey}
+  naver.secret: ${naver.secret}
