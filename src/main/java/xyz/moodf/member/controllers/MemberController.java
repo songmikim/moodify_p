@@ -69,7 +69,7 @@ public class MemberController {
         joinService.process(form);
 
         // 회원가입 성공시
-        return "redirect:/member/login";
+        return "redirect:/main/login";
     }
 
     @GetMapping("/login")
@@ -96,7 +96,7 @@ public class MemberController {
         model.addAttribute("kakaoLoginUrl", kakaoLoginService.getLoginUrl(form.getRedirectUrl()));
         model.addAttribute("naverLoginUrl", naverLoginService.getLoginUrl(form.getRedirectUrl()));
 
-        return utils.tpl("member/login");
+        return utils.tpl("main/login");
     }
 
     /**
