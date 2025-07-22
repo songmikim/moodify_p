@@ -69,10 +69,10 @@ public class MemberController {
         joinService.process(form);
 
         // 회원가입 성공시
-        return "redirect:/main/login";
+        return "redirect:/login";
     }
 
-    @GetMapping({"/login", "/"})
+    @GetMapping("/login")
     public String login(@ModelAttribute RequestLogin form, Errors errors, Model model) {
         commonProcess("login", model);
 
