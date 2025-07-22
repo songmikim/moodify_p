@@ -53,6 +53,7 @@ python:
     base: ${python.base}
     emotion: ${python.emotion}
 
+
 # 소셜 로그인
 social:
   kakao.apikey: ${kakao.apikey}
