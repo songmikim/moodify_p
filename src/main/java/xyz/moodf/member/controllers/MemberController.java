@@ -92,7 +92,6 @@ public class MemberController {
         }
         /* 검증 실패 처리 E */
 
-        System.out.println(form.getRedirectUrl());
         /* 소셜 로그인 URL */
         model.addAttribute("kakaoLoginUrl", kakaoLoginService.getLoginUrl(form.getRedirectUrl()));
         model.addAttribute("naverLoginUrl", naverLoginService.getLoginUrl(form.getRedirectUrl()));
