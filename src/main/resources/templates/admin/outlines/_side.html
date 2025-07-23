@@ -3,6 +3,7 @@
     <aside th:fragment="menu">
         <a th:href="@{/admin/basic}" th:classappend="${mainCode == 'basic'} ? 'on'">기본설정</a>
         <a th:href="@{/admin/member}" th:classappend="${mainCode == 'member'} ? 'on'">회원관리</a>
-        <a th:href="@{/admin/board}" th:classappend="${mainCode == 'board'} ? 'on'">게시판관리</a>
+        <a th:href="@{/admin/board/notice}" th:classappend="${mainCode == 'noticeBoard'} ? 'on'">공지게시판관리</a>
+        <a th:href="@{/admin/board/suggestion}" th:classappend="${mainCode == 'suggestionBoard'} ? 'on'">건의게시판관리</a>
     </aside>
 </html>
