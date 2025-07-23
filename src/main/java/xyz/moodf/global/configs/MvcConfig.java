@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry){
-        registry.addResourceHandler("/**)")
+        registry.addResourceHandler("/**)") //모든 경로에 적용
                 .addResourceLocations("classpath:/static/");
     }
 

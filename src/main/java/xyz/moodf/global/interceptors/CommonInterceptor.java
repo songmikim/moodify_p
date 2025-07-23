@@ -1,4 +1,4 @@
-package xyz.moodf.global.interceptors;
+    package xyz.moodf.global.interceptors;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,13 +29,14 @@ public class CommonInterceptor implements HandlerInterceptor {
         }
     } // 로그인 회원정보 유지
 
-    private void clearSocialToken(HttpServletRequest request) {
-        String url = request.getRequestURI();
-        if (!url.contains("/join")) {
-            HttpSession session = request.getSession();
-            session.removeAttribute("socialType");
-            session.removeAttribute("socialToken");
-        }
-    }
 
-}
+        private void clearSocialToken(HttpServletRequest request) {
+            String url = request.getRequestURI();
+            if (!url.contains("/join")) {
+                HttpSession session = request.getSession();
+                session.removeAttribute("socialType");
+                session.removeAttribute("socialToken");
+            }
+        }
+
+    }
