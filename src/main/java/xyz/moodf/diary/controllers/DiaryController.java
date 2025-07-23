@@ -5,11 +5,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import xyz.moodf.diary.constants.Weather;
+import xyz.moodf.diary.dtos.DiaryRequest;
+import xyz.moodf.diary.entities.Diary;
 import xyz.moodf.diary.services.DiaryService;
 import xyz.moodf.global.annotations.ApplyCommonController;
 import xyz.moodf.global.libs.Utils;
 import xyz.moodf.member.entities.Member;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +31,13 @@ public class DiaryController {
     public String diary(Model model) {
         commonProcess("member", model);
 
+        Diary diary = new Diary();
+        diary.setWeather(Weather.NULL);
+
+        model.addAttribute("today", LocalDate.now());
+        model.addAttribute("diary", diary);
+        model.addAttribute("weatherValues", Weather.values());
+
         return utils.tpl("diary/diary");
     }
 
@@ -38,11 +49,11 @@ public class DiaryController {
     }
 
     @PostMapping("/write")
-    public String saveDiary(@RequestParam String title,
-                            @RequestParam String content,
+    public String saveDiary(@ModelAttribute DiaryRequest diaryRequest,
                             @SessionAttribute("requestLogin") Member member,
                             Model model) {
-        service.saveDiary(title, content, member);
+
+        service.process(diaryRequest, member);
 
         return "redirect:/diary/result";
     }

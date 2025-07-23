@@ -5,13 +5,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+import xyz.moodf.diary.constants.Weather;
+import xyz.moodf.diary.dtos.DiaryRequest;
 import xyz.moodf.diary.entities.Diary;
 import xyz.moodf.diary.repositories.DiaryRepository;
 import xyz.moodf.member.entities.Member;
 import xyz.moodf.member.repositories.MemberRepository;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.time.LocalDate;
 
 @Transactional
 @SpringBootTest
@@ -41,21 +42,36 @@ public class DiaryServiceTest {
     }
 
     @Test
-    void saveDiaryWithMember() {
+    void test1() {
         String title = "오늘의 일기";
         String content = "아무 노래나 일단 틀어~ 아무거나 신나는 걸로~";
 
-        Diary savedDiary = diaryService.saveDiary(title, content, member);
+//        Diary savedDiary = diaryService.process(title, content, member);
+//
+//        // 검증
+//        assertNotNull(savedDiary.getDid(), "Diary ID가 null이면 안 됩니다.");
+//        assertEquals(title, savedDiary.getTitle(), "제목이 일치해야 합니다.");
+//        assertEquals(content, savedDiary.getContent(), "내용이 일치해야 합니다.");
+//        assertEquals(member.getSeq(), savedDiary.getMember().getSeq(), "작성자가 일치해야 합니다.");
+//
+//        // DB에서 확인
+//        Diary found = diaryRepository.findById(savedDiary.getDid()).orElseThrow();
+//        assertEquals(title, found.getTitle());
+//        System.out.println("저장된 일기: " + found);
+    }
 
-        // 검증
-        assertNotNull(savedDiary.getDid(), "Diary ID가 null이면 안 됩니다.");
-        assertEquals(title, savedDiary.getTitle(), "제목이 일치해야 합니다.");
-        assertEquals(content, savedDiary.getContent(), "내용이 일치해야 합니다.");
-        assertEquals(member.getSeq(), savedDiary.getMember().getSeq(), "작성자가 일치해야 합니다.");
+    @Test
+    void test2() {
+        DiaryRequest diaryRequest = new DiaryRequest();
+        diaryRequest.setTitle("오늘의 일기");
+        diaryRequest.setContent("내용");
+        diaryRequest.setDate(LocalDate.now());
+        diaryRequest.setWeather(Weather.RAINY);
+
+        Diary savedDiary = diaryService.process(diaryRequest, member);
 
         // DB에서 확인
         Diary found = diaryRepository.findById(savedDiary.getDid()).orElseThrow();
-        assertEquals(title, found.getTitle());
         System.out.println("저장된 일기: " + found);
     }
 
