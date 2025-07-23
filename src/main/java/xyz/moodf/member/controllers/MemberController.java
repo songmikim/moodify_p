@@ -52,7 +52,7 @@ public class MemberController {
         form.setSocialType(type);
         form.setSocialToken(socialToken);
 
-        return utils.tpl("join");
+        return utils.tpl("member/join");
     }
 
     // 회원가입 처리
@@ -63,16 +63,16 @@ public class MemberController {
         joinValidator.validate(form, errors);
 
         if (errors.hasErrors()) {
-            return utils.tpl("join");
+            return utils.tpl("member/join");
         }
 
         joinService.process(form);
 
         // 회원가입 성공시
-        return "redirect:/main/login";
+        return "redirect:/login";
     }
 
-    @GetMapping({"/login", "/"})
+    @GetMapping("/login")
     public String login(@ModelAttribute RequestLogin form, Errors errors, Model model) {
         commonProcess("login", model);
 
@@ -92,7 +92,6 @@ public class MemberController {
         }
         /* 검증 실패 처리 E */
 
-        System.out.println(form.getRedirectUrl());
         /* 소셜 로그인 URL */
         model.addAttribute("kakaoLoginUrl", kakaoLoginService.getLoginUrl(form.getRedirectUrl()));
         model.addAttribute("naverLoginUrl", naverLoginService.getLoginUrl(form.getRedirectUrl()));
