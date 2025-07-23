@@ -2,6 +2,7 @@ package xyz.moodf.board.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -10,16 +11,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import xyz.moodf.board.validators.BoardValidator;
+import xyz.moodf.board.entities.Board;
+import xyz.moodf.board.services.configs.BoardConfigInfoService;
+import xyz.moodf.board.validators.BoardConfigValidator;
 import xyz.moodf.global.controllers.CommonController;
+import xyz.moodf.global.search.CommonSearch;
+import xyz.moodf.global.search.ListData;
 import xyz.moodf.member.constants.Authority;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/admin/board")
+@RequestMapping("/board")
 public class BoardController extends CommonController {
 
-    private final BoardValidator boardValidator;
+    private final BoardConfigValidator boardValidator;
+    private final BoardConfigInfoService configInfoService;
 
     @Override
     @ModelAttribute("mainCode")
@@ -32,10 +40,14 @@ public class BoardController extends CommonController {
      * @return
      */
     @GetMapping({"", "/list"})
-    public String list(Model model) {
+    public String list(@ModelAttribute CommonSearch search, Model model) {
         commonProcess("list", model);
 
-        return "admin/board/list";
+        ListData<Board> data = configInfoService.getList(search);
+        model.addAttribute("items", data.getItems());
+        model.addAttribute("pagination", data.getPagination());
+
+        return "front/board/list";
     }
 
     /**
@@ -57,7 +69,7 @@ public class BoardController extends CommonController {
         form.setRowsForPage(20);
         form.setPageCount(10);
 
-        return "admin/board/register";
+        return "front/board/register";
     }
 
     @PostMapping("/save")
@@ -69,10 +81,10 @@ public class BoardController extends CommonController {
         boardValidator.validate(form, errors);
 
         if (errors.hasErrors()) {
-            return "admin/board/" + mode;
+            return "front/board/" + mode;
         }
 
-        return "redirect:/admin/board";
+        return "redirect:/front/board";
     }
 
     /**

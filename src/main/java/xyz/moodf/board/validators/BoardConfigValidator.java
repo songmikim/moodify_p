@@ -11,7 +11,7 @@ import xyz.moodf.board.repositories.BoardRepository;
 @Lazy
 @Component
 @RequiredArgsConstructor
-public class BoardValidator implements Validator {
+public class BoardConfigValidator implements Validator {
 
     private final BoardRepository repository;
 
