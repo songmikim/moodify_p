@@ -13,8 +13,9 @@
     <div th:if="${member.socialType.name() == 'NONE'}">
         <a th:href="@{/mypage/password}" th:text="#{비밀번호_변경}"></a>
     </div>
-    <form method="post" th:action="@{/mypage/delete}" onsubmit="return confirm('#{탈퇴하기}?');">
+    <form method="post" th:action="@{/mypage/delete}" id="deleteForm">
         <button type="submit" th:text="#{탈퇴하기}"></button>
     </form>
+
 </main>
 </html>
