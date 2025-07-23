@@ -33,6 +33,14 @@ public class Utils {
         return 1;
     }
 
+    public String keywords() {
+        return "";
+    }
+
+    public String description() {
+        return "";
+    }
+
     // 휴대폰 or PC 확인
 
     public boolean isMobile() {
@@ -46,7 +54,8 @@ public class Utils {
 
     // mobile, front 템플릿 분리
     public String tpl(String path) {
-        String prefix = isMobile() ? "mobile" : "front";
+        //String prefix = isMobile() ? "mobile" : "front";
+        String prefix = "front";
 
         return String.format("%s/%s", prefix, path);
     }
