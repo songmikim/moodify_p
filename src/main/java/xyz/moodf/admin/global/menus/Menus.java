@@ -19,11 +19,18 @@ public class Menus {
                 new Menu("list", "회원목록", "/admin/member")
         ));
 
-        // 게시판 관리 메뉴
-        menus.put("board", List.of(
-                new Menu("list", "게시판 목록", "/admin/board"),
-                new Menu("register", "게시판 등록", "/admin/board/register"),
-                new Menu("posts", "게시글 관리", "/admin/board/posts")
+        // 공지 게시판 관리 메뉴
+        menus.put("noticeBoard", List.of(
+                new Menu("noticeList", "게시판 목록", "/admin/board/notice"),
+                new Menu("noticeRegister", "게시판 등록", "/admin/board/notice/register"),
+                new Menu("noticePosts", "게시글 관리", "/admin/board/notice/posts")
+        ));
+
+        // 건의 게시판 관리 메뉴
+        menus.put("suggestionBoard", List.of(
+                new Menu("suggestionList", "게시판 목록", "/admin/board/suggestion"),
+                new Menu("suggestionRegister", "게시판 등록", "/admin/board/suggestion/register"),
+                new Menu("suggestionPosts", "게시글 관리", "/admin/board/suggestion/posts")
         ));
 
     }
