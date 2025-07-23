@@ -70,7 +70,7 @@ public class MyPageController {
         List<String> addCommonScript = new ArrayList<>();
         List<String> addScript = new ArrayList<>();
 
-        if (mode.equals("mypage")) {
+        if (mode.equals("index")) {
             pageTitle = utils.getMessage("마이페이지");
         } else if (mode.equals("password")) {
             pageTitle = utils.getMessage("비밀번호_변경");
