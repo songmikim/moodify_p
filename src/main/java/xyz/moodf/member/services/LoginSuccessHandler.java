@@ -20,7 +20,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
      */
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-
+        System.out.println("결과: 성공");
         HttpSession session = request.getSession();
         RequestLogin form = (RequestLogin) session.getAttribute("requestLogin");
         form = Objects.requireNonNullElseGet(form, RequestLogin::new);

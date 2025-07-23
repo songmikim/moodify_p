@@ -114,12 +114,12 @@ public class NaverLoginService implements SocialLoginService {
         String redirectUri = utils.getUrl("/member/social/callback/naver");
 
         return String.format("https://nid.naver.com/oauth2.0/authorize?client_id=%s&response_type=code&redirect_uri=%s&state=%s",
-                apiKey, redirectUri, Objects.requireNonNullElse(redirectUrl, ""));
+                apiKey, redirectUri, Objects.requireNonNullElse(redirectUrl, "/"));
     }
 
     private void checkSuccess(HttpStatusCode status) {
         if (!status.is2xxSuccessful()) {
-            throw new AlertRedirectException(utils.getMessage("UnAuthorized.social"), "/member/login", HttpStatus.UNAUTHORIZED);
+            throw new AlertRedirectException(utils.getMessage("UnAuthorized.social"), "/login", HttpStatus.UNAUTHORIZED);
         }
     }
 }
