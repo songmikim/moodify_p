@@ -54,7 +54,7 @@ public class SecurityConfig {
          * anyRequest().authenticated() : 회원 전용 페이지가 기본, 일부 페이지 -> 비회원 사이트
          */
         http.authorizeHttpRequests(c -> {
-            c.requestMatchers("/login", "/join", "/board/**").permitAll()
+            c.requestMatchers("/login", "/join", "/board/**", "/diary/**").permitAll()
                     .requestMatchers("/front/**", "/mobile/**", "/admin/**", "/common/**").permitAll()
                     //.requestMatchers("/admin/**").hasAuthority("ADMIN")
                     .requestMatchers("/admin/**").permitAll()

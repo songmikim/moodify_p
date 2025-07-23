@@ -174,7 +174,7 @@ public class Utils {
     }
 
     public String printNoImage(){
-        String url= request.getContextPath() + "/common/images/no_image,jpg";
+        String url= request.getContextPath() + "/common/images/no_image.jpg";
 
         return String.format("<img src='%s'>",url);
 
