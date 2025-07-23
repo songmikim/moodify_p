@@ -8,10 +8,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import xyz.moodf.member.services.*;
 
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
+    private final MemberInfoService infoService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -22,7 +24,8 @@ public class SecurityConfig {
                     .loginProcessingUrl("/login")
                     .usernameParameter("email")
                     .passwordParameter("password")
-                    ;
+                    .successHandler(new LoginSuccessHandler())
+                    .failureHandler(new LoginFailureHandler());
         });
 
         http.logout(c -> {
@@ -34,18 +37,23 @@ public class SecurityConfig {
         http.rememberMe(c -> {
             c.rememberMeParameter("autoLogin")
                     .tokenValiditySeconds(60 * 60 * 24 * 30)
-                    ;
+                    .userDetailsService(infoService)
+                    .authenticationSuccessHandler(new LoginSuccessHandler());
         });
 
         /* 인가 설정 - 자원에 대한 접근 권한 */
         http.authorizeHttpRequests(c -> {
-            c.requestMatchers("/login", "/join", "/notice").anonymous() // 비회원 전용
-                    .requestMatchers("/mypage/**").authenticated() // 회원 전용
-                    .anyRequest().permitAll();
+            c.requestMatchers("/login", "/join", "/board/**").permitAll()
+                    .requestMatchers("/front/**", "/mobile/**", "/admin/**", "/common/**").permitAll()
+                    //.requestMatchers("/admin/**").hasAuthority("ADMIN")
+                    .requestMatchers("/admin/**").permitAll()
+                    .anyRequest().authenticated();
+
         });
 
         http.exceptionHandling(c -> {
-
+            c.authenticationEntryPoint(new MemberAuthenticationExceptionHandler()); // 미로그인 상태에서의 인가 실패에 대한 처리
+            c.accessDeniedHandler(new MemberAccessDeniedHandler()); // 인증 받은 회원이 권한이 없는 페이지에 접근한 경우
         });
 
 

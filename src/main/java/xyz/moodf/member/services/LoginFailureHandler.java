@@ -23,8 +23,6 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
      */
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-        System.out.println("exception:" + exception);
-
         HttpSession session = request.getSession();
         RequestLogin form = (RequestLogin)session.getAttribute("requestLogin");
         form = Objects.requireNonNullElseGet(form, RequestLogin::new);
@@ -67,7 +65,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
             globalErrors.add("Authentication.account.locked");
         } else if (exception instanceof CredentialsExpiredException) { // 비밀번호가 만료된 경우
             // 비밀번호 변경 페이지로 이동
-            response.sendRedirect(request.getContextPath() + "/member/password");
+            response.sendRedirect(request.getContextPath() + "/password");
             return;
 
         }
@@ -75,6 +73,6 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
         session.setAttribute("requestLogin", form);
 
         // 로그인 실패시에는 로그인 페이지로 이동
-        response.sendRedirect(request.getContextPath() + "/member/login");
+        response.sendRedirect(request.getContextPath() + "/login");
     }
 }

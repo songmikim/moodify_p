@@ -23,7 +23,7 @@ public class DiaryController {
     private final Utils utils;
     private final DiaryService service;
 
-    @GetMapping({"", "/"})
+    @GetMapping
     public String diary(Model model) {
         commonProcess("member", model);
 
