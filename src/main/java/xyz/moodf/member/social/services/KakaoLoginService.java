@@ -40,6 +40,7 @@ public class KakaoLoginService implements SocialLoginService {
 
     @Override
     public String getToken(String code) {
+        System.out.println("getToken!");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
@@ -71,12 +72,16 @@ public class KakaoLoginService implements SocialLoginService {
 
         Map resBody = res.getBody();
         long id = (Long)resBody.get("id");
+        System.out.println(id);
         return "" + id;
     }
 
     @Override
     public boolean login(String token) {
         Member member = memberRepository.findBySocialTypeAndSocialToken(SocialType.KAKAO, token);
+
+        System.out.println("member"+member);
+
         if (member == null) {
             return false;
         }
@@ -102,12 +107,12 @@ public class KakaoLoginService implements SocialLoginService {
 
         String redirectUri = utils.getUrl("/member/social/callback/kakao");
 
-        return String.format("https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=%s&redirect_uri=%s&state=%s", apiKey, redirectUri, Objects.requireNonNullElse(redirectUrl, ""));
+        return String.format("https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=%s&redirect_uri=%s&state=%s", apiKey, redirectUri, Objects.requireNonNullElse(redirectUrl, "/"));
     }
 
     private void checkSuccess(HttpStatusCode status) {
         if (!status.is2xxSuccessful()) {
-            throw new AlertRedirectException(utils.getMessage("UnAuthorized.social"), "/member/login", HttpStatus.UNAUTHORIZED);
+            throw new AlertRedirectException(utils.getMessage("UnAuthorized.social"), "/login", HttpStatus.UNAUTHORIZED);
         }
     }
 }

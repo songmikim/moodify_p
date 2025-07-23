@@ -55,7 +55,7 @@ public class SecurityConfig {
          */
         http.authorizeHttpRequests(c -> {
             c.requestMatchers("/login", "/join", "/board/**", "/diary/**").permitAll()
-                    .requestMatchers("/front/**", "/mobile/**", "/admin/**", "/common/**").permitAll()
+                    .requestMatchers("/front/**", "/mobile/**", "/member/**", "/common/**").permitAll()
                     //.requestMatchers("/admin/**").hasAuthority("ADMIN")
                     .requestMatchers("/admin/**").permitAll()
                     .anyRequest().authenticated();
