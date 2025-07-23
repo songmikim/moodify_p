@@ -41,7 +41,18 @@ public class SecurityConfig {
                     .authenticationSuccessHandler(new LoginSuccessHandler());
         });
 
-        /* 인가 설정 - 자원에 대한 접근 권한 */
+        /* 인가 설정 - 자원에 대한 접근 권한 설정 */
+        /**
+         * authenticated() : 인증 받은 사용자만 접근 가능 (회원)
+         * anonymous() : 인증 받지 않은 사용자만 접근 가능 (비회원)
+         * permitAll() : 모든 사용자가 접근 가능
+         * hasAuthority("권한이름") : 하나의 권한을 체크
+         * hasAnyAuthority("권한1", "권한2", ...) : 다수의 권한을 체크
+         * hasRole("롤이름") : ROLE_롤이름, 롤 이름으로 권한을 체크
+         * hasAnyRole("롤1", "롤2", ...) : 다수의 롤(역할)으로 권한을 체크
+         * anyRequest().permitAll() : 비회원 페이지가 기본, 일부 페이지 -> 회원 전용 사이트
+         * anyRequest().authenticated() : 회원 전용 페이지가 기본, 일부 페이지 -> 비회원 사이트
+         */
         http.authorizeHttpRequests(c -> {
             c.requestMatchers("/login", "/join", "/board/**").permitAll()
                     .requestMatchers("/front/**", "/mobile/**", "/admin/**", "/common/**").permitAll()
