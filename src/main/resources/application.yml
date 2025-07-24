@@ -12,6 +12,19 @@ spring:
     username: ${db.username}
     password: ${db.password}
 
+  #이메일 검색 설정
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: #구글아이디
+    password: #앱 비밀번호
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
   # JPA 설정
   jpa:
     properties:

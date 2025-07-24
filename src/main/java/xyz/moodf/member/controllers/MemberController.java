@@ -142,6 +142,19 @@ public class MemberController {
         model.addAttribute("pageTitle", pageTitle);
     }
 
+    @GetMapping("/findpassword")
+    public String findPassword(Model model) {
+        model.addAttribute("requestFindPassword", new RequestFindIdPassword());
+        return "front/member/findpw";
+    }
+
+    @GetMapping("/findid")
+    public String findid(Model model) {
+        model.addAttribute("requestFindPassword", new RequestFindIdPassword());
+        return "front/member/findid";
+    }
+
+
 //    @ResponseBody
 //    @GetMapping("/test")
 //    public void test(Principal principal) {

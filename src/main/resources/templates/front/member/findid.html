@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{front/layouts/main}">
+
+<main layout:fragment="content">
+    <div class="outer-wrapper">
+        <div class="inner-wrapper">
+            <div class="frmBox">
+                <div class="frmTitle">
+                    <h2>아이디 찾기</h2>
+                </div>
+
+                <h6>등록한 이름과 이메일을 입력하세요</h6>
+
+                <form name="frmFindPwd" method="post" th:action="@{/member/find-password}" autocomplete="off" th:object="${requestFindPassword}">
+                    <div class="idtxt">
+                        <p>이름</p>
+                        <div>
+                            <input type="text" th:field="*{mbId}" id="mbId">
+                        </div>
+                    </div>
+
+                    <div class="idtxt">
+                        <p>이메일</p>
+                        <div>
+                            <input type="email" th:field="*{mbEmail}" id="mbEmail">
+                        </div>
+                    </div>
+
+                    <div class="idtxt">
+                        <button type="submit" class="submit-btn">아이디 확인하기</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+</html>
