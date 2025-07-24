@@ -13,9 +13,10 @@
    * 차콜 블랙 (#2E2E2E) → 텍스트/배경
    * 라이트 옐로우 (#FFFACD) → 하이 라이트
    * 밀키 베이지 (#FFF4E6) → 배경색
-   * 밀키 베이지 (#FFF4E6) → 배경색 하이 라이트
+   * 페일 살몬 (#FFF0ED) → 배경색 하이 라이트
    */
 }
-.flex{display:flex;}
 *{margin:0; padding:0; text-decoration:none; color:var(--fontc); font-size:13px; list-style:none; background:var(--bgc); display:block;}
 aside{position:fixed; left:0; width:200px; background:var(--bghc);}
+.hidden{display:hidden;}
+.flex{display:flex;}
