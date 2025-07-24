@@ -22,6 +22,6 @@ public class MemberAuthenticationExceptionHandler implements AuthenticationEntry
         String qs = request.getQueryString();
         URL = StringUtils.hasText(qs) ? URL + "?" + URLEncoder.encode(qs, "UTF-8") : URL;
 
-        response.sendRedirect(String.format("%s/member/login?redirectUrl=%s",request.getContextPath(), URL));
+        response.sendRedirect(String.format("%s/login?redirectUrl=%s",request.getContextPath(), URL));
     }
 }
