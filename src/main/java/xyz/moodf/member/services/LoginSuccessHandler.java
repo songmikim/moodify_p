@@ -6,13 +6,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import xyz.moodf.global.validators.RedirectUrlValidator;
+import org.springframework.util.StringUtils;
 import xyz.moodf.member.controllers.RequestLogin;
 
 import java.io.IOException;
 import java.util.Objects;
 
-public class LoginSuccessHandler implements AuthenticationSuccessHandler, RedirectUrlValidator {
+public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     /**
      * Authentication authentication
      * - 인증 정보가 담겨 있는 객체
@@ -27,7 +27,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler, Redire
 
         String redirectUrl = form.getRedirectUrl();
 
-        redirectUrl = getAllowedRedirectUrl(redirectUrl);
+        redirectUrl = StringUtils.hasText(redirectUrl) ? redirectUrl : "/diary";
 
         System.out.println("redirectUrl: "+ redirectUrl);
 

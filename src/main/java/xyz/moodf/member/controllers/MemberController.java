@@ -9,7 +9,6 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import xyz.moodf.global.annotations.ApplyCommonController;
 import xyz.moodf.global.libs.Utils;
-import xyz.moodf.global.validators.RedirectUrlValidator;
 import xyz.moodf.member.services.JoinService;
 import xyz.moodf.member.social.constants.SocialType;
 import xyz.moodf.member.social.services.KakaoLoginService;
@@ -24,7 +23,7 @@ import java.util.List;
 @ApplyCommonController
 @RequestMapping
 @SessionAttributes("requestLogin")
-public class MemberController implements RedirectUrlValidator {
+public class MemberController {
 
     private final Utils utils;
     private final JoinValidator joinValidator;
@@ -94,8 +93,8 @@ public class MemberController implements RedirectUrlValidator {
         /* 검증 실패 처리 E */
 
         /* 소셜 로그인 URL */
-        model.addAttribute("kakaoLoginUrl", kakaoLoginService.getLoginUrl(getAllowedRedirectUrl(form.getRedirectUrl())));
-        model.addAttribute("naverLoginUrl", naverLoginService.getLoginUrl(getAllowedRedirectUrl(form.getRedirectUrl())));
+        model.addAttribute("kakaoLoginUrl", kakaoLoginService.getLoginUrl(StringUtils.hasText(form.getRedirectUrl()) ? form.getRedirectUrl() : "/diary"));
+        model.addAttribute("naverLoginUrl", naverLoginService.getLoginUrl(StringUtils.hasText(form.getRedirectUrl()) ? form.getRedirectUrl() : "/diary"));
 
         return utils.tpl("main/login");
     }
