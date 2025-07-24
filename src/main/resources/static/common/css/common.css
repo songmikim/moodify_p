@@ -18,5 +18,5 @@
 }
 *{margin:0; padding:0; text-decoration:none; color:var(--fontc); font-size:13px; list-style:none; background:var(--bgc); display:block;}
 aside{position:fixed; left:0; width:200px; background:var(--bghc);}
-.hidden{display:hidden;}
 .flex{display:flex;}
+.hidden{display:none; visibility:hidden;}
