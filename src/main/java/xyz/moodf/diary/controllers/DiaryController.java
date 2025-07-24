@@ -4,7 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import xyz.moodf.diary.constants.Weather;
 import xyz.moodf.diary.dtos.DiaryRequest;
 import xyz.moodf.diary.entities.Diary;
@@ -12,6 +15,7 @@ import xyz.moodf.diary.services.DiaryService;
 import xyz.moodf.global.annotations.ApplyCommonController;
 import xyz.moodf.global.libs.Utils;
 import xyz.moodf.member.entities.Member;
+import xyz.moodf.member.libs.MemberUtil;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -21,11 +25,11 @@ import java.util.List;
 @ApplyCommonController
 @RequiredArgsConstructor
 @RequestMapping("/diary")
-@SessionAttributes("requestLogin")
 public class DiaryController {
 
     private final Utils utils;
-    private final DiaryService service;
+    private final DiaryService diaryService;
+    private final MemberUtil memberUtil;
 
     @GetMapping
     public String diary(Model model) {
@@ -50,10 +54,11 @@ public class DiaryController {
 
     @PostMapping("/write")
     public String saveDiary(@ModelAttribute DiaryRequest diaryRequest,
-                            @SessionAttribute("requestLogin") Member member,
                             Model model) {
 
-        service.process(diaryRequest, member);
+        Member member = memberUtil.getMember();
+
+        diaryService.process(diaryRequest, member);
 
         return "redirect:/diary/result";
     }
