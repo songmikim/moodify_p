@@ -2,6 +2,7 @@ package xyz.moodf.diary.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 import xyz.moodf.diary.constants.Weather;
 import xyz.moodf.global.entities.BaseEntity;
 import xyz.moodf.member.entities.Member;
@@ -28,5 +29,6 @@ public class Diary extends BaseEntity {
     private Weather weather = Weather.NULL;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
     private Member member;
 }
