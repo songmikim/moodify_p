@@ -50,7 +50,13 @@ public class MyPageController {
         if (errors.hasErrors()) {
             return utils.tpl("mypage/password");
         }
-        service.changePassword(memberUtil.getMember(), form.getPassword());
+
+        boolean result = service.changePassword(memberUtil.getMember(), form.getCurrentPassword(), form.getPassword());
+        if (!result) {
+            errors.rejectValue("currentPassword", "Mismatch.currentPassword");
+            return utils.tpl("mypage/password");
+        }
+
         return "redirect:/mypage";
     }
 
