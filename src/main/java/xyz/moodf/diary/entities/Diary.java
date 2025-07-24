@@ -31,4 +31,7 @@ public class Diary extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @ToString.Exclude
     private Member member;
+
+    @OneToOne(mappedBy = "diary", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Sentiment sentiment;
 }

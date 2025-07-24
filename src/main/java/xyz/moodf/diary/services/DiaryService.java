@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.moodf.diary.dtos.DiaryRequest;
 import xyz.moodf.diary.entities.Diary;
+import xyz.moodf.diary.entities.Sentiment;
 import xyz.moodf.diary.repositories.DiaryRepository;
 import xyz.moodf.member.entities.Member;
 
@@ -17,12 +18,16 @@ public class DiaryService {
 
     public Diary process(DiaryRequest request, Member member) {
         Diary diary = new Diary();
+        Sentiment sentiment = new Sentiment();
 
         diary.setTitle(request.getTitle());
         diary.setContent(request.getContent());
         diary.setDate(request.getDate());
         diary.setWeather(request.getWeather());
         diary.setMember(member);
+
+        diary.setSentiment(sentiment);
+        sentiment.setDiary(diary);
 
         return diaryRepository.save(diary);
     }
