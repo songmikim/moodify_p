@@ -69,6 +69,8 @@ public class MyPageController {
         String pageTitle = "";
         List<String> addCommonScript = new ArrayList<>();
         List<String> addScript = new ArrayList<>();
+        List<String> addCommonCss = new ArrayList<>();
+        List<String> addCss = new ArrayList<>();
 
         if (mode.equals("index")) {
             pageTitle = utils.getMessage("마이페이지");
@@ -78,6 +80,8 @@ public class MyPageController {
 
         model.addAttribute("addCommonScript", addCommonScript);
         model.addAttribute("addScript", addScript);
+        model.addAttribute("addCommonCss", addCommonCss);
+        model.addAttribute("addCss", addCss);
         model.addAttribute("pageTitle", pageTitle);
     }
 }

@@ -123,6 +123,8 @@ public class MemberController {
         String pageTitle = "";
         List<String> addCommonScript = new ArrayList<>();
         List<String> addScript = new ArrayList<>();
+        List<String> addCommonCss = new ArrayList<>();
+        List<String> addCss = new ArrayList<>();
 
         if (mode.equals("join")) { // 회원 가입 공통 처리
             addCommonScript.add("fileManager");
@@ -135,6 +137,8 @@ public class MemberController {
 
         model.addAttribute("addCommonScript", addCommonScript);
         model.addAttribute("addScript", addScript);
+        model.addAttribute("addCommonCss", addCommonCss);
+        model.addAttribute("addCss", addCss);
         model.addAttribute("pageTitle", pageTitle);
     }
 
