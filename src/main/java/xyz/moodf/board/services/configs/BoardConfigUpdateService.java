@@ -18,8 +18,10 @@ public class BoardConfigUpdateService {
     private final BoardRepository boardRepository;
 
     public void process(RequestBoard form) {
-
-        Board item = mapper.map(form, Board.class);
-        boardRepository.saveAndFlush(item);
+        String mode = Objects.requireNonNullElse(form.getMode(), "register");
+        if (mode.equals("register")) {
+            Board item = mapper.map(form, Board.class);
+            boardRepository.saveAndFlush(item);
+        }
     }
 }

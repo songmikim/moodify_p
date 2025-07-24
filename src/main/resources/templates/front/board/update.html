@@ -3,21 +3,16 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{front/layouts/main}">
 
-<section layout:fragment="content" th:object="${requestBoard}">
-    <h1>
-        <th:block  th:text="${pageTitle}"></th:block> -
-        <th:block th:text="*{name + '(' + bid + ')'}"></th:block>
-    </h1>
-
+<main layout:fragment="content">
+    <th:block th:replace="~{front/board/_board_title::common}"></th:block>
     <form name="frmSave" method="POST" th:action="@{/board/save}" autocomplete="off">
         <input type="hidden" name="mode" value="update">
-
+        <input type="hidden" name="seq">
         <th:block th:replace="~{front/board/_form::common}"></th:block>
-
         <div class="button-group">
-            <button type="reset" class="btn">다시입력</button>
-            <button type="submit" class="btn black">수정하기</button>
+            <button type="reset" th:text="#{다시입력}" class="btn"></button>
+            <button type="submit" th:text="#{수정하기}" class="btn"></button>
         </div>
     </form>
-</section>
+</main>
 </html>

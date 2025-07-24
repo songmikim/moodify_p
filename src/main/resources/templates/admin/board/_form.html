@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+ <th:block th:fragment="common" th:object="${requestBoard}">
+     <div class="error global" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
+     <h2>기본설정</h2>
+     <table class="table-cols mb30">
+        <tr>
+            <th width="150">게시판 아이디</th>
+            <td th:if="*{mode == 'update'}">
+                <input type="hidden" name="bid" th:field="*{bid}">
+                <th:block th:text="*{bid}"></th:block>
+            </td>
+            <td th:unless="*{mode == 'update'}">
+                <input type="text" name="bid" th:field="*{bid}">
+                <div class="error" th:each="err : ${#fields.errors('bid')}" th:text="${err}"></div>
+            </td>
+        </tr>
+         <tr>
+             <th>게시판 이름</th>
+             <td>
+                 <input type="text" name="name" th:field="*{name}">
+                 <div class="error" th:each="err : ${#fields.errors('name')}" th:text="${err}"></div>
+             </td>
+         </tr>
+         <tr>
+            <th>사용여부</th>
+             <td>
+                 <input type="radio" name="active" value="true" th:field="*{active}" id="active-true">
+                 <label for="active-true">사용</label>
+
+                 <input type="radio" name="active" value="false" th:field="*{active}" id="active-false">
+                 <label for="active-false">미사용</label>
+             </td>
+         </tr>
+         <tr>
+             <th>한페이지 게시글수</th>
+             <td>
+                 <input type="number" name="rowsForPage" th:field="*{rowsForPage}">
+             </td>
+         </tr>
+         <tr>
+             <th>노출 페이지수</th>
+             <td>
+                 <input type="number" name="pageCount" th:field="*{pageCount}">
+             </td>
+         </tr>
+         <tr>
+             <th>에디터</th>
+             <td>
+                 <input type="radio" name="editor" value="true" th:field="*{editor}" id="editor-true">
+                 <label for="editor-true">사용</label>
+
+                 <input type="radio" name="editor" value="false" th:field="*{editor}" id="editor-false">
+                 <label for="editor-false">미사용</label>
+             </td>
+         </tr>
+         <tr>
+             <th>이미지 업로드</th>
+             <td>
+                 <input type="radio" name="imageUpload" value="true" th:field="*{imageUpload}" id="imageUpload-true">
+                 <label for="imageUpload-true">사용</label>
+
+                 <input type="radio" name="imageUpload" value="false" th:field="*{imageUpload}" id="imageUpload-false">
+                 <label for="imageUpload-false">미사용</label>
+             </td>
+         </tr>
+         <tr>
+             <th>파일 첨부</th>
+             <td>
+                 <input type="radio" name="attachFile" value="true" id="attachFile-true" th:field="*{attachFile}">
+                 <label for="attachFile-true">사용</label>
+
+                 <input type="radio" name="attachFile" value="false" id="attachFile-false" th:field="*{attachFile}">
+                 <label for="attachFile-false">미사용</label>
+             </td>
+         </tr>
+         <tr>
+             <th>댓글</th>
+             <td>
+                 <input type="radio" name="comment" value="true" id="comment-true" th:field="*{comment}">
+                 <label for="comment-true">사용</label>
+
+                 <input type="radio" name="comment" value="false" id="comment-false" th:field="*{comment}">
+                 <label for="comment-false">미사용</label>
+             </td>
+         </tr>
+     </table>
+
+     <h2>분류설정</h2>
+
+     <table class="table-cols mb30">
+         <tr>
+             <th width="150">분류</th>
+             <td>
+                 <textarea name="category" th:text="*{category}" placeholder="분류 여러개는 엔터키로 줄개행 해서 입력"></textarea>
+             </td>
+         </tr>
+     </table>
+
+     <h2>스킨설정</h2>
+     <table class="table-cols mb30">
+         <tr>
+             <th width="150">스킨 선택</th>
+             <td>
+                 <input type="radio" name="skin" value="default" id="skin-default" th:field="*{skin}">
+                 <label for="skin-default">기본 스킨</label>
+
+                 <input type="radio" name="skin" value="gallery" id="skin-gallery" th:field="*{skin}">
+                 <label for="skin-gallery">갤러리 스킨</label>
+             </td>
+         </tr>
+     </table>
+
+     <h2>권한설정</h2>
+     <table class="table-cols mb30">
+         <tr>
+             <th width="150">목록 권한</th>
+             <td>
+                 <input type="radio" name="listAuthority" value="ALL" th:field="*{listAuthority}" id="listAuthority-ALL">
+                 <label for="listAuthority-ALL">비회원 + 회원 + 관리자</label>
+
+                 <input type="radio" name="listAuthority" value="MEMBER" th:field="*{listAuthority}" id="listAuthority-MEMBER">
+                 <label for="listAuthority-MEMBER">회원 + 관리자</label>
+
+                 <input type="radio" name="listAuthority" value="ADMIN" th:field="*{listAuthority}" id="listAuthority-ADMIN">
+                 <label for="listAuthority-ADMIN">관리자</label>
+             </td>
+         </tr>
+
+         <tr>
+             <th width="150">글보기 권한</th>
+             <td>
+                 <input type="radio" name="viewAuthority" value="ALL" th:field="*{viewAuthority}" id="viewAuthority-ALL">
+                 <label for="viewAuthority-ALL">비회원 + 회원 + 관리자</label>
+
+                 <input type="radio" name="viewAuthority" value="MEMBER" th:field="*{viewAuthority}" id="viewAuthority-MEMBER">
+                 <label for="viewAuthority-MEMBER">회원 + 관리자</label>
+
+                 <input type="radio" name="viewAuthority" value="ADMIN" th:field="*{viewAuthority}" id="viewAuthority-ADMIN">
+                 <label for="viewAuthority-ADMIN">관리자</label>
+             </td>
+         </tr>
+
+         <tr>
+             <th width="150">글작성 권한</th>
+             <td>
+                 <input type="radio" name="writeAuthority" value="ALL" th:field="*{writeAuthority}" id="writeAuthority-ALL">
+                 <label for="writeAuthority-ALL">비회원 + 회원 + 관리자</label>
+
+                 <input type="radio" name="writeAuthority" value="MEMBER" th:field="*{writeAuthority}" id="writeAuthority-MEMBER">
+                 <label for="writeAuthority-MEMBER">회원 + 관리자</label>
+
+                 <input type="radio" name="writeAuthority" value="ADMIN" th:field="*{writeAuthority}" id="writeAuthority-ADMIN">
+                 <label for="writeAuthority-ADMIN">관리자</label>
+             </td>
+         </tr>
+
+         <tr>
+             <th width="150">댓글작성 권한</th>
+             <td>
+                 <input type="radio" name="commentAuthority" value="ALL" th:field="*{commentAuthority}" id="commentAuthority-ALL">
+                 <label for="commentAuthority-ALL">비회원 + 회원 + 관리자</label>
+
+                 <input type="radio" name="commentAuthority" value="MEMBER" th:field="*{commentAuthority}" id="commentAuthority-MEMBER">
+                 <label for="commentAuthority-MEMBER">회원 + 관리자</label>
+
+                 <input type="radio" name="commentAuthority" value="ADMIN" th:field="*{commentAuthority}" id="commentAuthority-ADMIN">
+                 <label for="commentAuthority-ADMIN">관리자</label>
+             </td>
+         </tr>
+     </table>
+ </th:block>
+</html>

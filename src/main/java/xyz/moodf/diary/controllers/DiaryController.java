@@ -64,6 +64,8 @@ public class DiaryController {
         String pageTitle = "";
         List<String> addCommonScript = new ArrayList<>();
         List<String> addScript = new ArrayList<>();
+        List<String> addCss = new ArrayList<>();
+        List<String> addCommonCss = new ArrayList<>();
 
         if (mode.equals("member")) {
             addCommonScript.add("fileManager");
@@ -76,6 +78,8 @@ public class DiaryController {
 
         model.addAttribute("addCommonScript", addCommonScript);
         model.addAttribute("addScript", addScript);
+        model.addAttribute("addCss", addCss);
+        model.addAttribute("addCommonCss", addCommonCss);
         model.addAttribute("pageTitle", pageTitle);
     }
 }

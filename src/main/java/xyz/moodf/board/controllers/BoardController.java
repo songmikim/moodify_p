@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import xyz.moodf.board.entities.Board;
 import xyz.moodf.board.services.configs.BoardConfigInfoService;
+import xyz.moodf.board.services.configs.BoardConfigUpdateService;
 import xyz.moodf.board.validators.BoardConfigValidator;
 import xyz.moodf.global.controllers.CommonController;
 import xyz.moodf.global.search.CommonSearch;
@@ -23,11 +24,12 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/board")
+@RequestMapping("admin/board")
 public class BoardController extends CommonController {
 
     private final BoardConfigValidator boardValidator;
     private final BoardConfigInfoService configInfoService;
+    private final BoardConfigUpdateService configUpdateService;
 
     @Override
     @ModelAttribute("mainCode")
@@ -47,7 +49,7 @@ public class BoardController extends CommonController {
         model.addAttribute("items", data.getItems());
         model.addAttribute("pagination", data.getPagination());
 
-        return "front/board/list";
+        return "admin/board/list";
     }
 
     /**
@@ -69,7 +71,7 @@ public class BoardController extends CommonController {
         form.setRowsForPage(20);
         form.setPageCount(10);
 
-        return "front/board/register";
+        return "admin/board/register";
     }
 
     @PostMapping("/save")
@@ -79,12 +81,13 @@ public class BoardController extends CommonController {
         commonProcess(mode, model);
 
         boardValidator.validate(form, errors);
+        configUpdateService.process(form);
 
         if (errors.hasErrors()) {
-            return "front/board/" + mode;
+            return "admin/board/" + mode;
         }
 
-        return "redirect:/front/board";
+        return "redirect:/admin/board";
     }
 
     /**
