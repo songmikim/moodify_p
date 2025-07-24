@@ -6,8 +6,6 @@
         <meta name="base_url" th:content="@{/}">
         <meta name="csrf_token" th:content="${_csrf.token}">
         <meta name="csrf_header" th:content="${_csrf.headerName}">
-        <meta name="keywords" th:content="${@utils.keywords()}">
-        <meta name="description" th:content="${@utils.description()}">
         <link rel="stylesheet" type="text/css" th:href="@{/common/css/style.css?v={v}(v=${@utils.version()})}">
         <link rel="stylesheet" type="text/css" th:each="cssFile : ${addCommonCss}"
               th:href="@{/common/css/{css}.css?v={v}(css=${cssFile}, v=${@utils.version()})}">
@@ -30,6 +28,7 @@
     </head>
     <body>
         <header th:replace="~{front/outlines/_header::common}"></header>
+        <header th:replace="~{front/outlines/_menu::common}"></header>
         <main layout:fragment="content"></main>
         <footer th:replace="~{front/outlines/_footer::common}"></footer>
         <iframe name="ifrmProcess" class="dn"></iframe>
