@@ -33,7 +33,9 @@ public class SocialController {
 
         SocialType socialType = SocialType.valueOf(type.toUpperCase());
 
+        // socialType이 NONE이면 리턴
         if (socialType == SocialType.NONE)return "redirect:/";
+
         SocialLoginService service = socialType == SocialType.NAVER ? naverLoginService : kakaoLoginService;
 
 
@@ -51,6 +53,6 @@ public class SocialController {
         session.setAttribute("socialType", socialType);
         session.setAttribute("socialToken", token);
 
-        return "redirect:/member/join";
+        return "redirect:/join";
     }
 }

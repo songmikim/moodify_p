@@ -33,7 +33,7 @@ public class MemberController {
 
     @ModelAttribute("addCss")
     public List<String> addCss() {
-        return List.of("member/style");
+        return List.of("style");
     }
 
     @ModelAttribute("requestLogin")
@@ -69,7 +69,7 @@ public class MemberController {
         joinService.process(form);
 
         // 회원가입 성공시
-        return "redirect:/member/login";
+        return "redirect:/login";
     }
 
     @GetMapping("/login")
@@ -93,10 +93,10 @@ public class MemberController {
         /* 검증 실패 처리 E */
 
         /* 소셜 로그인 URL */
-        model.addAttribute("kakaoLoginUrl", kakaoLoginService.getLoginUrl(form.getRedirectUrl()));
-        model.addAttribute("naverLoginUrl", naverLoginService.getLoginUrl(form.getRedirectUrl()));
+        model.addAttribute("kakaoLoginUrl", kakaoLoginService.getLoginUrl(StringUtils.hasText(form.getRedirectUrl()) ? form.getRedirectUrl() : "/diary"));
+        model.addAttribute("naverLoginUrl", naverLoginService.getLoginUrl(StringUtils.hasText(form.getRedirectUrl()) ? form.getRedirectUrl() : "/diary"));
 
-        return utils.tpl("member/login");
+        return utils.tpl("main/login");
     }
 
     /**

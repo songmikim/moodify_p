@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{front/layouts/main}">
+<main layout:fragment="content" class="container mt-4">
+    <h1 th:text="#{마이페이지}"></h1>
+    <div class="user-info">
+        <p><strong th:text="#{이메일}"></strong> : <span th:text="${member.email}"></span></p>
+        <p><strong th:text="#{회원명}"></strong> : <span th:text="${member.name}"></span></p>
+        <p><strong th:text="#{휴대전화번호}"></strong> : <span th:text="${member.mobile}"></span></p>
+    </div>
+
+    <div th:if="${member.socialType.name() == 'NONE'}">
+        <a th:href="@{/mypage/password}" th:text="#{비밀번호_변경}"></a>
+    </div>
+    <form method="post" th:action="@{/mypage/delete}" id="deleteForm">
+        <button type="submit" th:text="#{탈퇴하기}"></button>
+    </form>
+
+</main>
+</html>

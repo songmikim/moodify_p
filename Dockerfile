@@ -11,8 +11,10 @@ ENV DB_USERNAME=**
 
 ENV PYTHON_BASE=/python_project/.venv/bin
 ENV PYTHON_EMOTION=/python_project/source
-ENV KAKAO_API_KEY=**
+ENV KAKAO_APIKEY=**
+ENV NAVER_APIKEY=**
+ENV NAVER_SECRET=**
 
-ENTRYPOINT ["java", "-Ddb.password=${DB_PASSWORD}","-Ddb.url=${DB_URL}", "-Ddb.username=${DB_USERNAME}", "-Dfile.path=/uploads", "-Dfile.url=/uploads", "-Dpython.base=${PYTHON_BASE}", "-Dpython.emotion=${PYTHON_EMOTION}","-Dkakao.apikey=${KAKAO_API_KEY}", "-Dspring.profiles.active=${SPRING_PROFILES_ACTIVE}", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Ddb.password=${DB_PASSWORD}","-Ddb.url=${DB_URL}", "-Ddb.username=${DB_USERNAME}", "-Dfile.path=/uploads", "-Dfile.url=/uploads", "-Dpython.base=${PYTHON_BASE}", "-Dpython.emotion=${PYTHON_EMOTION}","-Dkakao.apikey=${KAKAO_APIKEY}","-Dnaver.apikey=${NAVER_APIKEY}","-Dnaver.secret=${NAVER_SECRET}", "-Dspring.profiles.active=${SPRING_PROFILES_ACTIVE}", "-jar", "app.jar"]
 
 EXPOSE ${PORT}
