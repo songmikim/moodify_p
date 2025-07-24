@@ -78,7 +78,7 @@ public class DiaryController {
 
         model.addAttribute("addCommonScript", addCommonScript);
         model.addAttribute("addScript", addScript);
-        model.addAttribute("addCss", addCommonCss);
+        model.addAttribute("addCss", addCss);
         model.addAttribute("addCommonCss", addCommonCss);
         model.addAttribute("pageTitle", pageTitle);
     }
