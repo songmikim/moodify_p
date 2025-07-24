@@ -6,10 +6,13 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import xyz.moodf.board.entities.Board;
+import xyz.moodf.board.entities.BoardData;
 import xyz.moodf.board.search.BoardSearch;
+import xyz.moodf.board.services.BoardDataInfoService;
 import xyz.moodf.board.services.configs.BoardConfigInfoService;
 import xyz.moodf.global.annotations.ApplyCommonController;
 import xyz.moodf.global.libs.Utils;
+import xyz.moodf.global.search.ListData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +24,7 @@ import java.util.List;
 @SessionAttributes({"board"})
 public class BoardPostController {
     private final Utils utils;
-    private final BoardConfigInfoService configInfoService;
+    private final BoardDataInfoService configInfoService;
 
     @ModelAttribute("board")
     public Board getBoard() {
@@ -32,6 +35,9 @@ public class BoardPostController {
     @GetMapping("/list/{bid}")
     public String list(@PathVariable("bid") String bid, @ModelAttribute BoardSearch search, Model model) {
         commonProcess(bid, "list", model);
+        ListData<BoardData> data = configInfoService.getList(search, bid);
+        model.addAttribute("items", data.getItems());
+        model.addAttribute("pagination", data.getPagination());
 
         return utils.tpl("board/list");
     }
@@ -77,37 +83,7 @@ public class BoardPostController {
      * @param model
      */
     private void commonProcess(String bid, String mode, Model model) {
-        Board board = configInfoService.get(bid);
-        mode = StringUtils.hasText(mode) ? mode : "list";
 
-        List<String> addCommonScript = new ArrayList<>();
-        List<String> addCss = new ArrayList<>();
-        List<String> addScript = new ArrayList<>();
-        String pageTitle = board.getName(); // 게시판 명
-
-        String skin = board.getSkin();
-        addCss.add("board/style"); // 스킨과 상관없는 공통 스타일
-        addCss.add(String.format("board/%s/style", skin)); // 스킨별 스타일
-
-        addScript.add("board/common"); // 스킨 상관없는 공통 자바스크립트
-
-        if (mode.equals("write") || mode.equals("update")) { // 등록, 수정
-            if (board.isAttachFile() || (board.isImageUpload() && board.isEditor())) {
-                addCommonScript.add("fileManager");
-            }
-
-            if (board.isEditor()) { // 에디터를 사용하는 경우, CKEDITOR5 스크립트를 추가
-                addCommonScript.add("ckeditor5/ckeditor");
-            }
-
-            addScript.add(String.format("board/%s/form", skin)); // 스킨별 양식 관련 자바스크립트
-        }
-
-        model.addAttribute("addCommonScript", addCommonScript);
-        model.addAttribute("addScript", addScript);
-        model.addAttribute("addCss", addCss);
-        model.addAttribute("pageTitle", pageTitle);
-        model.addAttribute("board", board);
     }
 
     /**

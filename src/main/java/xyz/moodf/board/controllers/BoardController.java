@@ -7,10 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import xyz.moodf.board.entities.Board;
 import xyz.moodf.board.services.configs.BoardConfigInfoService;
 import xyz.moodf.board.services.configs.BoardConfigUpdateService;
@@ -88,6 +85,16 @@ public class BoardController extends CommonController {
         }
 
         return "redirect:/admin/board";
+    }
+
+    @GetMapping("/update/{bid}")
+    public String update(@PathVariable("bid") String bid, Model model) {
+        commonProcess("update", model);
+        RequestBoard item = configInfoService.getForm(bid);
+
+        model.addAttribute("requestBoard", item);
+
+        return "admin/board/update";
     }
 
     /**

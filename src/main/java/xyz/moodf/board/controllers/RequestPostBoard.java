@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class ReqeustPostBoard {
+public class RequestPostBoard {
     private String mode;
     private Long seq;
 

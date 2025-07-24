@@ -3,9 +3,241 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{front/layouts/main}">
 
-<main layout:fragment="content">
-    <th:block th:replace="~{front/board/_board_title::common}"></th:block>
+<section layout:fragment="content">
 
-    <th:block th:replace="~{front/board/_items::common}"></th:block>
-</main>
+    <!-- 검색 폼 -->
+    <form name="frmSearch" method="GET" th:action="@{/board/list/{bid}(bid=${board.bid})}" autocomplete="off" th:object="${boardSearch}">
+        <div class="search-box">
+            <select name="sopt" th:field="*{sopt}">
+                <option value="ALL">통합검색</option>
+                <option value="SUBJECT">제목</option>
+                <option value="CONTENT">내용</option>
+                <option value="POSTER">작성자</option>
+            </select>
+            <input type="text" name="skey" th:field="*{skey}" placeholder="검색어를 입력하세요">
+            <button type="submit" class="search-btn">검색</button>
+        </div>
+    </form>
+
+    <!-- 게시글 목록 -->
+    <div class="board-list">
+        <table class="table">
+            <thead>
+            <tr>
+                <th width="80">번호</th>
+                <th>제목</th>
+                <th width="120">작성자</th>
+                <th width="100">조회수</th>
+                <th width="120">작성일</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- 일반글 표시 -->
+            <tr th:if="${items != null && !items.isEmpty()}"
+                th:each="item, status : ${items}" th:object="${item}"
+                th:unless="*{notice}">
+                <td class="text-center" th:text="*{seq}">번호</td>
+                <td>
+                    <a th:href="@{/board/view/{seq}(seq=*{seq})}"
+                       th:text="*{subject}" class="post-title">
+                    </a>
+                    <span th:if="*{secret}" class="secret-icon">🔒</span>
+                    <span th:if="*{category}" class="category-tag" th:text="'[' + *{category} + ']'"></span>
+                </td>
+                <td class="text-center" th:text="*{poster}">작성자</td>
+                <td class="text-center" th:text="*{viewCount}">0</td>
+                <td class="text-center" th:text="${#temporals.format(item.createdAt, 'yyyy-MM-dd')}">날짜</td>
+            </tr>
+
+            <!-- 게시글이 없을 때 -->
+            <tr th:unless="${items != null && !items.isEmpty()}">
+                <td colspan="5" class="no-data">게시글이 없습니다.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 글쓰기 버튼 -->
+    <div class="board-actions">
+        <a th:href="@{/board/write/{bid}(bid=${board.bid})}" class="write-btn">글쓰기</a>
+    </div>
+
+    <!-- 페이징 -->
+    <div class="pagination-wrapper">
+        <th:block th:replace="~{common/_pagination::pagination}"></th:block>
+    </div>
+
+    <style>
+        .board-header {
+            margin-bottom: 30px;
+            text-align: center;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 20px;
+        }
+
+        .board-header h1 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 28px;
+        }
+
+        .search-box {
+            margin: 20px 0;
+            text-align: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .search-box select,
+        .search-box input {
+            padding: 10px 12px;
+            margin: 0 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .search-box input {
+            width: 300px;
+        }
+
+        .search-btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+
+        .search-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .table th,
+        .table td {
+            padding: 15px 12px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            color: #495057;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .table tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .notice-row {
+            background-color: #fff3cd !important;
+        }
+
+        .notice-row:hover {
+            background-color: #ffeaa7 !important;
+        }
+
+        .notice-badge {
+            background-color: #dc3545;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .post-title {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .post-title:hover {
+            color: #007bff;
+            text-decoration: underline;
+        }
+
+        .secret-icon {
+            margin-left: 8px;
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        .category-tag {
+            color: #6c757d;
+            font-size: 12px;
+            margin-left: 8px;
+            background-color: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6c757d;
+            font-size: 16px;
+        }
+
+        .board-actions {
+            text-align: right;
+            margin: 30px 0;
+        }
+
+        .write-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .write-btn:hover {
+            background-color: #218838;
+            color: white;
+        }
+
+        .pagination-wrapper {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            .search-box input {
+                width: 200px;
+            }
+
+            .table th,
+            .table td {
+                padding: 8px;
+            }
+
+            .board-header h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</section>
 </html>
