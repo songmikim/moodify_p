@@ -18,7 +18,7 @@ import xyz.moodf.member.constants.Authority;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("admin/board")
+@RequestMapping("/admin/board")
 public class BoardController extends CommonController {
 
     private final BoardConfigValidator boardValidator;
