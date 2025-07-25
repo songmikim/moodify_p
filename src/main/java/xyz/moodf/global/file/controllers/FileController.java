@@ -65,14 +65,14 @@ public class FileController {
 
     @DeleteMapping("/delete/{seq}")
     public FileInfo delete(@PathVariable("seq") Long seq) {
-        FileInfo item = deleteService.process(seq);
+        FileInfo item = deleteService.deleteProcess(seq);
 
         return item;
     }
 
     @DeleteMapping({"/deletes/{gid}", "/deletes/{gid}/{location}"})
     public List<FileInfo> deletes(@PathVariable("gid") String gid, @PathVariable(name="location", required = false) String location) {
-        List<FileInfo> items = deleteService.process(gid, location);
+        List<FileInfo> items = deleteService.deleteProcess(gid, location);
 
         return items;
     }
