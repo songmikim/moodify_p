@@ -1,16 +1,20 @@
 package xyz.moodf.board.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import xyz.moodf.board.entities.Board;
 import xyz.moodf.board.entities.BoardData;
 import xyz.moodf.board.search.BoardSearch;
 import xyz.moodf.board.services.BoardDataInfoService;
+import xyz.moodf.board.services.BoardDataUpdateService;
 import xyz.moodf.board.services.configs.BoardConfigInfoService;
 import xyz.moodf.board.services.configs.BoardConfigUpdateService;
+import xyz.moodf.board.validators.BoardDataValidator;
 import xyz.moodf.global.annotations.ApplyCommonController;
 import xyz.moodf.global.libs.Utils;
 import xyz.moodf.global.search.ListData;
@@ -30,6 +34,8 @@ public class BoardPostController {
     private final MemberUtil memberUtil;
     private final BoardDataInfoService InfoService;
     private final BoardConfigInfoService configInfoService;
+    private final BoardDataUpdateService updateService;
+    private final BoardDataValidator boardDataValidator;
 
     @ModelAttribute("board")
     public Board getBoard() {
@@ -63,6 +69,24 @@ public class BoardPostController {
         }
 
         return utils.tpl("board/write");
+    }
+
+    // 게시글 저장
+    @PostMapping("/save")
+    public String save(@Valid RequestPostBoard form, Errors errors, Model model, String bid) {
+        String mode = form.getMode();
+        mode = StringUtils.hasText(mode) ? mode : "register";
+        commonProcess(bid, mode, model);
+
+        boardDataValidator.validate(form, errors);
+
+        updateService.process(form);
+
+        if (errors.hasErrors()) {
+            return "admin/board/" + mode;
+        }
+
+        return "redirect:/admin/board";
     }
 
     // 게시글 수정

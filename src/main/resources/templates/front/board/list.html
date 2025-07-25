@@ -33,10 +33,10 @@
             </thead>
             <tbody>
             <!-- 일반글 표시 -->
-            <tr th:if="${items !=c null && !items.isEmpty()}"
+            <tr th:if="${items != null && !items.isEmpty()}"
                 th:each="item, status : ${items}" th:object="${item}"
                 th:unless="*{notice}">
-                <td lass="text-center" th:text="*{seq}">번호</td>
+                <td class="text-center" th:text="*{seq}">번호</td>
                 <td>
                     <a th:href="@{/board/view/{seq}(seq=*{seq})}"
                        th:text="*{subject}" class="post-title">
