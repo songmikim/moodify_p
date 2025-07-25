@@ -51,10 +51,10 @@ public class BoardPostController {
     // 게시글 작성
     @GetMapping("/write/{bid}")
     public String write(@PathVariable("bid") String bid, RequestPostBoard form, Model model) {
-        System.out.println("피카피카"+bid);
         commonProcess(bid, "write", model);
         form.setBid(bid);
         form.setGid(UUID.randomUUID().toString());
+        model.addAttribute("requestPostBoard", form);
 
         if (memberUtil.isLogin()) {
             form.setPoster(memberUtil.getMember().getName());
