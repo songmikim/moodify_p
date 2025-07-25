@@ -4,7 +4,7 @@
       layout:decorate="~{front/layouts/main}">
 <main layout:fragment="content">
     <h1 th:text="${pageTitle}"></h1>
-    <form name="frmJoin" method="post" th:action="@{/member/join}" autocomplete="off" th:object="${requestJoin}">
+    <form name="frmJoin" method="post" th:action="@{/join}" autocomplete="off" th:object="${requestJoin}">
         <input type="hidden" name="socialType" th:field="*{socialType}">
         <input type="hidden" name="socialToken" th:field="*{socialToken}">
         <div class="error global" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>

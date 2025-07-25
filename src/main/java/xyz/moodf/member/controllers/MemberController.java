@@ -33,7 +33,7 @@ public class MemberController {
 
     @ModelAttribute("addCss")
     public List<String> addCss() {
-        return List.of("member/style");
+        return List.of("style");
     }
 
     @ModelAttribute("requestLogin")
@@ -52,7 +52,7 @@ public class MemberController {
         form.setSocialType(type);
         form.setSocialToken(socialToken);
 
-        return utils.tpl("join");
+        return utils.tpl("member/join");
     }
 
     // 회원가입 처리
@@ -63,16 +63,16 @@ public class MemberController {
         joinValidator.validate(form, errors);
 
         if (errors.hasErrors()) {
-            return utils.tpl("join");
+            return utils.tpl("member/join");
         }
 
         joinService.process(form);
 
         // 회원가입 성공시
-        return "redirect:/main/login";
+        return "redirect:/login";
     }
 
-    @GetMapping({"/login", "/"})
+    @GetMapping("/login")
     public String login(@ModelAttribute RequestLogin form, Errors errors, Model model) {
         commonProcess("login", model);
 
@@ -92,10 +92,9 @@ public class MemberController {
         }
         /* 검증 실패 처리 E */
 
-        System.out.println(form.getRedirectUrl());
         /* 소셜 로그인 URL */
-        model.addAttribute("kakaoLoginUrl", kakaoLoginService.getLoginUrl(form.getRedirectUrl()));
-        model.addAttribute("naverLoginUrl", naverLoginService.getLoginUrl(form.getRedirectUrl()));
+        model.addAttribute("kakaoLoginUrl", kakaoLoginService.getLoginUrl(StringUtils.hasText(form.getRedirectUrl()) ? form.getRedirectUrl() : "/diary"));
+        model.addAttribute("naverLoginUrl", naverLoginService.getLoginUrl(StringUtils.hasText(form.getRedirectUrl()) ? form.getRedirectUrl() : "/diary"));
 
         return utils.tpl("main/login");
     }
@@ -124,6 +123,8 @@ public class MemberController {
         String pageTitle = "";
         List<String> addCommonScript = new ArrayList<>();
         List<String> addScript = new ArrayList<>();
+        List<String> addCommonCss = new ArrayList<>();
+        List<String> addCss = new ArrayList<>();
 
         if (mode.equals("join")) { // 회원 가입 공통 처리
             addCommonScript.add("fileManager");
@@ -136,6 +137,8 @@ public class MemberController {
 
         model.addAttribute("addCommonScript", addCommonScript);
         model.addAttribute("addScript", addScript);
+        model.addAttribute("addCommonCss", addCommonCss);
+        model.addAttribute("addCss", addCss);
         model.addAttribute("pageTitle", pageTitle);
     }
 
