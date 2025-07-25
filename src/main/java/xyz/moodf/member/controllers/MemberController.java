@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 import xyz.moodf.global.annotations.ApplyCommonController;
 import xyz.moodf.global.libs.Utils;
 import xyz.moodf.member.services.JoinService;
@@ -22,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @ApplyCommonController
 @RequestMapping
-@SessionAttributes("requestLogin")
+@SessionAttributes({"requestLogin", "EmailAuthVerified"})
 public class MemberController {
 
     private final Utils utils;
@@ -52,12 +53,15 @@ public class MemberController {
         form.setSocialType(type);
         form.setSocialToken(socialToken);
 
+        // 이메일 인증 여부 false로 초기화
+        model.addAttribute("EmailAuthVerified", false);
+
         return utils.tpl("member/join");
     }
 
     // 회원가입 처리
     @PostMapping("/join")
-    public String joinPs(@Valid RequestJoin form, Errors errors, Model model) {
+    public String joinPs(@Valid RequestJoin form, Errors errors, Model model, SessionStatus sessionStatus) {
         commonProcess("join", model);
 
         joinValidator.validate(form, errors);
@@ -67,6 +71,9 @@ public class MemberController {
         }
 
         joinService.process(form);
+
+        // EmailAuthVerified 세션값 비우기
+        sessionStatus.setComplete();
 
         // 회원가입 성공시
         return "redirect:/login";
