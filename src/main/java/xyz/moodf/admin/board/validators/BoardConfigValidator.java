@@ -1,12 +1,12 @@
-package xyz.moodf.board.validators;
+package xyz.moodf.admin.board.validators;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import xyz.moodf.board.controllers.RequestBoard;
-import xyz.moodf.board.repositories.BoardRepository;
+import xyz.moodf.admin.board.controllers.RequestBoard;
+import xyz.moodf.admin.board.repositories.BoardRepository;
 
 @Lazy
 @Component

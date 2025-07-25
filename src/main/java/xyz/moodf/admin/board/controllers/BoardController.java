@@ -1,27 +1,24 @@
-package xyz.moodf.board.controllers;
+package xyz.moodf.admin.board.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import xyz.moodf.board.entities.Board;
-import xyz.moodf.board.services.configs.BoardConfigInfoService;
-import xyz.moodf.board.services.configs.BoardConfigUpdateService;
-import xyz.moodf.board.validators.BoardConfigValidator;
+import xyz.moodf.admin.board.entities.Board;
+import xyz.moodf.admin.board.services.BoardConfigInfoService;
+import xyz.moodf.admin.board.services.BoardConfigUpdateService;
+import xyz.moodf.admin.board.validators.BoardConfigValidator;
 import xyz.moodf.global.controllers.CommonController;
 import xyz.moodf.global.search.CommonSearch;
 import xyz.moodf.global.search.ListData;
 import xyz.moodf.member.constants.Authority;
 
-import java.util.List;
-
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("admin/board")
+@RequestMapping("/admin/board")
 public class BoardController extends CommonController {
 
     private final BoardConfigValidator boardValidator;

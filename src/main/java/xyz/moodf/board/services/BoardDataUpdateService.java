@@ -5,7 +5,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import xyz.moodf.board.controllers.RequestPostBoard;
-import xyz.moodf.board.entities.Board;
 import xyz.moodf.board.entities.BoardData;
 import xyz.moodf.board.repositories.BoardDataRepository;
 

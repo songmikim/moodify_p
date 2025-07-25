@@ -1,12 +1,12 @@
-package xyz.moodf.board.services.configs;
+package xyz.moodf.admin.board.services;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import xyz.moodf.board.controllers.RequestBoard;
-import xyz.moodf.board.entities.Board;
-import xyz.moodf.board.repositories.BoardRepository;
+import xyz.moodf.admin.board.controllers.RequestBoard;
+import xyz.moodf.admin.board.entities.Board;
+import xyz.moodf.admin.board.repositories.BoardRepository;
 
 import java.util.Objects;
 
