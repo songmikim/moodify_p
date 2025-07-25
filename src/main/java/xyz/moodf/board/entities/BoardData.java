@@ -2,6 +2,7 @@ package xyz.moodf.board.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import xyz.moodf.admin.board.entities.Board;
 import xyz.moodf.global.entities.BaseEntity;
 import xyz.moodf.member.entities.Member;
 

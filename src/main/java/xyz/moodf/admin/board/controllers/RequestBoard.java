@@ -1,4 +1,4 @@
-package xyz.moodf.board.controllers;
+package xyz.moodf.admin.board.controllers;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
