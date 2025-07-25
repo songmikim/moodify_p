@@ -16,10 +16,12 @@ import xyz.moodf.member.constants.Authority;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/board")
+@RequestMapping("/admin/board")
 public class BoardController extends CommonController {
 
-    private final BoardValidator boardValidator;
+    private final BoardConfigValidator boardValidator;
+    private final BoardConfigInfoService configInfoService;
+    private final BoardConfigUpdateService configUpdateService;
 
     @Override
     @ModelAttribute("mainCode")
@@ -32,10 +34,14 @@ public class BoardController extends CommonController {
      * @return
      */
     @GetMapping({"", "/list"})
-    public String list(Model model) {
+    public String list(@ModelAttribute CommonSearch search, Model model) {
         commonProcess("list", model);
 
-        return "front/board/list";
+        ListData<Board> data = configInfoService.getList(search);
+        model.addAttribute("items", data.getItems());
+        model.addAttribute("pagination", data.getPagination());
+
+        return "admin/board/list";
     }
 
     /**
@@ -57,7 +63,7 @@ public class BoardController extends CommonController {
         form.setRowsForPage(20);
         form.setPageCount(10);
 
-        return "front/board/register";
+        return "admin/board/register";
     }
 
     @PostMapping("/save")
@@ -68,11 +74,23 @@ public class BoardController extends CommonController {
 
         boardValidator.validate(form, errors);
 
+        configUpdateService.process(form);
+
         if (errors.hasErrors()) {
-            return "front/board/" + mode;
+            return "admin/board/" + mode;
         }
 
-        return "redirect:/front/board";
+        return "redirect:/admin/board";
+    }
+
+    @GetMapping("/update/{bid}")
+    public String update(@PathVariable("bid") String bid, Model model) {
+        commonProcess("update", model);
+        RequestBoard item = configInfoService.getForm(bid);
+
+        model.addAttribute("requestBoard", item);
+
+        return "admin/board/update";
     }
 
     /**
@@ -85,6 +103,8 @@ public class BoardController extends CommonController {
         code = StringUtils.hasText(code) ? code : "list";
         if (code.equals("register")) {
             pageTitle =  "게시판 등록";
+        } else if (code.equals("update")) {
+            pageTitle =  "게시판 수정";
         } else {
             pageTitle = "게시판 목록";
         }

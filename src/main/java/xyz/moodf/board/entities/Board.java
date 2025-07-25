@@ -11,7 +11,7 @@ import xyz.moodf.member.constants.Authority;
 @Entity
 public class Board extends BaseEntity {
     @Id
-    @Column(length=45)
+    @Column(length=45, updatable = false)
     private String bid; // 게시판 아이디
 
     @Column(length=100, nullable = false)
