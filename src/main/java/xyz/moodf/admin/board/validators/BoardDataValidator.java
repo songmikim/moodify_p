@@ -1,17 +1,15 @@
-package xyz.moodf.board.validators;
+package xyz.moodf.admin.board.validators;
 
-
+import xyz.moodf.admin.board.exceptions.BoardNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import xyz.moodf.admin.board.entities.Board;
+import xyz.moodf.admin.board.repositories.BoardRepository;
 import xyz.moodf.board.controllers.RequestPostBoard;
-import xyz.moodf.board.entities.Board;
-import xyz.moodf.board.exceptions.BoardNotFoundException;
-import xyz.moodf.board.repositories.BoardDataRepository;
-import xyz.moodf.board.repositories.BoardRepository;
 import xyz.moodf.member.constants.Authority;
 import xyz.moodf.member.libs.MemberUtil;
 
