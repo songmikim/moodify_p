@@ -6,11 +6,11 @@
      <table class="table-cols mb30">
         <tr>
             <th width="150">게시판 아이디</th>
-            <td th:if="*{mode == 'update'}">
+            <td th:if="${subCode == 'update'}">
                 <input type="hidden" name="bid" th:field="*{bid}">
                 <th:block th:text="*{bid}"></th:block>
             </td>
-            <td th:unless="*{mode == 'update'}">
+            <td th:unless="${subCode == 'update'}">
                 <input type="text" name="bid" th:field="*{bid}">
                 <div class="error" th:each="err : ${#fields.errors('bid')}" th:text="${err}"></div>
             </td>

@@ -11,6 +11,9 @@ spring:
     url: jdbc:mysql://${db.url}
     username: ${db.username}
     password: ${db.password}
+  devtools:
+    livereload:
+      enabled: false
 
   # JPA 설정
   jpa:

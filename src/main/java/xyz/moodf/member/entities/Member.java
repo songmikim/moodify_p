@@ -2,6 +2,7 @@ package xyz.moodf.member.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 import xyz.moodf.diary.entities.Diary;
 import xyz.moodf.global.entities.BaseEntity;
 import xyz.moodf.member.constants.Authority;
@@ -40,6 +41,7 @@ public class Member extends BaseEntity {
     private Authority authority = Authority.USER;
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @ToString.Exclude
     private List<Diary> diaries = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)

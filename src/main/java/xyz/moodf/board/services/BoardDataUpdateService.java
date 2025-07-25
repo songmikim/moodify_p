@@ -20,9 +20,9 @@ public class BoardDataUpdateService {
 
     public void process(RequestPostBoard form) {
         String mode = Objects.requireNonNullElse(form.getMode(), "register");
-        if (mode.equals("register")) {
-            BoardData item = mapper.map(form, BoardData.class);
-            boardRepository.saveAndFlush(item);
-        }
+        BoardData item = mapper.map(form, BoardData.class);
+        boardRepository.saveAndFlush(item);
+
+
     }
 }

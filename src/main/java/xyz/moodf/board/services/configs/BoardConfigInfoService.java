@@ -41,6 +41,7 @@ public class BoardConfigInfoService {
      * @return
      */
     public Board get(String bid) {
+        System.out.println("냠냠"+bid);
         Board item = repository.findById(bid).orElseThrow(BoardNotFoundException::new);
 
         addInfo(item); // 추가 정보 공통 처리

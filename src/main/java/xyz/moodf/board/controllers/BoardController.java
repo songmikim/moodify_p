@@ -78,6 +78,7 @@ public class BoardController extends CommonController {
         commonProcess(mode, model);
 
         boardValidator.validate(form, errors);
+
         configUpdateService.process(form);
 
         if (errors.hasErrors()) {
@@ -107,6 +108,8 @@ public class BoardController extends CommonController {
         code = StringUtils.hasText(code) ? code : "list";
         if (code.equals("register")) {
             pageTitle =  "게시판 등록";
+        } else if (code.equals("update")) {
+            pageTitle =  "게시판 수정";
         } else {
             pageTitle = "게시판 목록";
         }

@@ -19,9 +19,8 @@ public class BoardConfigUpdateService {
 
     public void process(RequestBoard form) {
         String mode = Objects.requireNonNullElse(form.getMode(), "register");
-        if (mode.equals("register")) {
-            Board item = mapper.map(form, Board.class);
-            boardRepository.saveAndFlush(item);
-        }
+        Board item = mapper.map(form, Board.class);
+        boardRepository.saveAndFlush(item);
     }
+
 }
