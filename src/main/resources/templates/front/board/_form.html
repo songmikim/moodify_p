@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="common" th:object="${requestBoard}">
+    <div class="error global" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
+    <input type="hidden" name="bid" th:field="*{bid}">
+    <input type="hidden" name="gid" th:field="*{gid}">
+    <div class="error" th:each="err : ${#fields.errors('bid')}" th:text="${err}"></div>
+    <div class="error" th:each="err : ${#fields.errors('gid')}" th:text="${err}"></div>
+
+    <th:block th:if="${board.skin == 'default'}">
+        <th:block th:replace="~{front/board/skins/default/_form::skin}"></th:block>
+    </th:block>
+
+    <th:block th:if="${board.skin == 'gallery'}">
+        <th:block th:replace="~{front/board/skins/gallery/_form::skin}"></th:block>
+    </th:block>
+
+</th:block>
+</html>

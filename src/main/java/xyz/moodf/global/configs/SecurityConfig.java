@@ -58,7 +58,7 @@ public class SecurityConfig {
                     .requestMatchers("/front/**", "/mobile/**", "/member/**", "/common/**").permitAll()
                     //.requestMatchers("/admin/**").hasAuthority("ADMIN")
                     .requestMatchers("/admin/**").permitAll()
-                    .anyRequest().authenticated();
+                   .anyRequest().authenticated();
 
         });
 
