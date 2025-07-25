@@ -2,30 +2,22 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <aside th:fragment="common">
+    <button type="button" class="openBtn"><img th:src="@{/common/images/menu-open.png}" alt="메뉴"/></button>
     <div class="right sideMenu">
-        <button type="button"><img /></button>
-        <ul class="diary">
-            <li>
-                <h3>일기장</h3>
-            </li>
-            <li>
-                <a href="/diary/diary">일기 쓰기</a>
-            </li>
-            <li>
-                <a href="/diary/calender">일기 목록</a>
-            </li>
-        </ul>
-        <ul>
-            <li>
-                <h3>게시판</h3>
-            </li>
-            <li>
-                <a href="/board/notice">공지사항</a>
-            </li>
-            <li>
-                <a href="/board/QA">Q&A</a>
-            </li>
-        </ul>
+        <button type="button" class="closeBtn"><img th:src="@{/common/images/menu-close.png}" alt="메뉴"/></button>
+        <div th:each="menuGroup : ${#lists.arrayList(
+            {'기본 설정', basicMenus},
+            {'회원 관리', memberMenus},
+            {'공지 게시판', noticeMenus},
+            {'건의 게시판', suggestionMenus})}">
+
+            <ul>
+                <li><h3 th:text="${menuGroup[0]}"></h3></li> <!-- 메뉴 그룹명 -->
+                <li th:each="menu : ${menuGroup[1]}">
+                    <a th:href="@{${menu.url}}" th:text="${menu.name}"></a>
+                </li>
+            </ul>
+        </div>
     </div>
 </aside>
 </html>
