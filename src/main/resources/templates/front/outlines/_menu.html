@@ -4,13 +4,9 @@
 <aside th:fragment="common">
     <button type="button" class="openBtn"><img th:src="@{/common/images/menu-open.png}" alt="메뉴"/></button>
     <div class="right sideMenu">
+        <button type="button" class="closeBtn"><img th:src="@{/common/images/menu-close.png}" alt="메뉴"/></button>
+        <h3>일기장</h3>
         <ul>
-            <li>
-                <button type="button" class="closeBtn"><img th:src="@{/common/images/menu-close.png}" alt="메뉴"/></button>
-            </li>
-            <li>
-                <h3>일기장</h3>
-            </li>
             <li>
                 <a th:href="@{/diary/diary}">일기 쓰기</a>
             </li>
@@ -18,10 +14,8 @@
                 <a th:href="@{/diary/calender}">일기 목록</a>
             </li>
         </ul>
+        <h3>게시판</h3>
         <ul>
-            <li>
-                <h3>게시판</h3>
-            </li>
             <li>
                 <a th:href="@{/board/notice}">공지사항</a>
             </li>
