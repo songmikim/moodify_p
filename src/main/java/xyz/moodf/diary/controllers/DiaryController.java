@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import xyz.moodf.diary.constants.Weather;
 import xyz.moodf.diary.dtos.DiaryRequest;
 import xyz.moodf.diary.entities.Diary;
@@ -20,16 +17,23 @@ import xyz.moodf.member.libs.MemberUtil;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @ApplyCommonController
 @RequiredArgsConstructor
 @RequestMapping("/diary")
+@SessionAttributes("extraData")
 public class DiaryController {
 
     private final Utils utils;
     private final DiaryService diaryService;
     private final MemberUtil memberUtil;
+
+    @ModelAttribute("extraData")
+    public Map<LocalDate, Object> getExtraData() {
+        return Map.of(LocalDate.now(), "<img src='/common/images/kakao_login.png'>");
+    }
 
     @GetMapping
     public String diary(Model model) {
