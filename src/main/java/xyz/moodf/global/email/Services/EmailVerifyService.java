@@ -15,6 +15,7 @@ public class EmailVerifyService {
     private final EmailSendService sendService;
     private final HttpSession session;
     private final Utils utils;
+
     /**
      * 이메일 인증 번호 발급 전송
      *
@@ -29,13 +30,14 @@ public class EmailVerifyService {
 
         EmailMessage emailMessage = new EmailMessage(
                 email,
-                Utils.getMessage("Email.verification.subject", "commons"),
-                Utils.getMessage("Email.verification.message", "commons"));
+                utils.getMessage("Email.verification.subject"),
+                utils.getMessage("Email.verification.message"));
         Map<String, Object> tplData = new HashMap<>();
         tplData.put("authNum", authNum);
 
         return sendService.sendMail(emailMessage, "auth", tplData);
     }
+
     /**
      * 발급 받은 인증번호와 사용자 입력 코드와 일치 여부 체크
      *
@@ -66,5 +68,4 @@ public class EmailVerifyService {
 
         return false;
     }
-
 }
