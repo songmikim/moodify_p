@@ -1,4 +1,4 @@
-package xyz.moodf.board.exceptions;
+package xyz.moodf.admin.board.exceptions;
 
 import org.springframework.http.HttpStatus;
 import xyz.moodf.global.exceptions.script.AlertBackException;

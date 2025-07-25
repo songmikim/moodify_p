@@ -1,4 +1,4 @@
-package xyz.moodf.board.entities;
+package xyz.moodf.admin.board.entities;
 
 
 import jakarta.persistence.*;

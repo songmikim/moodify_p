@@ -1,4 +1,4 @@
-package xyz.moodf.board.controllers;
+package xyz.moodf.admin.board.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -6,12 +6,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import xyz.moodf.board.validators.BoardValidator;
+import org.springframework.web.bind.annotation.*;
+import xyz.moodf.admin.board.entities.Board;
+import xyz.moodf.admin.board.services.BoardConfigInfoService;
+import xyz.moodf.admin.board.services.BoardConfigUpdateService;
+import xyz.moodf.admin.board.validators.BoardConfigValidator;
 import xyz.moodf.global.controllers.CommonController;
+import xyz.moodf.global.search.CommonSearch;
+import xyz.moodf.global.search.ListData;
 import xyz.moodf.member.constants.Authority;
 
 @Controller

@@ -12,16 +12,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import xyz.moodf.board.controllers.RequestBoard;
-import xyz.moodf.board.entities.Board;
-import xyz.moodf.global.search.CommonSearch;
-import xyz.moodf.global.search.ListData;
-import xyz.moodf.board.exceptions.BoardNotFoundException;
-import xyz.moodf.global.search.Pagination;
-import java.util.List;
+import xyz.moodf.admin.board.controllers.RequestBoard;
+import xyz.moodf.admin.board.exceptions.BoardNotFoundException;
 import xyz.moodf.board.entities.BoardData;
 import xyz.moodf.board.entities.QBoardData;
 import xyz.moodf.board.repositories.BoardDataRepository;
+import xyz.moodf.global.search.CommonSearch;
+import xyz.moodf.global.search.ListData;
+import xyz.moodf.global.search.Pagination;
+
+import java.util.List;
 
 import static org.springframework.data.domain.Sort.Order.desc;
 

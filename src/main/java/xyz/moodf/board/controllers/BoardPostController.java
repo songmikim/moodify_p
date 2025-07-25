@@ -5,12 +5,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import xyz.moodf.board.entities.Board;
+import xyz.moodf.admin.board.entities.Board;
+import xyz.moodf.admin.board.services.BoardConfigInfoService;
 import xyz.moodf.board.entities.BoardData;
 import xyz.moodf.board.search.BoardSearch;
 import xyz.moodf.board.services.BoardDataInfoService;
-import xyz.moodf.board.services.configs.BoardConfigInfoService;
-import xyz.moodf.board.services.configs.BoardConfigUpdateService;
 import xyz.moodf.global.annotations.ApplyCommonController;
 import xyz.moodf.global.libs.Utils;
 import xyz.moodf.global.search.ListData;
@@ -39,7 +38,6 @@ public class BoardPostController {
     // 게시글 목록
     @GetMapping("/list/{bid}")
     public String list(@PathVariable("bid") String bid, @ModelAttribute BoardSearch search, Model model) {
-        System.out.println("확인"+bid);
         commonProcess(bid, "list", model);
         ListData<BoardData> data = InfoService.getList(search, bid);
         model.addAttribute("items", data.getItems());
@@ -51,7 +49,6 @@ public class BoardPostController {
     // 게시글 작성
     @GetMapping("/write/{bid}")
     public String write(@PathVariable("bid") String bid, RequestPostBoard form, Model model) {
-        System.out.println("피카피카"+bid);
         commonProcess(bid, "write", model);
         form.setBid(bid);
         form.setGid(UUID.randomUUID().toString());

@@ -1,4 +1,4 @@
-package xyz.moodf.board.services.configs;
+package xyz.moodf.admin.board.services;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.StringExpression;
@@ -12,13 +12,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import xyz.moodf.board.controllers.RequestBoard;
-import xyz.moodf.board.entities.Board;
+import xyz.moodf.admin.board.controllers.RequestBoard;
+import xyz.moodf.admin.board.entities.Board;
+import xyz.moodf.admin.board.repositories.BoardRepository;
 import xyz.moodf.board.entities.QBoard;
-import xyz.moodf.board.repositories.BoardRepository;
+import xyz.moodf.admin.board.exceptions.BoardNotFoundException;
 import xyz.moodf.global.search.CommonSearch;
 import xyz.moodf.global.search.ListData;
-import xyz.moodf.board.exceptions.BoardNotFoundException;
 import xyz.moodf.global.search.Pagination;
 
 import java.util.List;
@@ -41,7 +41,6 @@ public class BoardConfigInfoService {
      * @return
      */
     public Board get(String bid) {
-        System.out.println("냠냠"+bid);
         Board item = repository.findById(bid).orElseThrow(BoardNotFoundException::new);
 
         addInfo(item); // 추가 정보 공통 처리
