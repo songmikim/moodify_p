@@ -9,8 +9,7 @@ import xyz.moodf.member.entities.Member;
 import xyz.moodf.member.repositories.MemberRepository;
 import xyz.moodf.mypage.services.MyPageService;
 
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
 @SpringBootTest
@@ -36,10 +35,11 @@ public class MyPageServiceTest {
 
     @Test
     void changePassword() {
-        myPageService.changePassword(member, "Newpass1!");
+        boolean result = myPageService.changePassword(member, "1234", "Newpass1!");
         Member saved = memberRepository.findById(member.getSeq()).orElseThrow();
         assertNotNull(saved.getCredentialChangedAt());
         assertNotEquals("Newpass1!", saved.getPassword());
+        assertTrue(result);
     }
 
     @Test
