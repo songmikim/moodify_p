@@ -9,16 +9,11 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import xyz.moodf.admin.board.entities.Board;
 import xyz.moodf.admin.board.services.BoardConfigInfoService;
+import xyz.moodf.admin.board.validators.BoardDataValidator;
 import xyz.moodf.board.entities.BoardData;
 import xyz.moodf.board.search.BoardSearch;
 import xyz.moodf.board.services.BoardDataInfoService;
-<<<<<<< HEAD
 import xyz.moodf.board.services.BoardDataUpdateService;
-import xyz.moodf.board.services.configs.BoardConfigInfoService;
-import xyz.moodf.board.services.configs.BoardConfigUpdateService;
-import xyz.moodf.board.validators.BoardDataValidator;
-=======
->>>>>>> f7768142784b4108d7f530d6309a6c1670027abe
 import xyz.moodf.global.annotations.ApplyCommonController;
 import xyz.moodf.global.libs.Utils;
 import xyz.moodf.global.search.ListData;
@@ -82,7 +77,6 @@ public class BoardPostController {
         commonProcess(bid, mode, model);
 
         boardDataValidator.validate(form, errors);
-
         updateService.process(form);
 
         if (errors.hasErrors()) {
