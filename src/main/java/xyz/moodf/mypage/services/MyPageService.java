@@ -14,10 +14,14 @@ public class MyPageService {
     private final MemberRepository repository;
     private final PasswordEncoder passwordEncoder;
 
-    public void changePassword(Member member, String password) {
-        member.setPassword(passwordEncoder.encode(password));
+    public boolean changePassword(Member member, String currentPassword, String newPassword) {
+        if (!passwordEncoder.matches(currentPassword, member.getPassword())) {
+            return false;
+        }
+        member.setPassword(passwordEncoder.encode(newPassword));
         member.setCredentialChangedAt(LocalDateTime.now());
         repository.saveAndFlush(member);
+        return true;
     }
 
     public void deleteAccount(Member member) {
