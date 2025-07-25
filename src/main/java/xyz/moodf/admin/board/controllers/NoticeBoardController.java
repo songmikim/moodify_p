@@ -1,4 +1,4 @@
-package xyz.moodf.admin.board.suggestion;
+package xyz.moodf.admin.board.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,20 +10,20 @@ import xyz.moodf.global.annotations.ApplyCommonController;
 
 @Controller
 @ApplyCommonController
-@RequestMapping("/admin/board/suggestion")
-public class SuggestionBoardController extends CommonController {
+@RequestMapping("/admin/board/notice")
+public class NoticeBoardController extends CommonController {
 
     @Override
     @ModelAttribute("mainCode")
     public String mainCode() {
-        return "suggestionBoard";
+        return "noticeBoard";
     }
 
     @GetMapping
     public String basicConfig(Model model) {
-        commonProcess("suggestionBoard", model);
+        commonProcess("noticeBoard", model);
 
-        return "admin/board/suggestion/index";
+        return "admin/board/notice/index";
     }
 
 
