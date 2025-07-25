@@ -10,10 +10,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.servlet.LocaleResolver;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -28,6 +25,9 @@ public class Utils {
     //private final FileProperties fileProperties;
     //private final FileInfoService inforservice;
 
+    private static final ResourceBundle commonsBundle;
+    private static final ResourceBundle validationsBundle;
+    private static final ResourceBundle errorsBundle;
 
     public int version() {
         return 1;
@@ -83,6 +83,21 @@ public class Utils {
         } finally {
             ms.setUseCodeAsDefaultMessage(true);
         }
+    }
+
+    public static String getMessage(String code, String type) {
+        type = StringUtils.hasText(type) ? type : "validations";
+
+        ResourceBundle bundle = null;
+        if (type.equals("commons")) {
+            bundle = commonsBundle;
+        } else if (type.equals("errors")) {
+            bundle = errorsBundle;
+        } else {
+            bundle = validationsBundle;
+        }
+
+        return bundle.getString(code);
     }
 
 
