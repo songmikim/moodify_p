@@ -16,4 +16,14 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
+    const sideMenu = document.getElementsByClassName('sideMenu');
+    const openBtn = document.getElementsByClassName('openBtn');
+    const closeBtn = document.getElementsByClassName('closeBtn');
+    const showMenu = () => {
+        sideMenu(menu => menu.style.display = 'block');
+    };
+
+    const hideMenu = () => {
+        sideMenu(menu => menu.style.display = 'none');
+    };
 });

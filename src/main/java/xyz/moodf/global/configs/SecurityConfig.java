@@ -56,9 +56,10 @@ public class SecurityConfig {
         http.authorizeHttpRequests(c -> {
             c.requestMatchers("/login", "/join", "/board/**", "/diary/**", "/error/**", "/calendar/**").permitAll()
                     .requestMatchers("/front/**", "/mobile/**", "/member/**", "/common/**").permitAll()
+                    .requestMatchers("/api/email/**").permitAll()
                     //.requestMatchers("/admin/**").hasAuthority("ADMIN")
                     .requestMatchers("/admin/**").permitAll()
-                    .anyRequest().authenticated();
+                   .anyRequest().authenticated();
 
         });
 

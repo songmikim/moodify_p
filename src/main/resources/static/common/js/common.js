@@ -58,6 +58,34 @@ var commonLib = {
     }
 }
 
+/* 에디터 공통 */
+commonLib.loadEditor = function(el, height = 350) {
+    if (!ClassicEditor || !el) {
+        return Promise.resolve();
+    }
+
+    return new Promise((resolve, reject) => {
+        (async () => {
+            try {
+                const editor = await ClassicEditor.create(el);
+                resolve(editor);
+
+                editor.editing.view.change((writer) => {
+                    writer.setStyle(
+                        "height", `${height}px`,
+                        editor.editing.view.document.getRoot()
+                    );
+                });
+
+            } catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        })();
+    });
+};
+
+
 /* window.alert를 SweetAlert2로 교체 */
 window.alert = function(message, callback) {
     parent.Swal.fire({
@@ -68,4 +96,53 @@ window.alert = function(message, callback) {
             callback();
         }
     })
+};
+
+window.addEventListener("DOMContentLoaded", function() {
+    // 이미지 상세보기 처리 S
+    const { fileManager } = commonLib;
+    const showImages = document.getElementsByClassName("show-image");
+    for (const el of showImages) {
+        el.addEventListener("click", function() {
+            const { seq } = this.dataset;
+            fileManager.showImage(seq);
+        });
+    }
+    // 이미지 상세보기 처리 E
+});
+
+/**
+* 이메일 인증 메일 보내기
+*
+* @param email : 인증할 이메일
+*/
+commonLib.sendEmailVerify = function(email) {
+    const { ajaxLoad } = commonLib;
+
+    const url = `/api/email/verify?email=${email}`;
+
+    ajaxLoad("GET", url, null, "json")
+        .then(data => {
+            if (typeof callbackEmailVerify == 'function') { // 이메일 승인 코드 메일 전송 완료 후 처리 콜백
+                callbackEmailVerify(data);
+            }
+        })
+        .catch(err => console.error(err));
+};
+
+/**
+* 인증 메일 코드 검증 처리
+*
+*/
+commonLib.sendEmailVerifyCheck = function(authNum) {
+    const { ajaxLoad } = commonLib;
+    const url = `/api/email/auth_check?authNum=${authNum}`;
+
+    ajaxLoad("GET", url, null, "json")
+        .then(data => {
+            if (typeof callbackEmailVerifyCheck == 'function') { // 인증 메일 코드 검증 요청 완료 후 처리 콜백
+                callbackEmailVerifyCheck(data);
+            }
+        })
+        .catch(err => console.error(err));
 };
