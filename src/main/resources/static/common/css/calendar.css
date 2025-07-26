@@ -26,6 +26,7 @@
 }
 
 .day-of-month > li .inner {
+    position: relative;
     height: 100px;
     background: #f8f8f8;
     border-radius: 5px;
@@ -40,3 +41,21 @@
 .day-of-month > li:nth-of-type(7n) .day {
     color: blue;
 }
+
+/* 감정 이미지 S */
+
+.inner .extra {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* 이미지 사이즈를 상위 박스에 맞게 조정 */
+.inner .extra img {
+    max-width: 50px;
+    max-height: 50px;
+    display: block; /* 여백 제거 */
+}
+
+/* 감정 이미지 E */
