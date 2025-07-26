@@ -111,6 +111,7 @@ window.addEventListener("DOMContentLoaded", function() {
     // 이미지 상세보기 처리 E
 });
 
+
 /**
 * 이메일 인증 메일 보내기
 *
@@ -118,32 +119,27 @@ window.addEventListener("DOMContentLoaded", function() {
 */
 commonLib.sendEmailVerify = function(email) {
     const { ajaxLoad } = commonLib;
+
     const url = `/api/email/verify?email=${email}`;
 
-    ajaxLoad(url, function(data) {
-        if (typeof callbackEmailVerify === 'function') { // 이메일 승인 코드 메일 전송 완료 후 처리 콜백
+    ajaxLoad(url, (data) => {
+        if (typeof callbackEmailVerify === 'function') {
             callbackEmailVerify(data);
         }
-    }, function(err) {
-        console.error("이메일 인증 전송 실패:", err);
-    });
-};
 
+    }, (err) => console.error(err));
+};
 
 /**
 * 인증 메일 코드 검증 처리
 *
-* @param authNum : 사용자 입력 인증번호
 */
 commonLib.sendEmailVerifyCheck = function(authNum) {
     const { ajaxLoad } = commonLib;
     const url = `/api/email/auth_check?authNum=${authNum}`;
-
-    ajaxLoad(url, function(data) {
-        if (typeof callbackEmailVerifyCheck === 'function') { // 인증 메일 코드 검증 요청 완료 후 처리 콜백
+    ajaxLoad(url, (data) => {
+        if (typeof callbackEmailVerifyCheck === 'function') {
             callbackEmailVerifyCheck(data);
         }
-    }, function(err) {
-        console.error("인증 코드 확인 실패:", err);
-    });
+    }, (err) => console.error(err))
 };
