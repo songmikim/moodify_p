@@ -1,14 +1,12 @@
 package xyz.moodf.mypage.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import xyz.moodf.global.annotations.ApplyCommonController;
 import xyz.moodf.global.libs.Utils;
 import xyz.moodf.member.libs.MemberUtil;
@@ -65,9 +63,20 @@ public class MyPageController {
      * @return
      */
     @PostMapping("/delete")
-    public String deleteAccount() {
-        service.deleteAccount(memberUtil.getMember());
-        return "redirect:/logout";
+    public String deleteRequest(Model model) {
+        service.requestDelete(memberUtil.getMember());
+        commonProcess("delete", model);
+        return utils.tpl("mypage/delete_requested");
+    }
+
+    @GetMapping("/delete/confirm")
+    public String deleteConfirm(@RequestParam("token") String token, Model model, HttpServletRequest request) {
+        boolean result = service.confirmDelete(token);
+        if (result) {
+            request.getSession().invalidate();
+        }
+        commonProcess("delete", model);
+        return utils.tpl("mypage/deleted");
     }
 
     private void commonProcess(String mode, Model model) {
@@ -82,6 +91,8 @@ public class MyPageController {
             pageTitle = utils.getMessage("마이페이지");
         } else if (mode.equals("password")) {
             pageTitle = utils.getMessage("비밀번호_변경");
+        } else if (mode.equals("delete")) {
+            pageTitle = utils.getMessage("탈퇴하기");
         }
 
         model.addAttribute("addCommonScript", addCommonScript);
