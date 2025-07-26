@@ -15,7 +15,7 @@ import org.springframework.util.StringUtils;
 import xyz.moodf.admin.board.controllers.RequestBoard;
 import xyz.moodf.admin.board.entities.Board;
 import xyz.moodf.admin.board.repositories.BoardRepository;
-import xyz.moodf.board.entities.QBoard;
+import xyz.moodf.admin.board.entities.QBoard;
 import xyz.moodf.admin.board.exceptions.BoardNotFoundException;
 import xyz.moodf.global.search.CommonSearch;
 import xyz.moodf.global.search.ListData;
