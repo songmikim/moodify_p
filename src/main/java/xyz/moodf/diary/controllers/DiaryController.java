@@ -4,13 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import xyz.moodf.diary.constants.Weather;
 import xyz.moodf.diary.dtos.DiaryRequest;
 import xyz.moodf.diary.entities.Diary;
+import xyz.moodf.diary.services.DiaryInfoService;
 import xyz.moodf.diary.services.DiaryService;
 import xyz.moodf.global.annotations.ApplyCommonController;
 import xyz.moodf.global.libs.Utils;
@@ -19,17 +17,28 @@ import xyz.moodf.member.libs.MemberUtil;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @ApplyCommonController
 @RequiredArgsConstructor
 @RequestMapping("/diary")
+@SessionAttributes("extraData")
 public class DiaryController {
 
     private final Utils utils;
     private final DiaryService diaryService;
+    private final DiaryInfoService infoService;
     private final MemberUtil memberUtil;
+
+    @ModelAttribute("extraData")
+    public Map<LocalDate, Object> getExtraData() {
+        Map<LocalDate, Object> map = new HashMap<>();
+        map.put(LocalDate.now(), "<img src='/common/images/kakao_login.png'>");
+        return map;
+    }
 
     @GetMapping
     public String diary(Model model) {
@@ -45,6 +54,30 @@ public class DiaryController {
         return utils.tpl("diary/diary");
     }
 
+    @GetMapping("/calendar")
+    public String calendar(Model model, @ModelAttribute("extraData") Map<LocalDate, Object> extraData) {
+        commonProcess("member", model);
+
+        Member member = memberUtil.getMember();
+        List<Diary> diaryList = infoService.getList(member.getSeq());
+
+        /* 날짜마다 감정 이미지 삽입 */
+        for (Diary diary : diaryList) {
+            String sentimentString = "";
+            String diarySentiment = infoService.getMostFrequentSentiment(diary.getDid());
+
+            /* 추후에 수정 필요 - 감정 결과에 따라 이미지 다르게 띄우기 */
+            switch (diarySentiment) {
+                case "": sentimentString = "happiness"; break;
+                default: break;
+            }
+
+            extraData.put(diary.getDate(), "<img src='/common/images/sentiments/" + sentimentString + ".png'>");
+        }
+
+        return utils.tpl("diary/calendar");
+    }
+
     @GetMapping("/result")
     public String result(Model model) {
         commonProcess("member", model);
@@ -52,7 +85,7 @@ public class DiaryController {
         return utils.tpl("diary/result");
     }
 
-    @PostMapping("/write")
+    @PostMapping("/save")
     public String saveDiary(@ModelAttribute DiaryRequest diaryRequest,
                             Model model) {
 

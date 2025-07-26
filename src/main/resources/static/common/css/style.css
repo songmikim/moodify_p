@@ -22,7 +22,7 @@ html{background:var(--bgc); font-size:13px;}
 .hidden{display:none; visibility:hidden;}
 /* 공통 부분 */
 .dn {
-    display:none !important;
+    display: none !important;
 }
 /*임시;*/
 aside{width:0 !important;}
