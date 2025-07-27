@@ -46,7 +46,7 @@ public class FileUploadService {
         // 하나의 파일만 업로드 하는 경우
         if (single) {
             // 기존 업로드된 파일 삭제
-            deleteService.process(gid, location);
+            deleteService.deleteProcess(gid, location);
 
             files = new MultipartFile[] { files[0] };
         }
