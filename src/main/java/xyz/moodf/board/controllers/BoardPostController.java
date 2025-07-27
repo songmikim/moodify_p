@@ -9,7 +9,6 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import xyz.moodf.admin.board.entities.Board;
 import xyz.moodf.admin.board.services.BoardConfigInfoService;
-import xyz.moodf.admin.board.validators.BoardDataValidator;
 import xyz.moodf.board.entities.BoardData;
 import xyz.moodf.board.search.BoardSearch;
 import xyz.moodf.board.services.BoardDataInfoService;
@@ -34,7 +33,7 @@ public class BoardPostController {
     private final BoardDataInfoService InfoService;
     private final BoardConfigInfoService configInfoService;
     private final BoardDataUpdateService updateService;
-    private final BoardDataValidator boardDataValidator;
+    private final xyz.moodf.board.validators.BoardDataValidator boardDataValidator;
 
     @ModelAttribute("board")
     public Board getBoard() {
@@ -71,8 +70,9 @@ public class BoardPostController {
 
     // 게시글 저장
     @PostMapping("/save")
-    public String save(@Valid RequestPostBoard form, Errors errors, Model model, String bid) {
+    public String save(@Valid RequestPostBoard form, Errors errors, Model model) {
         String mode = form.getMode();
+        String bid= form.getBid();
         mode = StringUtils.hasText(mode) ? mode : "register";
         commonProcess(bid, mode, model);
 
