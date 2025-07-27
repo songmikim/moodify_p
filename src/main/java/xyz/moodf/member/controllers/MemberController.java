@@ -8,7 +8,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 import xyz.moodf.global.annotations.ApplyCommonController;
+import xyz.moodf.global.file.controllers.RequestUpload;
+import xyz.moodf.global.file.entities.FileInfo;
 import xyz.moodf.global.libs.Utils;
 import xyz.moodf.member.services.JoinService;
 import xyz.moodf.member.social.constants.SocialType;
@@ -18,6 +21,7 @@ import xyz.moodf.member.validators.JoinValidator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
@@ -53,6 +57,8 @@ public class MemberController {
         form.setSocialType(type);
         form.setSocialToken(socialToken);
 
+        String gid = UUID.randomUUID().toString();
+        model.addAttribute("gid", gid);
         // 이메일 인증 여부 false로 초기화
         model.addAttribute("EmailAuthVerified", false);
 
@@ -136,6 +142,7 @@ public class MemberController {
         if (mode.equals("join")) { // 회원 가입 공통 처리
             addCommonScript.add("fileManager");
             addScript.add("member/join");
+            addScript.add("member/form");
             pageTitle = utils.getMessage("회원가입");
 
         } else if (mode.equals("login")) { // 로그인 공통 처리

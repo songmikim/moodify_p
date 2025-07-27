@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.ToString;
 import xyz.moodf.diary.entities.Diary;
 import xyz.moodf.global.entities.BaseEntity;
+import xyz.moodf.global.file.entities.FileInfo;
 import xyz.moodf.member.constants.Authority;
 import xyz.moodf.member.social.constants.SocialType;
 
@@ -57,4 +58,8 @@ public class Member extends BaseEntity {
     private LocalDateTime expired; // 계정 만료 일자, null이면 만료 X
 
     private LocalDateTime credentialChangedAt; // 비밀번호 변경 일시
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "profile_image_id")
+    private FileInfo profileImage;
 }

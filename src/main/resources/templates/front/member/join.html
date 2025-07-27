@@ -7,6 +7,7 @@
     <form name="frmJoin" method="post" th:action="@{/join}" autocomplete="off" th:object="${requestJoin}">
         <input type="hidden" name="socialType" th:field="*{socialType}">
         <input type="hidden" name="socialToken" th:field="*{socialToken}">
+        <input type="hidden" name="gid" th:value="${gid}" />
         <div class="error global" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
 
         <div th:if="*{social}">
@@ -49,6 +50,9 @@
             <li>
                 <input type="text" name="mobile" th:field="*{mobile}" th:placeholder="#{휴대전화번호}">
                 <div class="error" th:each="err : ${#fields.errors('mobile')}" th:text="${err}"></div>
+            </li>
+            <li>
+                <button type="button" class="file-upload-btn" th:text="#{프로필_이미지_업로드}" th:data-gid="${gid}" data-location="profile" data-single="true" data-image-only="true"></button>
             </li>
         </ul>
 

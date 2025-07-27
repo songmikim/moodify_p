@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class RequestUpload {
     private String gid;
     private String location;
-    private MultipartFile[] files;
+    private MultipartFile[] file;
     private boolean single;
     private boolean imageOnly;
 }
