@@ -52,7 +52,11 @@
                 <div class="error" th:each="err : ${#fields.errors('mobile')}" th:text="${err}"></div>
             </li>
             <li>
-                <button type="button" class="file-upload-btn" th:text="#{프로필_이미지_업로드}" th:data-gid="${gid}" data-location="profile" data-single="true" data-image-only="true"></button>
+                <div class="profile-image file-upload-btn" th:data-gid="${gid}" data-single="true" data-image-only="true">
+                    <div th:text="#{프로필_이미지를_등록하세요.}"></div>
+                    <div class="inner"></div>
+                </div>
+
             </li>
         </ul>
 
@@ -61,8 +65,8 @@
         <input type="checkbox" name="termsAgree" th:field="*{termsAgree}" id="terms-agree">
         <label for="terms-agree" th:text="#{회원가입_약관에_동의합니다}"></label>
         <div class="error" th:each="err : ${#fields.errors('termsAgree')}" th:text="${err}"></div>
-
         <button type="submit" th:text="#{가입하기}"></button>
     </form>
+    <script th:replace="~{common/_file_tpl::image_tpl}"></script>
 </main>
 </html>
