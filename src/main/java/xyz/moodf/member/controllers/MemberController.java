@@ -7,7 +7,11 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 import xyz.moodf.global.annotations.ApplyCommonController;
+import xyz.moodf.global.file.controllers.RequestUpload;
+import xyz.moodf.global.file.entities.FileInfo;
 import xyz.moodf.global.libs.Utils;
 import xyz.moodf.member.services.JoinService;
 import xyz.moodf.member.social.constants.SocialType;
@@ -17,12 +21,13 @@ import xyz.moodf.member.validators.JoinValidator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
 @ApplyCommonController
 @RequestMapping
-@SessionAttributes("requestLogin")
+@SessionAttributes({"requestLogin", "EmailAuthVerified"})
 public class MemberController {
 
     private final Utils utils;
@@ -52,12 +57,17 @@ public class MemberController {
         form.setSocialType(type);
         form.setSocialToken(socialToken);
 
+        String gid = UUID.randomUUID().toString();
+        model.addAttribute("gid", gid);
+        // 이메일 인증 여부 false로 초기화
+        model.addAttribute("EmailAuthVerified", false);
+
         return utils.tpl("member/join");
     }
 
     // 회원가입 처리
     @PostMapping("/join")
-    public String joinPs(@Valid RequestJoin form, Errors errors, Model model) {
+    public String joinPs(@Valid RequestJoin form, Errors errors, Model model, SessionStatus sessionStatus) {
         commonProcess("join", model);
 
         joinValidator.validate(form, errors);
@@ -67,6 +77,9 @@ public class MemberController {
         }
 
         joinService.process(form);
+
+        // EmailAuthVerified 세션값 비우기
+        sessionStatus.setComplete();
 
         // 회원가입 성공시
         return "redirect:/login";
@@ -93,8 +106,8 @@ public class MemberController {
         /* 검증 실패 처리 E */
 
         /* 소셜 로그인 URL */
-        model.addAttribute("kakaoLoginUrl", kakaoLoginService.getLoginUrl(form.getRedirectUrl()));
-        model.addAttribute("naverLoginUrl", naverLoginService.getLoginUrl(form.getRedirectUrl()));
+        model.addAttribute("kakaoLoginUrl", kakaoLoginService.getLoginUrl(StringUtils.hasText(form.getRedirectUrl()) ? form.getRedirectUrl() : "/diary"));
+        model.addAttribute("naverLoginUrl", naverLoginService.getLoginUrl(StringUtils.hasText(form.getRedirectUrl()) ? form.getRedirectUrl() : "/diary"));
 
         return utils.tpl("main/login");
     }
@@ -123,10 +136,13 @@ public class MemberController {
         String pageTitle = "";
         List<String> addCommonScript = new ArrayList<>();
         List<String> addScript = new ArrayList<>();
+        List<String> addCommonCss = new ArrayList<>();
+        List<String> addCss = new ArrayList<>();
 
         if (mode.equals("join")) { // 회원 가입 공통 처리
             addCommonScript.add("fileManager");
             addScript.add("member/join");
+            addScript.add("member/form");
             pageTitle = utils.getMessage("회원가입");
 
         } else if (mode.equals("login")) { // 로그인 공통 처리
@@ -135,6 +151,8 @@ public class MemberController {
 
         model.addAttribute("addCommonScript", addCommonScript);
         model.addAttribute("addScript", addScript);
+        model.addAttribute("addCommonCss", addCommonCss);
+        model.addAttribute("addCss", addCss);
         model.addAttribute("pageTitle", pageTitle);
     }
 

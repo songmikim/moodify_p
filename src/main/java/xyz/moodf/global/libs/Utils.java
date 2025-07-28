@@ -2,6 +2,7 @@ package xyz.moodf.global.libs;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
@@ -9,6 +10,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.servlet.LocaleResolver;
+import xyz.moodf.global.configs.FileProperties;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-//@EnableConfigurationProperties(FileProperties.class)
+@EnableConfigurationProperties(FileProperties.class)
 public class Utils {
 
     private final HttpServletRequest request;
@@ -31,6 +33,14 @@ public class Utils {
 
     public int version() {
         return 1;
+    }
+
+    public String keywords() {
+        return "";
+    }
+
+    public String description() {
+        return "";
     }
 
     // 휴대폰 or PC 확인
@@ -46,7 +56,8 @@ public class Utils {
 
     // mobile, front 템플릿 분리
     public String tpl(String path) {
-        String prefix = isMobile() ? "mobile" : "front";
+        //String prefix = isMobile() ? "mobile" : "front";
+        String prefix = "front";
 
         return String.format("%s/%s", prefix, path);
     }
@@ -114,7 +125,7 @@ public class Utils {
         try {
 //            FileInfo item = infoService.get(seq);
             long folder = seq % 10L;
-            url = String.format("%s/file/thumb?seq=%s&width=%s&height=%s&crop=true", request.getContextPath(), seq, width, height);
+            url = String.format("%s/uploads/thumb?seq=%s&width=%s&height=%s&crop=true", request.getContextPath(), seq, width, height);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -165,7 +176,7 @@ public class Utils {
     }
 
     public String printNoImage(){
-        String url= request.getContextPath() + "/common/images/no_image,jpg";
+        String url= request.getContextPath() + "/common/images/no_image.jpg";
 
         return String.format("<img src='%s'>",url);
 

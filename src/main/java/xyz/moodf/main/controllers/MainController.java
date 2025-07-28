@@ -15,8 +15,8 @@ public class MainController {
 
     private final Utils utils;
 
-    @GetMapping("/")
+    @GetMapping
     public String index() {
-        return "redirect:/login";
+        return utils.tpl("main/index");
     }
 }
