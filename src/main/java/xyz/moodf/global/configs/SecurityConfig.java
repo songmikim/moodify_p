@@ -70,6 +70,10 @@ public class SecurityConfig {
 
         http.headers(c -> c.frameOptions(f -> f.sameOrigin()));
 
+        http.csrf(csrf -> csrf
+                .ignoringRequestMatchers("/board/check-guest-password") // CSRF 제외
+        );
+
         return http.build();
     }
 
