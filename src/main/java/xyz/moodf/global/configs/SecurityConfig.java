@@ -60,7 +60,7 @@ public class SecurityConfig {
                     //.requestMatchers("/admin/**").hasAuthority("ADMIN")
                     .requestMatchers("/admin/**").permitAll()
                    .anyRequest().authenticated();
-
+        });
         http.exceptionHandling(c -> {
             c.authenticationEntryPoint(new MemberAuthenticationExceptionHandler()); // 미로그인 상태에서의 인가 실패에 대한 처리
             c.accessDeniedHandler(new MemberAccessDeniedHandler()); // 인증 받은 회원이 권한이 없는 페이지에 접근한 경우
