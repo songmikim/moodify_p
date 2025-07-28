@@ -62,7 +62,7 @@ public class ThumbnailService {
     }
 
     public String getThumbPath(Long seq, String url, int width, int height, boolean crop) {
-        String basePath = properties.getPath() + "/thumbs";
+        String basePath = properties.getPath() + "/thumb";
 
         String thumbPath = "";
         if (seq != null && seq > 0L) { // 직접 업로드한 파일 기준

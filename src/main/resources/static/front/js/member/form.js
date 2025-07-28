@@ -4,13 +4,14 @@ function fileUploadCallback(items) {
     const { seq } = items[0];
     let html = document.getElementById("image_tpl").innerHTML;
     const targetEl = document.querySelector(".profile-image .inner")
-    const imageUrl = commonLib.getUrl(`/uploads/thumbs?seq=${seq}&width=250&height=250&crop=true`)
+    const imageUrl = commonLib.getUrl(`/uploads/thumb?seq=${seq}&width=250&height=250&crop=true`)
     html = html.replace(/\[seq\]/g, seq)
                 .replace(/\[imageUrl\]/g, imageUrl)
     const domParser = new DOMParser();
     const dom = domParser.parseFromString(html, "text/html");
     const el = dom.querySelector(".file-image");
     targetEl.append(el);
+    targetEl.parentElement.classList.add("uploaded")
     const removeEl = el.querySelector(".remove");
     removeEl.addEventListener("click", function () {
 

@@ -26,7 +26,7 @@ public class MyPageServiceTest {
     @BeforeEach
     void setUp() {
         member = new Member();
-        member.setEmail("mypage@test.org");
+        member.setEmail("mypage@Join.org");
         member.setPassword("1234");
         member.setName("테스터");
         member.setMobile("01000000000");

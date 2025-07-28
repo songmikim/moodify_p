@@ -61,6 +61,5 @@ public class Member extends BaseEntity implements Serializable {
     private LocalDateTime credentialChangedAt; // 비밀번호 변경 일시
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "profile_image_id")
     private FileInfo profileImage;
 }
