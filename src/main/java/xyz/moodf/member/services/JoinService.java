@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import xyz.moodf.global.file.entities.FileInfo;
+import xyz.moodf.global.file.repositories.FileInfoRepository;
 import xyz.moodf.member.constants.Authority;
 import xyz.moodf.member.controllers.RequestJoin;
 import xyz.moodf.member.entities.Member;
@@ -25,6 +27,7 @@ public class JoinService {
     private final ModelMapper modelMapper;
     private final PasswordEncoder encoder;
     private final MemberRepository repository;
+    private final FileInfoRepository fileRepository;
     private final HttpSession session;
 
     public void process(RequestJoin form) {
@@ -55,6 +58,11 @@ public class JoinService {
         member.setSocialType(Objects.requireNonNullElse(form.getSocialType(), SocialType.NONE));
         member.setSocialToken(form.getSocialToken());
 
+        String gid = form.getGid();
+        if (StringUtils.hasText(form.getGid())) {
+            FileInfo profileImage = fileRepository.findFirstByGidOrderByCreatedAtAsc(form.getGid()).orElse(null);
+            member.setProfileImage(profileImage);
+        }
         repository.saveAndFlush(member);
 
         // 소셜 로그인 관련 세션값 삭제
