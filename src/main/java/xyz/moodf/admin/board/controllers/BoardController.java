@@ -11,6 +11,9 @@ import xyz.moodf.admin.board.entities.Board;
 import xyz.moodf.admin.board.services.BoardConfigInfoService;
 import xyz.moodf.admin.board.services.BoardConfigUpdateService;
 import xyz.moodf.admin.board.validators.BoardConfigValidator;
+import xyz.moodf.board.entities.BoardData;
+import xyz.moodf.board.search.BoardSearch;
+import xyz.moodf.board.services.BoardDataInfoService;
 import xyz.moodf.global.controllers.CommonController;
 import xyz.moodf.global.search.CommonSearch;
 import xyz.moodf.global.search.ListData;
@@ -24,6 +27,7 @@ public class BoardController extends CommonController {
     private final BoardConfigValidator boardValidator;
     private final BoardConfigInfoService configInfoService;
     private final BoardConfigUpdateService configUpdateService;
+    private final BoardDataInfoService dataInfoService;
 
     @Override
     @ModelAttribute("mainCode")
@@ -95,6 +99,17 @@ public class BoardController extends CommonController {
         return "admin/board/update";
     }
 
+    @GetMapping("/posts")
+    public String posts(@ModelAttribute BoardSearch search, Model model) {
+        commonProcess("posts", model);
+        ListData<BoardData> data = dataInfoService.getList(search);
+        model.addAttribute("items", data.getItems());
+        model.addAttribute("pagination", data.getPagination());
+
+        return "admin/board/posts";
+    }
+
+
     /**
      * 컨트롤러 요청 처리 메서드의 공통 처리 부분
      * @param code
@@ -107,6 +122,8 @@ public class BoardController extends CommonController {
             pageTitle =  "게시판 등록";
         } else if (code.equals("update")) {
             pageTitle =  "게시판 수정";
+        } else if (code.equals("posts")) {
+            pageTitle =  "게시글 목록";
         } else {
             pageTitle = "게시판 목록";
         }
