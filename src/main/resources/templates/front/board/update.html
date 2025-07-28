@@ -7,7 +7,7 @@
     <th:block th:replace="~{front/board/_board_title::common}"></th:block>
     <form name="frmSave" method="POST" th:action="@{/board/save}" autocomplete="off">
         <input type="hidden" name="mode" value="update">
-        <input type="hidden" name="seq">
+        <input type="hidden" name="seq" th:value="${requestPostBoard.seq}">
         <th:block th:replace="~{front/board/_form::common}"></th:block>
         <div class="button-group">
             <button type="reset" th:text="#{다시입력}" class="btn"></button>
