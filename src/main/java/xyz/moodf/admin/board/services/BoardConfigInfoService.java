@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import xyz.moodf.admin.board.controllers.RequestBoard;
 import xyz.moodf.admin.board.entities.Board;
+import xyz.moodf.admin.board.entities.QBoard;
 import xyz.moodf.admin.board.repositories.BoardRepository;
 import xyz.moodf.admin.board.entities.QBoard;
 import xyz.moodf.admin.board.exceptions.BoardNotFoundException;

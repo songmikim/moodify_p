@@ -72,7 +72,6 @@ public class ThumbnailService {
             if (!file.exists() || !file.isDirectory()) {
                 file.mkdirs();
             }
-
             thumbPath = basePath + String.format("/%s/%s_%s_%s_%s%s", folder, width, height, crop, seq, Objects.requireNonNullElse(item.getExtension(), ""));
 
         } else if (StringUtils.hasText(url)) { // 원격 URL 이미지인 기준

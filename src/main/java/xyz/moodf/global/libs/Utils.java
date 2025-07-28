@@ -2,6 +2,7 @@ package xyz.moodf.global.libs;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
@@ -9,6 +10,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.servlet.LocaleResolver;
+import xyz.moodf.global.configs.FileProperties;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-//@EnableConfigurationProperties(FileProperties.class)
+@EnableConfigurationProperties(FileProperties.class)
 public class Utils {
 
     private final HttpServletRequest request;
@@ -123,7 +125,7 @@ public class Utils {
         try {
 //            FileInfo item = infoService.get(seq);
             long folder = seq % 10L;
-            url = String.format("%s/file/thumb?seq=%s&width=%s&height=%s&crop=true", request.getContextPath(), seq, width, height);
+            url = String.format("%s/uploads/thumb?seq=%s&width=%s&height=%s&crop=true", request.getContextPath(), seq, width, height);
         } catch (Exception e) {
             e.printStackTrace();
         }
