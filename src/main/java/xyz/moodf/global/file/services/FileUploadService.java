@@ -38,7 +38,7 @@ public class FileUploadService {
         boolean single = form.isSingle(); // 하나의 파일만 업로드(기존 gid + location으로 등록된 파일을 삭제하고 다시 업로드)
         boolean imageOnly = form.isImageOnly(); // 이미지 형식이 아닌 파일은 업로드 제외
 
-        MultipartFile[] files = form.getFiles();
+        MultipartFile[] files = form.getFile();
         if (files == null || files.length == 0) { // 파일을 업로드 하지 않은 경우
             throw new AlertBackException(utils.getMessage("NotUpload.file"), HttpStatus.BAD_REQUEST);
         }

@@ -21,6 +21,7 @@ import xyz.moodf.global.file.services.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,10 +38,13 @@ public class FileController {
     @ApiResponse(responseCode = "201", description = "파일 업로드 성공시 업로드한 파일 목록이 출력")
     @PostMapping("/upload")
     @ResponseStatus(HttpStatus.CREATED)
-    public List<FileInfo> upload(RequestUpload form, @RequestPart("file") MultipartFile[] files) {
-        form.setFiles(files);
+    public List<FileInfo> upload(@ModelAttribute RequestUpload form) {
+        String gid = form.getGid();
+        if (gid == null || gid.trim().isEmpty()) {
+            gid = UUID.randomUUID().toString(); // 자동 생성
+            form.setGid(gid);
+        }
         List<FileInfo> items = uploadService.process(form);
-
         return items;
     }
 
@@ -78,9 +82,6 @@ public class FileController {
     }
     /**
      * 파일 다운로드
-     *
-     *
-     *
      */
     @GetMapping("/download/{seq}")
     public void download(@PathVariable("seq") Long seq) {
@@ -123,17 +124,4 @@ public class FileController {
 
         return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
     }
-
-//    @GetMapping("/download/{seq}")
-//    public void download(@PathVariable("seq") Long seq) {
-//        response.setHeader("Content-Disposition", "attachment; filename=test.txt");
-//
-//        try {
-//            PrintWriter out = response.getWriter();
-//            out.println("test1");
-//            out.println("test2");
-//            out.println("test3");
-//
-//        } catch (IOException e) {}
-//    }
 }

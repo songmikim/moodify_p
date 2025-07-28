@@ -26,6 +26,9 @@ public class DiaryService {
         diary.setWeather(request.getWeather());
         diary.setMember(member);
 
+        sentiment.setSentiment("");
+        sentiment.setContent("");
+
         diary.setSentiment(sentiment);
         sentiment.setDiary(diary);
 
