@@ -217,10 +217,6 @@ public class BoardPostController {
             addScript.add(String.format("board/%s/form", skin));
             pageTitle = boardData.getSubject() + " - " + board.getName();
 
-            System.out.println(permissionService.canEdit(boardData));
-            System.out.println(permissionService.canDelete(boardData));
-            System.out.println(boardData.getMember() == null);
-
             model.addAttribute("canEdit", permissionService.canEdit(boardData));
             model.addAttribute("canDelete", permissionService.canDelete(boardData));
             model.addAttribute("isGuest", permissionService.isMember(boardData));
@@ -243,7 +239,6 @@ public class BoardPostController {
     public Map<String, Object> checkGuestPassword(@RequestParam Long seq,
                                                   @RequestParam String password) {
         Map<String, Object> result = new HashMap<>();
-        System.out.println("테스트");
         try {
             BoardData boardData = InfoService.get(seq);
 

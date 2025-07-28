@@ -24,9 +24,7 @@ function checkGuestPassword(action, seq) {
                 if (action === 'update') {
                     location.href = '/board/update/' + seq;
                 } else if (action === 'delete') {
-                    if (confirm('정말 삭제하시겠습니까?')) {
-                        deletePost(seq);
-                    }
+                    deletePost(seq);
                 }
             } else {
                 alert(data.message); // "비밀번호가 틀렸습니다"
@@ -39,5 +37,7 @@ function checkGuestPassword(action, seq) {
 }
 
 function deletePost(seq) {
-    location.href = '/board/delete/' + seq;
+    if (confirm('정말 삭제하시겠습니까?')) {
+        location.href = '/board/delete/' + seq;
+    }
 }
