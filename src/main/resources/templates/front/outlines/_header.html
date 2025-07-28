@@ -6,11 +6,11 @@
         <div class="left">
         </div>
         <div class="right">
-            <a th:href="@{/mypage}" class="profile-image"><th:block th:if="${profile != null"></th:block></a>
-            <div class="user-menu hidden">
-                <a th:href="@{/logout}" th:text="#{로그아웃}"></a>
+            <div th:if="">
                 <a sec:authorize="hasAnyAuthority('ADMIN')" th:href="@{/admin}" th:text="#{사이트_관리}"></a>
             </div>
+            <a th:href="@{/logout}" th:text="#{로그아웃}"><img th:src="@{/common/images/logout.png}" alt="로그아웃"></a>
+            <a th:href="@{/mypage}" class="profile-image"><th:block th:if="${profile != null"></th:block></a>
         </div>
     </div>
 </header>
