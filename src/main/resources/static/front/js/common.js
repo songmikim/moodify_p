@@ -16,14 +16,17 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
-    const sideMenu = document.getElementsByClassName('sideMenu');
-    const openBtn = document.getElementsByClassName('openBtn');
-    const closeBtn = document.getElementsByClassName('closeBtn');
+    const sideMenu = Array.from(document.getElementsByClassName('sideMenu'));
+    const openBtn = Array.from(document.getElementsByClassName('openBtn'));
+    const closeBtn = Array.from(document.getElementsByClassName('closeBtn'));
     const showMenu = () => {
-        sideMenu(menu => menu.style.display = 'block');
+        sideMenu.forEach(menu => menu.style.display = 'block');
     };
 
     const hideMenu = () => {
-        sideMenu(menu => menu.style.display = 'none');
+        sideMenu.forEach(menu => menu.style.display = 'none');
     };
+
+    openBtn.forEach(btn => btn.addEventListener('click', showMenu));
+    closeBtn.forEach(btn => btn.addEventListener('click', hideMenu));
 });
