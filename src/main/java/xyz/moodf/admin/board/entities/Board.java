@@ -6,10 +6,12 @@ import lombok.Data;
 import xyz.moodf.global.entities.BaseEntity;
 import xyz.moodf.member.constants.Authority;
 
+import java.io.Serializable;
+
 
 @Data
 @Entity
-public class Board extends BaseEntity {
+public class Board extends BaseEntity implements Serializable {
     @Id
     @Column(length=45, updatable = false)
     private String bid; // 게시판 아이디
