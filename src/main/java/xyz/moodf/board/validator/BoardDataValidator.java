@@ -1,4 +1,4 @@
-package xyz.moodf.board.validators;
+package xyz.moodf.board.validator;
 
 
 import lombok.RequiredArgsConstructor;
@@ -11,6 +11,7 @@ import xyz.moodf.admin.board.entities.Board;
 import xyz.moodf.admin.board.repositories.BoardRepository;
 import xyz.moodf.admin.board.exceptions.BoardNotFoundException;
 import xyz.moodf.board.controllers.RequestPostBoard;
+import xyz.moodf.global.validators.PasswordValidator;
 import xyz.moodf.member.constants.Authority;
 import xyz.moodf.member.libs.MemberUtil;
 
@@ -18,7 +19,7 @@ import xyz.moodf.member.libs.MemberUtil;
 @Lazy
 @Component
 @RequiredArgsConstructor
-public class BoardDataValidator implements Validator {
+public class BoardDataValidator implements Validator, PasswordValidator {
     private final BoardRepository repository;
     private final MemberUtil memberUtil;
 
@@ -36,6 +37,11 @@ public class BoardDataValidator implements Validator {
         String mode = form.getMode();
         String bid = form.getBid();
 
+        // 글 수정이면 seq 필수
+        if (mode.equals("update") && (form.getSeq() == null || form.getSeq() < 1L)) {
+            errors.rejectValue("seq", "NotNull");
+        }
+
         // 제목 필수
         if (!StringUtils.hasText(form.getSubject())) {
             errors.rejectValue("subject", "NotBlank");
@@ -47,18 +53,18 @@ public class BoardDataValidator implements Validator {
         }
 
         // 비회원인 경우 작성자명 필수
-        if (form.isGuest() && !StringUtils.hasText(form.getPoster())) {
+        if (form.isGuest()) {
+            if (!StringUtils.hasText(form.getPoster())) {
             errors.rejectValue("poster", "NotBlank");
-        }
+            }
 
+            String guestPw=form.getGuestPw();
         // 비회원인 경우 비밀번호 필수
-        if (form.isGuest() && !StringUtils.hasText(form.getGuestPw())) {
-            errors.rejectValue("guestPw", "NotBlank");
-        }
-
-        Board board = repository.findById(form.getBid()).orElseThrow(BoardNotFoundException::new);
-        if (board.getWriteAuthority() == Authority.USER && !memberUtil.isLogin()) {
-            errors.reject("NoPermission.write");
+            if (!StringUtils.hasText(guestPw)) {
+                errors.rejectValue("guestPw", "NotBlank");
+            } else if (!checkAlpha(guestPw, true) || !checkNumber(guestPw) || guestPw.length() < 4){ // 비밀번호 복잡성도 체크
+                errors.rejectValue("Complexity", "guestPw");
+            }
         }
     }
 }

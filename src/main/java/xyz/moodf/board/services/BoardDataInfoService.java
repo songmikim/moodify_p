@@ -90,6 +90,9 @@ public class BoardDataInfoService
             andBuilder.and(board.board.bid.eq(bid));
         }
 
+        //deletedAt 필터링
+        andBuilder.and(board.deletedAt.isNull());
+
         // 키워드 검색 처리 S
         sopt = StringUtils.hasText(sopt) ? sopt.toUpperCase() : "ALL";
         if (StringUtils.hasText(skey)) {

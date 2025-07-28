@@ -11,18 +11,17 @@ import xyz.moodf.admin.board.entities.Board;
 import xyz.moodf.admin.board.services.BoardConfigInfoService;
 import xyz.moodf.board.entities.BoardData;
 import xyz.moodf.board.search.BoardSearch;
+import xyz.moodf.board.services.BoardDataDeleteService;
 import xyz.moodf.board.services.BoardDataInfoService;
 import xyz.moodf.board.services.BoardDataUpdateService;
 import xyz.moodf.board.services.BoardPermissionService;
+import xyz.moodf.board.validator.BoardDataValidator;
 import xyz.moodf.global.annotations.ApplyCommonController;
-import xyz.moodf.global.exceptions.UnAuthorizedException;
 import xyz.moodf.global.libs.Utils;
 import xyz.moodf.global.search.ListData;
 import xyz.moodf.member.libs.MemberUtil;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @ApplyCommonController
@@ -36,7 +35,8 @@ public class BoardPostController {
     private final BoardPermissionService permissionService;
     private final BoardConfigInfoService configInfoService;
     private final BoardDataUpdateService updateService;
-    private final xyz.moodf.board.validators.BoardDataValidator boardDataValidator;
+    private final BoardDataDeleteService deleteService;
+    private final BoardDataValidator boardDataValidator;
 
     @ModelAttribute("board")
     public Board getBoard() {
@@ -223,12 +223,11 @@ public class BoardPostController {
 
             model.addAttribute("canEdit", permissionService.canEdit(boardData));
             model.addAttribute("canDelete", permissionService.canDelete(boardData));
-            model.addAttribute("isGuest", boardData.getMember() == null);
+            model.addAttribute("isGuest", permissionService.isMember(boardData));
 
         } else if (mode.equals("delete")) { // 삭제 모드
-            // 삭제 권한 확인 로직이 여기에 들어갈 수 있음
-            // 실제 삭제 처리는 별도 서비스에서 수행
             pageTitle = board.getName() + " - 글 삭제";
+            deleteService.softDelete(boardData.getSeq());
         }
 
         model.addAttribute("addCommonScript", addCommonScript);
@@ -239,5 +238,30 @@ public class BoardPostController {
         model.addAttribute("boardData", boardData);
     }
 
+    @PostMapping("/check-guest-password")
+    @ResponseBody
+    public Map<String, Object> checkGuestPassword(@RequestParam Long seq,
+                                                  @RequestParam String password) {
+        Map<String, Object> result = new HashMap<>();
+        System.out.println("테스트");
+        try {
+            BoardData boardData = InfoService.get(seq);
+
+            // guestPwCheck 메서드 사용
+            if (permissionService.guestPwCheck(boardData, password)) {
+                result.put("success", true);
+                result.put("message", "비밀번호가 일치합니다");
+            } else {
+                result.put("success", false);
+                result.put("message", "비밀번호가 틀렸습니다");
+            }
+
+        } catch (Exception e) {
+            result.put("success", false);
+            result.put("message", "오류가 발생했습니다");
+        }
+
+        return result;
+    }
 
 }
