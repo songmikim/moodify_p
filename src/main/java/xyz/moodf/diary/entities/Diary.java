@@ -1,5 +1,6 @@
 package xyz.moodf.diary.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
@@ -19,6 +20,7 @@ public class Diary extends BaseEntity {
     private Member member;
 
     @Id
+    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate date;
 
     @Column(length=50, nullable = false)

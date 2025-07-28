@@ -1,16 +1,21 @@
 package xyz.moodf.diary.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import xyz.moodf.diary.constants.Weather;
 import xyz.moodf.diary.dtos.DiaryRequest;
+import xyz.moodf.diary.dtos.SentimentRequest;
 import xyz.moodf.diary.entities.Diary;
 import xyz.moodf.diary.entities.DiaryId;
+import xyz.moodf.diary.entities.Sentiment;
+import xyz.moodf.diary.repositories.SentimentRepository;
 import xyz.moodf.diary.services.DiaryInfoService;
 import xyz.moodf.diary.services.DiaryService;
+import xyz.moodf.diary.services.SentimentService;
 import xyz.moodf.global.annotations.ApplyCommonController;
 import xyz.moodf.global.libs.Utils;
 import xyz.moodf.member.entities.Member;
@@ -32,6 +37,8 @@ public class DiaryController {
     private final Utils utils;
     private final DiaryService diaryService;
     private final DiaryInfoService infoService;
+    private final SentimentService sentimentService;
+    private final SentimentRepository sentimentRepository;
     private final MemberUtil memberUtil;
 
     @ModelAttribute("extraData")
@@ -45,12 +52,18 @@ public class DiaryController {
     public String diary(Model model) {
         commonProcess("member", model);
 
+        Member member = memberUtil.getMember();
+
         Diary diary = new Diary();
         diary.setWeather(Weather.NULL);
 
         model.addAttribute("today", LocalDate.now());
         model.addAttribute("diary", diary);
         model.addAttribute("weatherValues", Weather.values());
+
+        Sentiment sentiment = sentimentService.create(member.getSeq());
+
+        model.addAttribute("gid", sentiment.getGid());
 
         return utils.tpl("diary/diary");
     }
@@ -65,11 +78,11 @@ public class DiaryController {
         /* 날짜마다 감정 이미지 삽입 */
         for (Diary diary : diaryList) {
             String sentimentString = "";
-            String diarySentiment = infoService.getMostFrequentSentiment(new DiaryId(member, diary.getDate()));
+            String diarySentiment = infoService.getMostFrequentSentiment(new DiaryId(member.getSeq(), diary.getDate()));
 
             /* 추후에 수정 필요 - 감정 결과에 따라 이미지 다르게 띄우기 */
             switch (diarySentiment) {
-                case "": sentimentString = "happiness"; break;
+                case "기쁨": sentimentString = "happiness"; break;
                 default: break;
             }
 
@@ -77,6 +90,21 @@ public class DiaryController {
         }
 
         return utils.tpl("diary/calendar");
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<?> updateDiary(
+            @RequestParam("gid") String gid,
+            @RequestBody SentimentRequest request) {
+
+        // 임시...
+        request.setSentiments("기쁨");
+
+        System.out.println("sentiments: " + request.getSentiments());
+        System.out.println("content: " + request.getContent());
+
+        sentimentService.update(gid, request);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/result")
@@ -88,14 +116,21 @@ public class DiaryController {
 
     @PostMapping("/save")
     public String saveDiary(@ModelAttribute DiaryRequest diaryRequest,
+                            @RequestParam("gid") String gid,
                             Model model) {
 
         Member member = memberUtil.getMember();
-        LocalDate date = diaryRequest.getDate();
 
-        diaryService.process(diaryRequest, new DiaryId(member, date));
+        diaryService.process(diaryRequest, gid, member.getSeq());
 
         return "redirect:/diary/result";
+    }
+
+    @PostMapping("/delete")
+    public ResponseEntity<?> deleteSentiment(@RequestParam String gid) {
+        System.out.println("삭제요청");
+        sentimentRepository.deleteById(gid);
+        return ResponseEntity.ok().build();
     }
 
 
@@ -109,7 +144,7 @@ public class DiaryController {
 
         if (mode.equals("member")) {
             addCommonScript.add("fileManager");
-            addScript.add("/diary");
+            addScript.add("diary/sentiment");  // 추가로 만든 sentiment db 관리 js 파일
             pageTitle = utils.getMessage("일기쓰기");
 
         } else if (mode.equals("login")) { // 로그인 공통 처리

@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import xyz.moodf.member.entities.Member;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -14,6 +13,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DiaryId implements Serializable {
-    Member member;
-    LocalDate date;
+    private Long member;
+    private LocalDate date;
 }

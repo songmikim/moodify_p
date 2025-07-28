@@ -26,12 +26,12 @@ public class DiaryInfoService {
     private final HttpServletRequest request;
     private final ModelMapper mapper;
 
-    public List<Diary> getList(long seq) {
+    public List<Diary> getList(long memberSeq) {
         QDiary diary = QDiary.diary;
 
         return jpaQueryFactory
                 .selectFrom(diary)
-                .where(diary.member.seq.eq(seq))
+                .where(diary.member.seq.eq(memberSeq))
                 .fetch();
     }
 
@@ -40,14 +40,16 @@ public class DiaryInfoService {
         QSentiment sentiment = QSentiment.sentiment;
 
         List<String> allSentiments = jpaQueryFactory
-                .select(sentiment.content)
+                .select(sentiment.sentiments)
                 .from(diary)
                 .join(sentiment).on(diary.gid.eq(sentiment.gid))
                 .where(
-                        diary.member.eq(diaryId.getMember())
-                                .and(diary.date.eq(diaryId.getDate())                                )
+                        diary.member.seq.eq(diaryId.getMember())
+                                .and(diary.date.eq(diaryId.getDate()))
                 )
                 .fetch();
+
+        System.out.println("1: " + allSentiments);
 
         // 각 감정의 빈도 수 저장
         Map<String, Integer> frequencyMap = new HashMap<>();
@@ -62,6 +64,8 @@ public class DiaryInfoService {
                 frequencyMap.put(trimmed, frequencyMap.getOrDefault(trimmed, 0) + 1);
             }
         }
+
+        System.out.println("2: " + frequencyMap);
 
         // 가장 많이 나온 감정
         return frequencyMap.entrySet().stream()
