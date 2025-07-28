@@ -1,24 +1,20 @@
 package xyz.moodf.diary.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.Data;
-import lombok.ToString;
 
 @Data
 @Entity
 public class Sentiment {
     @Id
-    @GeneratedValue
-    private Long sid;
+    @Column(length = 45)
+    private String gid;
 
     @Column(length=2000)
     private String content;
 
     @Column(length=2000)
-    private String sentiment;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "did")
-    @ToString.Exclude
-    private Diary diary;
+    private String sentiments;
 }

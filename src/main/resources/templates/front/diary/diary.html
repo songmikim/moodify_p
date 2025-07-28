@@ -6,6 +6,8 @@
     <h1>일기장 페이지</h1>
 
     <form th:action="@{/diary/save}" method="post">
+        <input type="hidden" id="gid" th:value="${gid}" />
+
         <div>
             <label for="date" class="form-label">날짜</label>
             <input type="date"

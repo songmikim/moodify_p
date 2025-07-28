@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import xyz.moodf.diary.constants.Weather;
 import xyz.moodf.diary.dtos.DiaryRequest;
 import xyz.moodf.diary.entities.Diary;
+import xyz.moodf.diary.entities.DiaryId;
 import xyz.moodf.diary.services.DiaryInfoService;
 import xyz.moodf.diary.services.DiaryService;
 import xyz.moodf.global.annotations.ApplyCommonController;
@@ -64,7 +65,7 @@ public class DiaryController {
         /* 날짜마다 감정 이미지 삽입 */
         for (Diary diary : diaryList) {
             String sentimentString = "";
-            String diarySentiment = infoService.getMostFrequentSentiment(diary.getDid());
+            String diarySentiment = infoService.getMostFrequentSentiment(new DiaryId(member, diary.getDate()));
 
             /* 추후에 수정 필요 - 감정 결과에 따라 이미지 다르게 띄우기 */
             switch (diarySentiment) {
@@ -90,8 +91,9 @@ public class DiaryController {
                             Model model) {
 
         Member member = memberUtil.getMember();
+        LocalDate date = diaryRequest.getDate();
 
-        diaryService.process(diaryRequest, member);
+        diaryService.process(diaryRequest, new DiaryId(member, date));
 
         return "redirect:/diary/result";
     }

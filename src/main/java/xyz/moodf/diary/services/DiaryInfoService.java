@@ -7,7 +7,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import xyz.moodf.diary.entities.Diary;
+import xyz.moodf.diary.entities.DiaryId;
 import xyz.moodf.diary.entities.QDiary;
+import xyz.moodf.diary.entities.QSentiment;
 import xyz.moodf.diary.repositories.DiaryRepository;
 
 import java.util.HashMap;
@@ -33,13 +35,18 @@ public class DiaryInfoService {
                 .fetch();
     }
 
-    public String getMostFrequentSentiment(long diarySeq) {
+    public String getMostFrequentSentiment(DiaryId diaryId) {
         QDiary diary = QDiary.diary;
+        QSentiment sentiment = QSentiment.sentiment;
 
         List<String> allSentiments = jpaQueryFactory
-                .select(diary.sentiment.sentiment)
+                .select(sentiment.content)
                 .from(diary)
-                .where(diary.did.eq(diarySeq))
+                .join(sentiment).on(diary.gid.eq(sentiment.gid))
+                .where(
+                        diary.member.eq(diaryId.getMember())
+                                .and(diary.date.eq(diaryId.getDate())                                )
+                )
                 .fetch();
 
         // 각 감정의 빈도 수 저장
@@ -49,8 +56,8 @@ public class DiaryInfoService {
 
             // string을 [] 형태로 변환
             String[] split = line.split(",");
-            for (String sentiment : split) {
-                String trimmed = sentiment.trim();  // 공백 제거
+            for (String s : split) {
+                String trimmed = s.trim();  // 공백 제거
                 if (trimmed.isEmpty()) continue;
                 frequencyMap.put(trimmed, frequencyMap.getOrDefault(trimmed, 0) + 1);
             }
