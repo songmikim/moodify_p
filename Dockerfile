@@ -25,8 +25,8 @@ ENV KAKAO_APIKEY=**
 ENV NAVER_APIKEY=**
 ENV NAVER_SECRET=**
 
-ENV REDIS_HOST=localhost
-ENV REDIS_PORT=6379
+ENV REDIS_HOST=**
+ENV REDIS_PORT=**
 
 ENTRYPOINT [  "java",  "-Ddb.password=${DB_PASSWORD}", "-Ddb.url=${DB_URL}",  "-Ddb.username=${DB_USERNAME}",  "-Dspring.jpa.hibernate.ddl-auto=${DDL_AUTO}",  "-Dfile.path=${FILE_PATH}",  "-Dfile.url=${FILE_URL}",  "-Dkakao.apikey=${KAKAO_APIKEY}",  "-Dmail.username=${MAIL_USERNAME}", "-Dmail.password=${MAIL_PASSWORD}",  "-Dnaver.apikey=${NAVER_APIKEY}",  "-Dnaver.secret=${NAVER_SECRET}",  "-Dpython.base=${PYTHON_BASE}",  "-Dpython.emotion=${PYTHON_EMOTION}",  "-Dredis.host=${REDIS_HOST}",  "-Dredis.port=${REDIS_PORT}",  "-Dspring.profiles.active=${SPRING_PROFILES_ACTIVE}",  "-jar", "app.jar"]
 
