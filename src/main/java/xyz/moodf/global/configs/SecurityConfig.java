@@ -59,6 +59,7 @@ public class SecurityConfig {
                             .requestMatchers("/file/upload").permitAll()
                             //.requestMatchers("/admin/**").hasAuthority("ADMIN")
                             .requestMatchers("/admin/**").permitAll()
+                            .requestMatchers("/findid", "/find_pw", "/find_pw_done").permitAll()
                             .anyRequest().authenticated();
         });
 
