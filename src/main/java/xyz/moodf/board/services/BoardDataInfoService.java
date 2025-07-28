@@ -64,6 +64,7 @@ public class BoardDataInfoService
      * 게시판 목록 조회
      *
      * @param search
+     * @param bid
      * @return
      */
     public ListData<BoardData> getList(CommonSearch search, String bid) {
@@ -76,6 +77,11 @@ public class BoardDataInfoService
 
         BooleanBuilder andBuilder = new BooleanBuilder();
         QBoardData board = QBoardData.boardData;
+
+        // bid 필터링 추가 - 특정 게시판의 글만 조회
+        if (StringUtils.hasText(bid)) {
+            andBuilder.and(board.board.bid.eq(bid));
+        }
 
         // 키워드 검색 처리 S
         sopt = StringUtils.hasText(sopt) ? sopt.toUpperCase() : "ALL";
@@ -92,7 +98,6 @@ public class BoardDataInfoService
             } else { // 통합 검색
                 fields = board.poster.concat(board.subject).concat(board.content);
             }
-            fields = board.poster.concat(board.subject).concat(bid);
             andBuilder.and(fields.contains(skey));
         }
         // 키워드 검색 처리 E
