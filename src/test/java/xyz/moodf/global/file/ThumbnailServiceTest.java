@@ -29,7 +29,7 @@ public class ThumbnailServiceTest {
     @Test
     void test() {
         MockMultipartFile file = new MockMultipartFile(
-                "file", "test.jpg", "image/jpeg", "image".getBytes()
+                "file", "test.png", "image/png", "image".getBytes()
         );
         RequestUpload upload = new RequestUpload();
 

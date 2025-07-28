@@ -102,7 +102,8 @@ public class FileController {
 
             OutputStream out = response.getOutputStream();
             out.write(bis.readAllBytes());
-
+            System.out.println("썸네일 생성 경로: " + path);
+            System.out.println("파일 존재 여부: " + new File(path).exists());
         } catch (IOException e) {}
     }
 
