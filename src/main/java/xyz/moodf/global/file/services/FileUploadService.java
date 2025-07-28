@@ -31,7 +31,7 @@ public class FileUploadService {
     private final FileInfoService infoService;
     private final FileDeleteService deleteService;
 
-    public List<FileInfo> process(RequestUpload form) {
+    public List<FileInfo> uploadProcess(RequestUpload form) {
         String gid = form.getGid(); // 그룹 ID
         gid = StringUtils.hasText(gid) ? gid : UUID.randomUUID().toString();
         String location = form.getLocation();

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{front/layouts/main}">
-<main layout:fragment="content">
+<main layout:fragment="content" class="join-page">
     <h1 th:text="${pageTitle}"></h1>
     <form name="frmJoin" method="post" th:action="@{/join}" autocomplete="off" th:object="${requestJoin}">
         <input type="hidden" name="socialType" th:field="*{socialType}">

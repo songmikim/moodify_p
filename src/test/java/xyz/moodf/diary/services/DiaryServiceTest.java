@@ -33,7 +33,7 @@ public class DiaryServiceTest {
     void init() {
         // 멤버 추가
         member = new Member();
-        member.setEmail("user01@test.org");
+        member.setEmail("user01@Join.org");
         member.setPassword("1234");
         member.setName("사용자01");
         member.setMobile("01010001000");

@@ -14,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import xyz.moodf.global.file.entities.FileInfo;
 import xyz.moodf.global.file.services.*;
 
@@ -44,7 +43,7 @@ public class FileController {
             gid = UUID.randomUUID().toString(); // 자동 생성
             form.setGid(gid);
         }
-        List<FileInfo> items = uploadService.process(form);
+        List<FileInfo> items = uploadService.uploadProcess(form);
         return items;
     }
 

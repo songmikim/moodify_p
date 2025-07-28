@@ -95,8 +95,8 @@ public class FileInfoService {
         /* 이미지인 경우 썸네일 기본 URL, 기본 Path  추가 */
         if (item.isImage()) {
             String folder = folder(item);
-            String thumbPath = String.format("%s/thumbs/%s/", properties.getPath(), folder);
-            String thumbUrl = String.format("%s%s/thumbs/%s/", request.getContextPath(), properties.getUrl(), folder);
+            String thumbPath = String.format("%s/thumb/%s/", properties.getPath(), folder);
+            String thumbUrl = String.format("%s%s/thumb/%s/", request.getContextPath(), properties.getUrl(), folder);
             item.setThumbBasePath(thumbPath);
             item.setThumbBaseUrl(thumbUrl);
         }

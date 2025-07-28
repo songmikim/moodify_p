@@ -78,3 +78,15 @@
 }
 
 /* login E */
+/* img upload S */
+.join-page .profile-image .inner{
+    display:none;
+}
+.join-page .profile-image.uploaded .inner{
+    display:block;
+}
+.join-page .profile-image.uploaded .file-upload-btn{
+    display:none;
+}
+
+/* img upload E */
