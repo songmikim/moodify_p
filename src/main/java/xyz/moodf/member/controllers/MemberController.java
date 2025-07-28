@@ -8,10 +8,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.multipart.MultipartFile;
 import xyz.moodf.global.annotations.ApplyCommonController;
-import xyz.moodf.global.file.controllers.RequestUpload;
-import xyz.moodf.global.file.entities.FileInfo;
 import xyz.moodf.global.libs.Utils;
 import xyz.moodf.member.services.JoinService;
 import xyz.moodf.member.social.constants.SocialType;
@@ -67,10 +64,15 @@ public class MemberController {
 
     // 회원가입 처리
     @PostMapping("/join")
-    public String joinPs(@Valid RequestJoin form, Errors errors, Model model, SessionStatus sessionStatus) {
+    public String joinPs(@Valid RequestJoin form, Errors errors, Model model, SessionStatus sessionStatus, @SessionAttribute(name = "EmailAuthVerified", required = false) Boolean emailVerified) {
         commonProcess("join", model);
 
         joinValidator.validate(form, errors);
+
+        if (emailVerified == null || !emailVerified) {
+            errors.reject("email", "이메일 인증을 완료해야 회원가입이 가능합니다.");
+            return utils.tpl("member/join");
+        }
 
         if (errors.hasErrors()) {
             return utils.tpl("member/join");
