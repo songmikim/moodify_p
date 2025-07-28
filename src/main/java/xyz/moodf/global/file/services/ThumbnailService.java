@@ -62,7 +62,7 @@ public class ThumbnailService {
     }
 
     public String getThumbPath(Long seq, String url, int width, int height, boolean crop) {
-        String basePath = properties.getPath() + "/thumbs";
+        String basePath = properties.getPath() + "/thumb";
 
         String thumbPath = "";
         if (seq != null && seq > 0L) { // 직접 업로드한 파일 기준
@@ -72,7 +72,6 @@ public class ThumbnailService {
             if (!file.exists() || !file.isDirectory()) {
                 file.mkdirs();
             }
-
             thumbPath = basePath + String.format("/%s/%s_%s_%s_%s%s", folder, width, height, crop, seq, Objects.requireNonNullElse(item.getExtension(), ""));
 
         } else if (StringUtils.hasText(url)) { // 원격 URL 이미지인 기준

@@ -14,46 +14,42 @@ window.addEventListener("DOMContentLoaded", function() {
                 return;
             }
 
-            /* 이메일 확인 전 이미 가입된 이메일인지 여부 체크 S */
-            ajaxLoad("GET", `/api/member/email_dup_check?email=${email}`, null, "json")
-                .then(data => {
-                    if (data.success) { // 중복이메일인 경우
-                        alert("이미 가입된 이메일입니다.");
+            ajaxLoad(`/api/member/email_dup_check?email=${email}`, (data) => {
+                 if (data.success) { // 중복이메일인 경우
+                    alert("이미 가입된 이메일입니다.");
                         frmJoin.email.focus();
                     } else { // 중복이메일이 아닌 경우
                         sendEmailVerify(email); // 이메일 인증 코드 전송
                         this.disabled = frmJoin.email.readonly = true;
 
-                         /* 인증코드 재전송 처리 S */
-                         if (emailReVerifyEl) {
+                        /* 인증코드 재전송 처리 S */
+                        if (emailReVerifyEl) {
                             emailReVerifyEl.addEventListener("click", function() {
                                 sendEmailVerify(email);
                             });
-                         }
+                        }
 
-                          /* 인증코드 재전송 처리 E */
+                        /* 인증코드 재전송 처리 E */
 
-                          /* 인증번호 확인 처리 S */
-                          if (emailConfirmEl && authNumEl) {
+                        /* 인증번호 확인 처리 S */
+                        if (emailConfirmEl && authNumEl) {
                             emailConfirmEl.addEventListener("click", function() {
-                                const authNum = authNumEl.value.trim();
-                                if (!authNum) {
-                                    alert("인증코드를 입력하세요.");
-                                    authNumEl.focus();
-                                    return;
-                                }
+                            const authNum = authNumEl.value.trim();
+                             if (!authNum) {
+                                alert("인증코드를 입력하세요.");
+                                authNumEl.focus();
+                                return;
+                             }
 
-                                // 인증코드 확인 요청
-                                const { sendEmailVerifyCheck } = commonLib;
-                                sendEmailVerifyCheck(authNum);
-                            });
-                          }
-                          /* 인증번호 확인 처리 E */
+                              // 인증코드 확인 요청
+                              const { sendEmailVerifyCheck } = commonLib;
+                              sendEmailVerifyCheck(authNum);
+                           });
+                        }
+                        /* 인증번호 확인 처리 E */
                     }
-                });
-
-            /* 이메일 확인 전 이미 가입된 이메일인지 여부 체크 E */
-        });
+            }, (err) => console.error(err))
+       });
     }
     /* 인증 코드 전송 E */
 });
@@ -99,8 +95,8 @@ function callbackEmailVerifyCheck(data) {
         const emailVerifyEl = document.getElementById("email_verify");
         emailVerifyEl.parentElement.removeChild(emailVerifyEl);
 
-        // 3. 이메일 입력 항목 readonly 속성으로 변경
-        frmJoin.email.readonly = true;
+        // 3. 이메일 입력 항목 readonly 속성으로 변경 //readonly, readOnly 확인하기 컴퓨터마다 다른가?
+        frmJoin.email.readOnly = true;
 
         // 4. 인증 성공시 인증코드 입력 영역 제거, 5. 인증 코드 입력 영역에 "확인된 이메일 입니다."라고 출력 처리
         const authBoxEl = document.querySelector(".auth_box");

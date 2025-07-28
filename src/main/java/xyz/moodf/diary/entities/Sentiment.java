@@ -5,9 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
 @Entity
-public class Sentiment {
+public class Sentiment implements Serializable {
     @Id
     @Column(length = 45)
     private String gid;

@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<script th:fragment="image_tpl" id="image_tpl" type="text/html">
+    <div class="file-image" id="file-[seq]"><img src="[imageUrl]" class="image show-image" data-seq="[seq]">
+        <button type="button" class="remove" data-seq="[seq]">
+        삭제
+        </button>
+    </div>
+</script>
+</html>

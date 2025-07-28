@@ -31,14 +31,14 @@ public class FileUploadService {
     private final FileInfoService infoService;
     private final FileDeleteService deleteService;
 
-    public List<FileInfo> process(RequestUpload form) {
+    public List<FileInfo> uploadProcess(RequestUpload form) {
         String gid = form.getGid(); // 그룹 ID
         gid = StringUtils.hasText(gid) ? gid : UUID.randomUUID().toString();
         String location = form.getLocation();
         boolean single = form.isSingle(); // 하나의 파일만 업로드(기존 gid + location으로 등록된 파일을 삭제하고 다시 업로드)
         boolean imageOnly = form.isImageOnly(); // 이미지 형식이 아닌 파일은 업로드 제외
 
-        MultipartFile[] files = form.getFiles();
+        MultipartFile[] files = form.getFile();
         if (files == null || files.length == 0) { // 파일을 업로드 하지 않은 경우
             throw new AlertBackException(utils.getMessage("NotUpload.file"), HttpStatus.BAD_REQUEST);
         }
@@ -46,7 +46,7 @@ public class FileUploadService {
         // 하나의 파일만 업로드 하는 경우
         if (single) {
             // 기존 업로드된 파일 삭제
-            deleteService.process(gid, location);
+            deleteService.deleteProcess(gid, location);
 
             files = new MultipartFile[] { files[0] };
         }

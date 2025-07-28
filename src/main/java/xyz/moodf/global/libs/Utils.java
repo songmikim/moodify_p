@@ -2,6 +2,7 @@ package xyz.moodf.global.libs;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
@@ -9,17 +10,17 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.servlet.LocaleResolver;
+import xyz.moodf.global.configs.FileProperties;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 @Component
 @RequiredArgsConstructor
-//@EnableConfigurationProperties(FileProperties.class)
+@EnableConfigurationProperties(FileProperties.class)
 public class Utils {
 
     private final HttpServletRequest request;
@@ -123,7 +124,7 @@ public class Utils {
         try {
 //            FileInfo item = infoService.get(seq);
             long folder = seq % 10L;
-            url = String.format("%s/file/thumb?seq=%s&width=%s&height=%s&crop=true", request.getContextPath(), seq, width, height);
+            url = String.format("%s/uploads/thumb?seq=%s&width=%s&height=%s&crop=true", request.getContextPath(), seq, width, height);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -187,5 +188,26 @@ public class Utils {
         String port = List.of(80, 443).contains(_port) ? "":":"+_port;
 
         return String.format("%s://%s%s%s%s", protocol, domain, port, request.getContextPath(), url);
+    }
+
+    // 알파벳, 숫자, 특수문자 조합 랜덤 문자열 생성
+    public String randomChars() {
+        return randomChars(8);
+    }
+
+    public String randomChars(int length) {
+        // 알파벳 생성
+        Stream<String> alphas = IntStream.concat(IntStream.rangeClosed((int)'a', (int)'z'), IntStream.rangeClosed((int)'A', (int)'Z')).mapToObj(s -> String.valueOf((char)s));
+
+        // 숫자 생성
+        Stream<String> nums = IntStream.range(0, 10).mapToObj(String::valueOf);
+
+        // 특수문자 생성 나중에 너무 힘든건 빼던가
+        Stream<String> specials = Stream.of("~", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "+", "-", "=", "[", "{", "}", "]", ";", ":");
+
+        List<String> chars = Stream.concat(Stream.concat(alphas, nums), specials).collect(Collectors.toCollection(ArrayList::new));
+        Collections.shuffle(chars);
+
+        return chars.stream().limit(length).collect(Collectors.joining());
     }
 }

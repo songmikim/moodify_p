@@ -25,6 +25,11 @@ spring:
     hibernate:
       ddlAuto: ${ddl.auto}
 
+  data:
+    redis:
+      host: ${redis.host}
+      port: ${redis.port}
+
   # 타임리프 설정
   thymeleaf:
     cache: false

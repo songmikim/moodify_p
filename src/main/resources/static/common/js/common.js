@@ -11,6 +11,7 @@ var commonLib = {
 
         const options = {
             method,
+            credentials: "include"
         }
 
         // body 데이터 처리, POST, PUT, PATH일때만 추가
@@ -27,8 +28,13 @@ var commonLib = {
          // csrf 토큰 처리
         const csrfToken = document.querySelector("meta[name='csrf_token']").content;
         const csrfHeader = document.querySelector("meta[name='csrf_header']").content;
-        header[csrfHeader] = csrfToken;
-        options.headers = header;
+        if (!(body instanceof FormData)) {
+            // CSRF 헤더는 FormData가 아닌 경우에만 적용
+            const csrfToken = document.querySelector("meta[name='csrf_token']").content;
+            const csrfHeader = document.querySelector("meta[name='csrf_header']").content;
+            header[csrfHeader] = csrfToken;
+            options.headers = header;
+        }
 
         // ajax 요청 처리
         fetch(url, options)
@@ -111,6 +117,7 @@ window.addEventListener("DOMContentLoaded", function() {
     // 이미지 상세보기 처리 E
 });
 
+
 /**
 * 이메일 인증 메일 보내기
 *
@@ -121,13 +128,12 @@ commonLib.sendEmailVerify = function(email) {
 
     const url = `/api/email/verify?email=${email}`;
 
-    ajaxLoad("GET", url, null, "json")
-        .then(data => {
-            if (typeof callbackEmailVerify == 'function') { // 이메일 승인 코드 메일 전송 완료 후 처리 콜백
-                callbackEmailVerify(data);
-            }
-        })
-        .catch(err => console.error(err));
+    ajaxLoad(url, (data) => {
+        if (typeof callbackEmailVerify === 'function') {
+            callbackEmailVerify(data);
+        }
+
+    }, (err) => console.error(err));
 };
 
 /**
@@ -137,12 +143,9 @@ commonLib.sendEmailVerify = function(email) {
 commonLib.sendEmailVerifyCheck = function(authNum) {
     const { ajaxLoad } = commonLib;
     const url = `/api/email/auth_check?authNum=${authNum}`;
-
-    ajaxLoad("GET", url, null, "json")
-        .then(data => {
-            if (typeof callbackEmailVerifyCheck == 'function') { // 인증 메일 코드 검증 요청 완료 후 처리 콜백
-                callbackEmailVerifyCheck(data);
-            }
-        })
-        .catch(err => console.error(err));
+    ajaxLoad(url, (data) => {
+        if (typeof callbackEmailVerifyCheck === 'function') {
+            callbackEmailVerifyCheck(data);
+        }
+    }, (err) => console.error(err))
 };

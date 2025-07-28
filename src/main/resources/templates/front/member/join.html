@@ -2,11 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{front/layouts/main}">
-<main layout:fragment="content">
+<main layout:fragment="content" class="join-page">
     <h1 th:text="${pageTitle}"></h1>
     <form name="frmJoin" method="post" th:action="@{/join}" autocomplete="off" th:object="${requestJoin}">
         <input type="hidden" name="socialType" th:field="*{socialType}">
         <input type="hidden" name="socialToken" th:field="*{socialToken}">
+        <input type="hidden" name="gid" th:value="${gid}" />
         <div class="error global" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
 
         <div th:if="*{social}">
@@ -50,6 +51,13 @@
                 <input type="text" name="mobile" th:field="*{mobile}" th:placeholder="#{휴대전화번호}">
                 <div class="error" th:each="err : ${#fields.errors('mobile')}" th:text="${err}"></div>
             </li>
+            <li>
+                <div class="profile-image file-upload-btn" th:data-gid="${gid}" data-single="true" data-image-only="true">
+                    <div th:text="#{프로필_이미지를_등록하세요.}"></div>
+                    <div class="inner"></div>
+                </div>
+
+            </li>
         </ul>
 
         <h3 th:text="#{약관동의}"></h3>
@@ -57,8 +65,8 @@
         <input type="checkbox" name="termsAgree" th:field="*{termsAgree}" id="terms-agree">
         <label for="terms-agree" th:text="#{회원가입_약관에_동의합니다}"></label>
         <div class="error" th:each="err : ${#fields.errors('termsAgree')}" th:text="${err}"></div>
-
         <button type="submit" th:text="#{가입하기}"></button>
     </form>
+    <script th:replace="~{common/_file_tpl::image_tpl}"></script>
 </main>
 </html>

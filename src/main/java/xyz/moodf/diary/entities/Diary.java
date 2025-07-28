@@ -8,12 +8,13 @@ import xyz.moodf.diary.constants.Weather;
 import xyz.moodf.global.entities.BaseEntity;
 import xyz.moodf.member.entities.Member;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Data
 @Entity
 @IdClass(DiaryId.class)
-public class Diary extends BaseEntity {
+public class Diary extends BaseEntity implements Serializable {
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @ToString.Exclude

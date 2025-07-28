@@ -7,7 +7,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import xyz.moodf.member.services.*;
 
 @Configuration
@@ -29,10 +28,9 @@ public class SecurityConfig {
         });
 
         http.logout(c -> {
-            c.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+            c.logoutUrl("/logout")
                     .logoutSuccessUrl("/login");
         });
-
         /* 자동 로그인 - RememberMe */
         http.rememberMe(c -> {
             c.rememberMeParameter("autoLogin")
@@ -40,6 +38,7 @@ public class SecurityConfig {
                     .userDetailsService(infoService)
                     .authenticationSuccessHandler(new LoginSuccessHandler());
         });
+        http.csrf(c -> c.ignoringRequestMatchers("/file/upload"));
 
         /* CSRF 보호 설정 비활성화 (/diary/delete) - sendBeacon()을 사용하기 위해서 */
         http.csrf(csrf -> csrf
@@ -59,13 +58,14 @@ public class SecurityConfig {
          * anyRequest().authenticated() : 회원 전용 페이지가 기본, 일부 페이지 -> 비회원 사이트
          */
         http.authorizeHttpRequests(c -> {
-            c.requestMatchers("/login", "/join", "/board/**", "/diary/**", "/error/**", "/calendar/**").permitAll()
-                    .requestMatchers("/front/**", "/mobile/**", "/member/**", "/common/**").permitAll()
-                    .requestMatchers("/api/email/**").permitAll()
-                    //.requestMatchers("/admin/**").hasAuthority("ADMIN")
-                    .requestMatchers("/admin/**").permitAll()
-                   .anyRequest().authenticated();
-
+                    c.requestMatchers("/login", "/join", "/board/**", "/diary/**", "/error/**", "/calendar/**", "/uploads/**", "/mypage/delete/confirm").permitAll()
+                            .requestMatchers("/front/**", "/mobile/**", "/member/**", "/common/**").permitAll()
+                            .requestMatchers("/api/**").permitAll()
+                            .requestMatchers("/file/upload").permitAll()
+                            //.requestMatchers("/admin/**").hasAuthority("ADMIN")
+                            .requestMatchers("/admin/**").permitAll()
+                            .requestMatchers("/findid", "/find_pw", "/find_pw_done").permitAll()
+                            .anyRequest().authenticated();
         });
 
         http.exceptionHandling(c -> {
@@ -75,6 +75,10 @@ public class SecurityConfig {
 
 
         http.headers(c -> c.frameOptions(f -> f.sameOrigin()));
+
+        http.csrf(csrf -> csrf
+                .ignoringRequestMatchers("/board/check-guest-password") // CSRF 제외
+        );
 
         return http.build();
     }
