@@ -9,6 +9,7 @@ import xyz.moodf.global.file.entities.FileInfo;
 import xyz.moodf.member.constants.Authority;
 import xyz.moodf.member.social.constants.SocialType;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.List;
         @Index(name="idx_member_mobile", columnList = "mobile"),
         @Index(name="idx_member_social", columnList = "socialType,socialToken")
 })
-public class Member extends BaseEntity {
+public class Member extends BaseEntity implements Serializable {
     @Id
     @GeneratedValue
     private Long seq;

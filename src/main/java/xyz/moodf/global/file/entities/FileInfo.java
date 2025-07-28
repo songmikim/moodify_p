@@ -5,6 +5,8 @@ import lombok.Data;
 import org.springframework.data.annotation.CreatedBy;
 import xyz.moodf.global.entities.BaseEntity;
 
+import java.io.Serializable;
+
 @Data
 @Entity
 @Table(indexes = {
@@ -13,7 +15,7 @@ import xyz.moodf.global.entities.BaseEntity;
         @Index(name="idx_fileinfo_location1", columnList = "gid,location,createdAt"),
         @Index(name="idx_fileinfo_location2", columnList = "gid,location,done,createdAt")
 })
-public class FileInfo extends BaseEntity {
+public class FileInfo extends BaseEntity implements Serializable {
     @Id
     @GeneratedValue
     private Long seq;

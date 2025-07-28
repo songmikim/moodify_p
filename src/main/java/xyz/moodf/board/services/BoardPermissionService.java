@@ -15,10 +15,6 @@ public class BoardPermissionService {
      * 수정 권한 확인
      */
     public boolean canEdit(BoardData boardData) {
-        // 관리자는 모든 글 수정 가능
-        if (memberUtil.isAdmin()) {
-            return true;
-        }
 
         // 회원 글인 경우 본인 확인
         if (boardData.getMember() != null) {
@@ -81,4 +77,29 @@ public class BoardPermissionService {
 
         return false;
     }
+
+    public boolean isMember(BoardData boardData){
+        // 관리자는 멤버와 상관없음
+        if (memberUtil.isAdmin()) {
+            return false;
+        }
+
+        // 회원인지 아닌지 판가름
+        if (boardData.getMember() != null) {
+            return false;
+            } else {return true;}
+    }
+
+    public boolean guestPwCheck(BoardData boardData, String guestPw) {
+        // null 체크 추가
+        if (boardData.getGuestPw() == null || guestPw == null) {
+            return false;
+        }
+
+        // trim()으로 공백 제거 후 비교
+        return guestPw.trim().equals(boardData.getGuestPw().trim());
+    }
+
+
+
 }

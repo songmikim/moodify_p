@@ -6,9 +6,11 @@ import xyz.moodf.admin.board.entities.Board;
 import xyz.moodf.global.entities.BaseEntity;
 import xyz.moodf.member.entities.Member;
 
+import java.io.Serializable;
+
 @Data
 @Entity
-public class BoardData extends BaseEntity {
+public class BoardData extends BaseEntity implements Serializable {
     @Id
     @GeneratedValue
     private Long seq;
