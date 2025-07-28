@@ -67,6 +67,13 @@ public class BoardDataInfoService
      * @param bid
      * @return
      */
+    /**
+     * 게시판 목록 조회
+     *
+     * @param search
+     * @param bid
+     * @return
+     */
     public ListData<BoardData> getList(CommonSearch search, String bid) {
         int page = Math.max(search.getPage(), 1);
         int limit = search.getLimit();

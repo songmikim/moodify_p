@@ -31,12 +31,15 @@
 
             <th:block th:if="${canEdit}">
                 <a th:if="${!isGuest}" th:href="@{/board/update/{seq}(seq=${boardData.seq})}" class="btn btn-edit">수정</a>
-                <button th:if="${isGuest}" type="button" class="btn btn-edit" onclick="checkGuestPassword('update', [[${boardData.seq}]])">수정</button>
+                <button th:if="${isGuest}" type="button" class="btn btn-edit"
+                        th:data-seq="${boardData.seq}"
+                        onclick="checkGuestPassword('update', this.dataset.seq)">수정</button>
             </th:block>
 
             <th:block th:if="${canDelete}">
                 <a th:if="${!isGuest}" th:href="@{/board/delete/{seq}(seq=${boardData.seq})}" class="btn btn-delete">삭제</a>
-                <button th:if="${isGuest}" type="button" class="btn btn-delete" onclick="checkGuestPassword('delete', [[${boardData.seq}]])">삭제</button>
+                <button th:if="${isGuest}" type="button" class="btn btn-delete"
+                        th:data-seq="${boardData.seq}" onclick="checkGuestPassword('delete', this.dataset.seq)">삭제</button>
             </th:block>
         </div>
     </div>

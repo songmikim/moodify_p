@@ -214,9 +214,12 @@ public class BoardPostController {
 
         } else if (mode.equals("view")) { // 조회 모드
             // 조회수 증가 (별도 서비스에서 처리하는 것이 좋음)
-            addScript.add(String.format("board/%s/view", skin));
             addScript.add(String.format("board/%s/form", skin));
             pageTitle = boardData.getSubject() + " - " + board.getName();
+
+            System.out.println(permissionService.canEdit(boardData));
+            System.out.println(permissionService.canDelete(boardData));
+            System.out.println(boardData.getMember() == null);
 
             model.addAttribute("canEdit", permissionService.canEdit(boardData));
             model.addAttribute("canDelete", permissionService.canDelete(boardData));

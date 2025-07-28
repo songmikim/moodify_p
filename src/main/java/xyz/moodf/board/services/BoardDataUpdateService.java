@@ -9,6 +9,7 @@ import xyz.moodf.admin.board.services.BoardConfigInfoService;
 import xyz.moodf.board.controllers.RequestPostBoard;
 import xyz.moodf.board.entities.BoardData;
 import xyz.moodf.board.repositories.BoardDataRepository;
+import xyz.moodf.member.libs.MemberUtil;
 
 import java.util.Objects;
 
@@ -18,12 +19,17 @@ import java.util.Objects;
 public class BoardDataUpdateService {
     private final ModelMapper mapper;
     private final BoardDataRepository boardRepository;
-    private final BoardConfigInfoService configInfoService; // 추가
+    private final BoardConfigInfoService configInfoService;
+    private final MemberUtil memberUtil;
 
     public void process(RequestPostBoard form) {
         String mode = Objects.requireNonNullElse(form.getMode(), "register");
 
         BoardData item = mapper.map(form, BoardData.class);
+
+        if (memberUtil.isLogin()) {
+            item.setMember(memberUtil.getMember());
+        }
         
         Board board = configInfoService.get(form.getBid());
         item.setBoard(board);
