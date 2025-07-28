@@ -40,6 +40,11 @@ public class SecurityConfig {
         });
         http.csrf(c -> c.ignoringRequestMatchers("/file/upload"));
 
+        /* CSRF 보호 설정 비활성화 (/diary/delete) - sendBeacon()을 사용하기 위해서 */
+        http.csrf(csrf -> csrf
+                .ignoringRequestMatchers("/diary/delete")  // 삭제용 비콘 요청만 제외
+        );
+
         /* 인가 설정 - 자원에 대한 접근 권한 설정 */
         /**
          * authenticated() : 인증 받은 사용자만 접근 가능 (회원)
