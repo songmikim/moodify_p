@@ -4,9 +4,11 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 @Data
 @Entity
-public class Sentiment {
+public class Sentiment implements Serializable {
     @Id
     @GeneratedValue
     private Long sid;
