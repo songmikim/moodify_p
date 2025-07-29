@@ -1,8 +1,10 @@
 package xyz.moodf.board.controllers;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
@@ -95,7 +97,8 @@ public class BoardPostController {
 
     // 게시글 수정
     @GetMapping("/update/{seq}")
-    public String update(@PathVariable("seq") Long seq, Model model) {
+    public String update(@PathVariable("seq") Long seq, HttpSession session, Model model) {
+
         commonProcess(seq, "update", model);
 
         return utils.tpl("board/update");
@@ -105,6 +108,11 @@ public class BoardPostController {
     @GetMapping("/view/{seq}")
     public String view(@PathVariable("seq") Long seq, Model model) {
         commonProcess(seq, "view", model);
+
+        BoardData boardData = InfoService.get(seq);
+        if (!permissionService.canView(boardData)) {
+            return "redirect:/board/list/" + boardData.getBoard().getBid() + "?error=access_denied";
+        }
 
         return utils.tpl("board/view");
     }
@@ -172,6 +180,8 @@ public class BoardPostController {
         Board board = boardData.getBoard();
 
         mode = StringUtils.hasText(mode) ? mode : "view";
+
+        commonProcess(board.getBid(),mode,model);
 
         List<String> addCommonScript = new ArrayList<>();
         List<String> addCss = new ArrayList<>();

@@ -10,29 +10,18 @@ window.addEventListener("DOMContentLoaded", function() {
 function checkGuestPassword(action, seq) {
     const password = prompt('비밀번호를 입력하세요:');
     if (password) {
-        // Spring Boot로 AJAX 요청
-        fetch('/board/check-guest-password', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `seq=${seq}&password=${encodeURIComponent(password)}`
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                if (action === 'update') {
-                    location.href = '/board/update/' + seq;
-                } else if (action === 'delete') {
-                    deletePost(seq);
-                }
-            } else {
-                alert(data.message); // "비밀번호가 틀렸습니다"
-            }
-        })
-        .catch(error => {
-            alert('오류가 발생했습니다.');
-        });
+        // 🔒 비밀번호와 함께 직접 이동
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/board/guest-' + action;
+
+        form.innerHTML = `
+            <input type="hidden" name="seq" value="${seq}">
+            <input type="hidden" name="guestPw" value="${password}">
+        `;
+
+        document.body.appendChild(form);
+        form.submit();
     }
 }
 
