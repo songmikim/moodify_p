@@ -2,16 +2,21 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{front/layouts/main}">
+
+<th:block layout:fragment="addCss">
+    <link rel="stylesheet" th:href="@{/front/css/member/join.css}" />
+</th:block>
+
 <main layout:fragment="content" class="join-page">
-    <h1 th:text="${pageTitle}"></h1>
     <form name="frmJoin" method="post" th:action="@{/join}" autocomplete="off" th:object="${requestJoin}">
+        <h1 th:text="${pageTitle}"></h1>
         <input type="hidden" name="socialType" th:field="*{socialType}">
         <input type="hidden" name="socialToken" th:field="*{socialToken}">
         <input type="hidden" name="gid" th:value="${gid}" />
         <div class="error global" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
 
         <div th:if="*{social}">
-            <th:block th:text="*{#messages.msg('SocialType.' + socialType)}"></th:block> 회원가입
+            <th:block th:text="*{#messages.msg('SocialType.' + socialType)}"></th:block>
         </div>
         <ul>
             <dl>
@@ -62,8 +67,10 @@
 
         <h3 th:text="#{약관동의}"></h3>
         <div class="terms">약관...</div>
-        <input type="checkbox" name="termsAgree" th:field="*{termsAgree}" id="terms-agree">
-        <label for="terms-agree" th:text="#{회원가입_약관에_동의합니다}"></label>
+        <div class="left checkbox">
+            <input type="checkbox" name="termsAgree" th:field="*{termsAgree}" id="terms-agree">
+            <label for="terms-agree" th:text="#{회원가입_약관에_동의합니다}"></label>
+        </div>
         <div class="error" th:each="err : ${#fields.errors('termsAgree')}" th:text="${err}"></div>
         <button type="submit" th:text="#{가입하기}"></button>
     </form>
