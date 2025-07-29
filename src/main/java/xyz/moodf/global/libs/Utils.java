@@ -27,8 +27,6 @@ public class Utils {
     private final MessageSource messageSource;
     private final LocaleResolver localeResolver;
 
-
-
     public int version() {
         return 1;
     }

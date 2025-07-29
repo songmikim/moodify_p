@@ -23,4 +23,4 @@ window.addEventListener("DOMContentLoaded", function() {
             alert('정말 처리하겠습니까?', () => formEl.submit());
         });
     }
-    //
+});
