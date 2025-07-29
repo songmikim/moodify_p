@@ -16,17 +16,35 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
-    const sideMenu = Array.from(document.getElementsByClassName('sideMenu'));
-    const openBtn = Array.from(document.getElementsByClassName('openBtn'));
-    const closeBtn = Array.from(document.getElementsByClassName('closeBtn'));
-    const showMenu = () => {
-        sideMenu.forEach(menu => menu.style.display = 'block');
-    };
 
-    const hideMenu = () => {
-        sideMenu.forEach(menu => menu.style.display = 'none');
-    };
 
-    openBtn.forEach(btn => btn.addEventListener('click', showMenu));
-    closeBtn.forEach(btn => btn.addEventListener('click', hideMenu));
+    /* 더보기 메뉴 클릭 처리 S */
+    const moreMenus = document.getElementsByClassName("more-menu");
+    for (const el of moreMenus) {
+        el.addEventListener("click", function() {
+            const menuEl = document.querySelector("body > aside");
+
+            const el = document.getElementById("modal-bg");
+            if (el) {
+                setTimeout(function() {
+                    el.parentElement.removeChild(el);
+                }, 1000)
+
+            }
+
+            if (!menuEl.classList.contains("on")) {
+                // 열기
+                const div = document.createElement("div");
+                div.id = "modal-bg";
+                document.body.append(div);
+
+                div.addEventListener("click", () => this.click());
+            }
+
+            menuEl.classList.toggle("on");
+
+
+        });
+    }
+    /* 더보기 메뉴 클릭 처리 E */
 });

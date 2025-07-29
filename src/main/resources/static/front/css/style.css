@@ -1,45 +1,264 @@
+@import url('https://fonts.googleapis.com/css2?family=Hi+Melody&family=Noto+Sans+KR:wght@100..900&display=swap');
+* {
+    box-sizing: border-box;
+    outline: none;
+    font-family: "Nanum Gothic", sans-serif;
+}
 
-h1{
-    margin:20px auto;
-    text-align:center;
+.melody {
+    font-family: "Hi Melody", sans-serif;
 }
-main{
-    margin:0 10%;
-    max-width:80%;
+
+html {
+    font-size: 13px;
 }
-footer{
-    position:fixed;
-    bottom:30px;
-    height:50px;
-    text-align:center
+
+body {
+    margin: 0;
+    color: #003049;
+    background: #fff;
 }
-footer a{}
-main, body{padding-bottom:80px; box-sizing:border-box; height:100%;}
-html{height:100%;}
-/* 사이드 메뉴 S*/
-aside{
-    max-width:200px; width:100%;
-    height:100%;
-    position:fixed;
-    left:0; top:0;
-    background:rgba(0,0,0,0);
+
+body.dark {
+    background: #003049;
+    color: #fff;
 }
-aside>button{
-    position:fixed;
-    top:10px; left:10px;
-    width: 30px; height:30px;
-    border:0;
+
+a {
+    color: #003049;
+    text-decoration: none;
 }
-aside img{width: 100%; height:100%;}
-.sideMenu{position:relative;color:var(--fontc);display:none;z-index:100;}
-.sideMenu>button{
-    position:fixed;
-    top:10px; right:-40px;
-    width: 30px; height:30px;
-    border:0;
+
+ol, ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
-.sideMenu>h3{
-    height:80px;
-    line-height:80px;
+
+li, dl, dt, dd {
+    padding: 0;
+    margin: 0;
 }
-/* 사이드 메뉴 E*/
+
+img {
+    border: 0;
+}
+
+/* 기본 제목 공통 */
+h1, h2, h3, h4 {
+    padding: 0;
+    margin: 0;
+}
+
+h1 {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+/* 입력 항목 공통 S */
+input[type='text'],
+input[type='email'],
+input[type='password'],
+input[type='number'] {
+    border: 1px solid #e2e2e2;
+    border-radius: 3px;
+    height: 45px;
+    width: 100%;
+}
+/* 입력 항목 공통 E */
+
+/* 체크박스 공통 S */
+input[type='checkbox'] {
+    display: none;
+}
+
+input[type='checkbox'] + label,
+.checkbox input[type='checkbox'] ~ label {
+    background:url("../images/check.png") no-repeat left center;
+    padding: 0 20px 0 33px;
+    height: 40px;
+    line-height: 40px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+input[type='checkbox']:checked + label,
+.checkbox input[type='checkbox']:checked ~ label {
+    background:url("../images/check_on.png") no-repeat left center;
+}
+
+input[type='checkbox'] + label.standalone {
+    padding: 0;
+    width: 23px;
+    height: 23px;
+}
+/* 체크박스 공통 E */
+
+/* 기준 너비 */
+.layout-width {
+    max-width: 1280px;
+    padding: 0 15px;
+    margin: 0 auto;
+}
+
+
+/* 헤더 영역 S */
+header {
+    height: 62px;
+    background: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+}
+
+body.dark header {
+    background: #e2e2e2;
+}
+/* 헤더 영역 E */
+header .logo {
+    display: block;
+    height: 62px;
+    background: url('../../common/images/logo_wmode.png') no-repeat center center;
+    background-size: 150px;
+}
+
+body.dark header .logo {
+     background: url('../../common/images/logo_bmode.png') no-repeat center center;
+     background-size: 150px;
+}
+
+header .left, header .right {
+    width: 100px;
+}
+
+header .logo-section {
+    flex-grow: 1;
+}
+
+header .right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+header .profile-image {
+    border-radius: 50%;
+    border: 2px solid #FFF0ED;
+    width: 40px;
+    margin-right: 10px;
+}
+
+header .left button {
+    background: transparent;
+    font-size: 30px;
+    color: #003049;
+    border: 0;
+    cursor: pointer;
+}
+
+header .right a i {
+    font-size: 30px;
+    color: #003049;
+}
+/* 푸터 영역 S */
+footer {
+    text-align: center;
+    background: #FFF0ED;
+    min-height: 250px;
+}
+
+footer .top-section {
+    min-height: 150px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+footer .bottom-section {
+    padding: 20px 0;
+}
+
+footer .bottom-section .text1 {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+}
+/* 푸터 영역 E */
+
+/* 더보기 메뉴 영역 S */
+body > aside {
+    position: fixed;
+    left: -300px;
+    top: 0;
+    width: 300px;
+    height: 100%;
+    background: #fff;
+    z-index: 30;
+    transition: all 0.8s;
+}
+
+body > aside.on {
+    left: 0;
+}
+
+.main-menu {
+    padding: 70px 30px 30px;
+}
+
+.main-menu i.more-menu {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    font-size: 25px;
+    color: #003049;
+}
+
+.main-menu h3 {
+    padding:0;
+    margin: 0 0 15px;
+    font-size: 1.35rem;
+}
+
+.main-menu h3:not(.first) {
+    margin-top: 50px;
+}
+
+.main-menu a {
+    display: block;
+    font-size: 1.25rem;
+    padding: 8px 0;
+}
+
+/* 더보기 메뉴 영역 E */
+
+main {
+    padding-top: 62px;
+    min-height: 600px;
+}
+
+/* 모달 */
+#modal-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 20;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+
+
+@media screen and (max-width: 350px) {
+    header .profile-image {
+        width: 30px;
+    }
+
+    header .logo {
+        background-size: 120px;
+    }
+}
+
