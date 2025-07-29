@@ -1,7 +1,7 @@
 window.addEventListener('DOMContentLoaded', function() {
     // 이미지 변경 예정..
     const emotions = [
-        { emotion: 'happiness', imagePath: '/common/images/sentiments/happiness.png', altText: '행복' },
+        { emotion: 'happiness', imagePath: '/common/images/sentiments/happiness.png', altText: '기쁨' },
         { emotion: 'sadness', imagePath: '/common/images/sentiments/happiness.png', altText: '슬픔' },
         { emotion: 'anger', imagePath: '/common/images/sentiments/happiness.png', altText: '분노' },
         { emotion: 'fear', imagePath: '/common/images/sentiments/happiness.png', altText: '불안' },
