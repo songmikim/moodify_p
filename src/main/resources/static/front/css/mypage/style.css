@@ -1,0 +1,20 @@
+
+.tabs button {
+    background:none;
+    border:0;
+    cursor:pointer;
+    padding:5px;
+    margin-right:5px;
+}
+.tabs button.active {
+    border-bottom:2px solid var(--mainc);
+}
+.tabs button img {
+    width:40px;
+    height:40px;
+}
+.tab-content {
+    margin-top:10px;
+}
+.song-list { list-style:none; padding:0; }
+.song-list li { margin-bottom:5px; }
