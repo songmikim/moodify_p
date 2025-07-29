@@ -40,7 +40,7 @@
                     <div class="error" th:each="err : ${#fields.errors('email')}" th:text="${err}"></div>
                 </dd>
             </dl>
-            <li th:if="*{!social}">
+             <li th:if="*{!social}">
                 <input type="password" name="password" th:field="*{password}" th:placeholder="#{비밀번호}">
                 <div class="error" th:each="err : ${#fields.errors('password')}" th:text="${err}"></div>
             </li>
