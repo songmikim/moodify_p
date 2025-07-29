@@ -53,7 +53,7 @@ body {
 .join-page ul,
 .join-page dl,
 .join-page li {
-  margin: 0;
+  margin: 6px;
   padding: 0;
   list-style: none;
 }
