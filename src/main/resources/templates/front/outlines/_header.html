@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<header th:fragment="common">
+    <div class="left">
+        <button type="button" class="more-menu">
+            <i class="xi-bars"></i>
+        </button>
+    </div>
+    <div class="logo-section">
+        <a th:href="@{/}" class="logo"></a>
+    </div>
+    <div class="right">
+        <th:block th:if="${isLogin}">
+            <a th:href="@{/mypage}">
+                <th:block th:if="${profile != null}" th:utext="${@utils.printThumb(profile.seq, 40, 40, 'profile-image')}"></th:block>
+                <th:block th:unless="${profile != null}">
+                    <img th:src="@{/common/images/profile/no_profile.jpg}" alt="profile-image" class="profile-image">
+                </th:block>
+            </a>
+            <a th:href="@{/logout}">
+                <i class="xi-log-out"></i>
+            </a>
+        </th:block>
+        <th:block th:unless="${isLogin}">
+            <a th:href="@{/login}">
+                <i class="xi-log-in"></i>
+            </a>
+            <a th:if="${isAdmin}" th:href="@{/admin}">
+                <i class="xi-cog"></i>
+            </a>
+        </th:block>
+    </div>
+</header>
+</html>

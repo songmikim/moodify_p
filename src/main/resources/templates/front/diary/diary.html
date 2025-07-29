@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{front/layouts/main}">
+<main layout:fragment="content">
+    <h1>일기장 페이지</h1>
+
+    <form th:action="@{/diary/save}" method="post">
+
+        <input type="hidden" id="gid" name="gid" th:value="${gid}" />
+
+        <div>
+            <label for="date" class="form-label">날짜</label>
+            <input type="date"
+                   class="form-control"
+                   id="date"
+                   name="date"
+                   th:value="${today}"
+                   th:max="${today}">
+        </div>
+
+        <div>
+            <label for="weather" class="form-label">날씨</label>
+            <select class="form-control" id="weather" name="weather">
+                <option th:each="w : ${weatherValues}"
+                        th:value="${w.name()}"
+                        th:selected="${diary.weather} == ${w}"
+                        th:text="${w.description}"></option>
+            </select>
+        </div>
+
+        <div>
+            <label for="title" class="form-label">제목</label>
+            <input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력하세요">
+        </div>
+
+        <div>
+            <label for="content" class="form-label">내용</label>
+            <textarea class="form-control" id="content" name="content" rows="10" placeholder="오늘의 일기를 작성해 보세요"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">저장하기</button>
+    </form>
+</main>
+</html>

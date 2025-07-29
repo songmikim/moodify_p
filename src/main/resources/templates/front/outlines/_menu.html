@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<aside th:fragment="common" class="main-menu">
+    <i class="xi-close more-menu"></i>
+    <h3 th:text="#{일기장}" class="first"></h3>
+    <a th:href="@{/diary}" th:text="#{일기_쓰기}"></a>
+    <a th:href="@{/diary/calendar}" th:text="#{일기_목록}"></a>
+
+    <h3 th:text="#{게시판}"></h3>
+    <a th:href="@{/board/list/notice}" th:text="#{공지사항}"></a>
+    <a th:href="@{/board/list/qa}">Q&amp;A</a>
+</aside>
+</html>

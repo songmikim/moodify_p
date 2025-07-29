@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{front/layouts/main}">
+
+<main layout:fragment="content">
+    <th:block th:replace="~{front/board/_board_title::common}"></th:block>
+
+    <div class="board-view">
+        <!-- 게시글 헤더 -->
+        <div class="post-header">
+            <h2 th:text="${boardData.subject}">게시글 제목</h2>
+            <div class="post-info">
+                <span>작성자: <strong th:text="${boardData.poster}">작성자명</strong></span>
+                <span>작성일: <span th:text="${#temporals.format(boardData.createdAt, 'yyyy-MM-dd HH:mm')}">2024-01-01 12:00</span></span>
+                <span>조회수: <span th:text="${boardData.viewCount}">0</span></span>
+                <span th:if="${boardData.notice}" class="notice-badge">공지</span>
+                <span th:if="${boardData.secret}" class="secret-badge">비밀글</span>
+            </div>
+        </div>
+
+        <!-- 게시글 내용 -->
+        <div class="post-content">
+            <div th:utext="${boardData.content}">게시글 내용이 여기에 표시됩니다.</div>
+        </div>
+
+        <!-- 비회원 글인 경우 비밀번호로 수정/삭제 -->
+        <!-- 회원 글 수정/삭제 버튼 -->
+        <div class="post-actions">
+            <a th:href="@{/board/list/{bid}(bid=${board.bid})}" class="btn btn-list">목록</a>
+
+            <th:block th:if="${canEdit}">
+                <button th:if="${!isGuest}" th:href="@{/board/update/{seq}(seq=${boardData.seq})}" class="btn btn-edit">수정</button>
+                <button th:if="${isGuest}" type="button" class="btn btn-edit"
+                        th:data-seq="${boardData.seq}"
+                        onclick="checkGuestPassword('update', this.dataset.seq)">수정</button>
+            </th:block>
+
+            <th:block th:if="${canDelete}">
+                <button th:if="${!isGuest}" type="button" class="btn btn-delete" th:data-seq="${boardData.seq}" onclick="deletePost(this.dataset.seq)">삭제</button>
+                <button th:if="${isGuest}" type="button" class="btn btn-delete"
+                        th:data-seq="${boardData.seq}" onclick="checkGuestPassword('delete', this.dataset.seq)">삭제</button>
+            </th:block>
+        </div>
+    </div>
+
+</main>
+</html>

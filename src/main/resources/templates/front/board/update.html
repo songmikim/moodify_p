@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{front/layouts/main}">
+
+<main layout:fragment="content">
+    <th:block th:replace="~{front/board/_board_title::common}"></th:block>
+    <form name="frmSave" method="POST" th:action="@{/board/save}" autocomplete="off">
+        <input type="hidden" name="mode" value="update">
+        <input type="hidden" name="seq" th:value="${requestPostBoard.seq}">
+        <th:block th:replace="~{front/board/_form::common}"></th:block>
+        <div class="button-group">
+            <button type="reset" th:text="#{다시입력}" class="btn"></button>
+            <button type="submit" th:text="#{수정하기}" class="btn"></button>
+        </div>
+    </form>
+</main>
+</html>
