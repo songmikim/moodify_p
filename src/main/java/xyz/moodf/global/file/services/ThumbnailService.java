@@ -26,8 +26,8 @@ public class ThumbnailService {
     public String create(RequestThumb form) {
         Long seq = form.getSeq();
         String url = form.getUrl();
-        int width = Math.max(form.getWidth(), 50);
-        int height = Math.max(form.getHeight(), 50);
+        int width = Math.max(form.getWidth(), 20);
+        int height = Math.max(form.getHeight(), 20);
         boolean crop = form.isCrop();
 
         // 썸네일 경로, 이미 생성된 썸네일이 있다면 생성되어 있는 경로로 반환

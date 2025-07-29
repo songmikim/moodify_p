@@ -16,8 +16,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
-
-
     /* 더보기 메뉴 클릭 처리 S */
     const moreMenus = document.getElementsByClassName("more-menu");
     for (const el of moreMenus) {
