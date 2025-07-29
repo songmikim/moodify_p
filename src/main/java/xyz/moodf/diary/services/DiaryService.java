@@ -31,7 +31,6 @@ public class DiaryService {
 
         Diary diary = new Diary();
 
-
         diary.setMember(member);
         diary.setDate(request.getDate());
         diary.setGid(gid);
