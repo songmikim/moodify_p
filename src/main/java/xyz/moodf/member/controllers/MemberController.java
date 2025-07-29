@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import xyz.moodf.global.annotations.ApplyCommonController;
 import xyz.moodf.global.libs.Utils;
+import xyz.moodf.member.services.FindPwService;
 import xyz.moodf.member.services.JoinService;
 import xyz.moodf.member.social.constants.SocialType;
 import xyz.moodf.member.social.services.KakaoLoginService;
@@ -32,6 +33,8 @@ public class MemberController {
     private final JoinService joinService;
     private final KakaoLoginService kakaoLoginService;
     private final NaverLoginService naverLoginService;
+
+    private final FindPwService findPwService;
 
     @ModelAttribute("addCss")
     public List<String> addCss() {
@@ -157,6 +160,50 @@ public class MemberController {
         model.addAttribute("addCss", addCss);
         model.addAttribute("pageTitle", pageTitle);
     }
+
+    /**
+     * 비밀번호 찾기 양식
+     * @param form
+     * @param model
+     * @return
+     */
+        @GetMapping("/find_pw")
+    public String findPw(@ModelAttribute RequestFindPw form, Model model) {
+        commonProcess("find_pw", model);
+
+        return utils.tpl("member/find_pw");
+    }
+
+    /**
+     * 비밀번호 찾기 처리
+     * @param form
+     * @param errors
+     * @param model
+     * @return
+     */
+    @PostMapping("/find_pw")
+    public String findPwPs(@Valid RequestFindPw form, Errors errors, Model model) {
+        commonProcess("find_pw", model);
+
+        findPwService.process(form, errors); //비밀번호 찾기 처리
+
+        if (errors.hasErrors()){
+            return utils.tpl("member/find_pw");
+        }
+
+        // 비밀번호 찾기 성공 시 완료 페이지
+        return "redirect:/find_pw_done";
+    }
+
+    @GetMapping("find_pw_done")
+    public String findPwDone (Model model) {
+        commonProcess("find_pw", model);
+
+        return utils.tpl("member/find_pw_done");
+    }
+
+
+
 
 //    @ResponseBody
 //    @GetMapping("/test")

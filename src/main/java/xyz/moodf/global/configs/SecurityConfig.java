@@ -40,6 +40,11 @@ public class SecurityConfig {
         });
         http.csrf(c -> c.ignoringRequestMatchers("/file/upload"));
 
+        /* CSRF 보호 설정 비활성화 (/diary/delete) - sendBeacon()을 사용하기 위해서 */
+        http.csrf(csrf -> csrf
+                .ignoringRequestMatchers("/diary/delete")  // 삭제용 비콘 요청만 제외
+        );
+
         /* 인가 설정 - 자원에 대한 접근 권한 설정 */
         /**
          * authenticated() : 인증 받은 사용자만 접근 가능 (회원)
@@ -53,13 +58,14 @@ public class SecurityConfig {
          * anyRequest().authenticated() : 회원 전용 페이지가 기본, 일부 페이지 -> 비회원 사이트
          */
         http.authorizeHttpRequests(c -> {
-            c.requestMatchers("/login", "/join", "/board/**", "/diary/**", "/error/**", "/calendar/**", "/uploads/**", "/mypage/delete/confirm").permitAll()
-                    .requestMatchers("/front/**", "/mobile/**", "/member/**", "/common/**").permitAll()
-                    .requestMatchers("/api/**").permitAll()
-                    .requestMatchers("/file/upload").permitAll()
-                    //.requestMatchers("/admin/**").hasAuthority("ADMIN")
-                    .requestMatchers("/admin/**").permitAll()
-                   .anyRequest().authenticated();
+                    c.requestMatchers("/login", "/join", "/board/**", "/diary/**", "/error/**", "/calendar/**", "/uploads/**", "/mypage/delete/confirm").permitAll()
+                            .requestMatchers("/front/**", "/mobile/**", "/member/**", "/common/**").permitAll()
+                            .requestMatchers("/api/**").permitAll()
+                            .requestMatchers("/file/upload").permitAll()
+                            //.requestMatchers("/admin/**").hasAuthority("ADMIN")
+                            .requestMatchers("/admin/**").permitAll()
+                            .requestMatchers("/findid", "/find_pw", "/find_pw_done").permitAll()
+                            .anyRequest().authenticated();
         });
 
         http.exceptionHandling(c -> {
@@ -69,6 +75,10 @@ public class SecurityConfig {
 
 
         http.headers(c -> c.frameOptions(f -> f.sameOrigin()));
+
+        http.csrf(csrf -> csrf
+                .ignoringRequestMatchers("/board/check-guest-password") // CSRF 제외
+        );
 
         return http.build();
     }
