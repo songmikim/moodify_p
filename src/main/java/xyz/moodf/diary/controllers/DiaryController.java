@@ -35,11 +35,11 @@ import java.util.Map;
 public class DiaryController {
 
     private final Utils utils;
+    private final MemberUtil memberUtil;
     private final DiaryService diaryService;
     private final DiaryInfoService infoService;
     private final SentimentService sentimentService;
     private final SentimentRepository sentimentRepository;
-    private final MemberUtil memberUtil;
 
     @ModelAttribute("extraData")
     public Map<LocalDate, Object> getExtraData() {
