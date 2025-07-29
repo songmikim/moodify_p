@@ -148,10 +148,12 @@ public class MemberController {
             addCommonScript.add("fileManager");
             addScript.add("member/join");
             addScript.add("member/form");
+            addCss.add("member/join");
             pageTitle = utils.getMessage("회원가입");
 
         } else if (mode.equals("login")) { // 로그인 공통 처리
             pageTitle = utils.getMessage("로그인");
+            addCss.add("member/login");
         }
 
         model.addAttribute("addCommonScript", addCommonScript);
