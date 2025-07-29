@@ -27,7 +27,6 @@ public class JoinService {
     private final PasswordEncoder encoder;
     private final MemberRepository repository;
     private final FileUploadService uploadService;
-
     private final HttpSession session;
 
     public void process(RequestJoin form) {
