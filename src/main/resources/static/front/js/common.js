@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (el) {
                 setTimeout(function() {
                     el.parentElement.removeChild(el);
-                }, 1000)
+                }, 300)
 
             }
 
@@ -37,10 +37,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 const div = document.createElement("div");
                 div.id = "modal-bg";
                 document.body.append(div);
+                setTimeout(() => {
+                    div.classList.add("show");  // opacity 1 적용 → 트랜지션 발생
+                }, 10);
 
                 div.addEventListener("click", () => this.click());
-            }
-
+                } else {
+                    const existingModal = document.getElementById("modal-bg");
+                    if (existingModal) {
+                        existingModal.classList.remove("show"); // fade-out 시작
+                        setTimeout(() => {
+                            existingModal?.remove(); // 트랜지션 끝나고 제거
+                        }, 300);
+                    }
+                }
             menuEl.classList.toggle("on");
 
 
