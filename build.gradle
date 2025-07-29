@@ -33,7 +33,6 @@ dependencies {
 	implementation 'net.coobird:thumbnailator:0.4.20'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
-
 	// ModelMapper
 	implementation 'org.modelmapper:modelmapper:3.2.3'
 
