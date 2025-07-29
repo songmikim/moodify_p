@@ -64,6 +64,14 @@ public class BoardDataInfoService
      * 게시판 목록 조회
      *
      * @param search
+     * @param bid
+     * @return
+     */
+    /**
+     * 게시판 목록 조회
+     *
+     * @param search
+     * @param bid
      * @return
      */
     public ListData<BoardData> getList(CommonSearch search, String bid) {
@@ -76,6 +84,14 @@ public class BoardDataInfoService
 
         BooleanBuilder andBuilder = new BooleanBuilder();
         QBoardData board = QBoardData.boardData;
+
+        // bid 필터링 추가 - 특정 게시판의 글만 조회
+        if (StringUtils.hasText(bid)) {
+            andBuilder.and(board.board.bid.eq(bid));
+        }
+
+        //deletedAt 필터링
+        andBuilder.and(board.deletedAt.isNull());
 
         // 키워드 검색 처리 S
         sopt = StringUtils.hasText(sopt) ? sopt.toUpperCase() : "ALL";
@@ -92,7 +108,6 @@ public class BoardDataInfoService
             } else { // 통합 검색
                 fields = board.poster.concat(board.subject).concat(board.content);
             }
-            fields = board.poster.concat(board.subject).concat(bid);
             andBuilder.and(fields.contains(skey));
         }
         // 키워드 검색 처리 E
@@ -104,6 +119,53 @@ public class BoardDataInfoService
 
         int total = (int)data.getTotalElements();
         Pagination pagination = new Pagination(page, total, 10, limit, request);
+
+        return new ListData<>(items, pagination);
+    }
+
+
+    // 관리자 게시글 관리용
+    public ListData<BoardData> getList(CommonSearch search) {
+        int page = Math.max(search.getPage(), 1);
+        int limit = search.getLimit();
+        limit = limit < 1 ? 20 : limit;
+
+        String sopt = search.getSopt();
+        String skey = search.getSkey();
+
+        BooleanBuilder andBuilder = new BooleanBuilder();
+        QBoardData board = QBoardData.boardData;
+
+        //deletedAt 필터링
+        andBuilder.and(board.deletedAt.isNull());
+
+        // 키워드 검색 처리 S
+        sopt = StringUtils.hasText(sopt) ? sopt.toUpperCase() : "ALL";
+        if (StringUtils.hasText(skey)) {
+            skey = skey.trim();
+
+            StringExpression fields = null;
+            if (sopt.equals("POSTER")) {
+                fields = board.poster;
+            } else if (sopt.equals("SUBJECT")) {
+                fields = board.subject;
+            } else if (sopt.equals("CONTENT")) {
+                fields = board.content;
+            } else { // 통합 검색
+                fields = board.poster.concat(board.subject).concat(board.content);
+            }
+            andBuilder.and(fields.contains(skey));
+        }
+        // 키워드 검색 처리 E
+
+        Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(desc("createdAt")));
+        Page<BoardData> data = repository.findAll(andBuilder, pageable);
+        List<BoardData> items = data.getContent();
+        items.forEach(this::addInfo); // 추가정보 처리
+
+        int total = (int)data.getTotalElements();
+        Pagination pagination = new Pagination(page, total, 10, limit, request);
+        System.out.println("테스트");
 
         return new ListData<>(items, pagination);
     }

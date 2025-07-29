@@ -95,8 +95,8 @@ function callbackEmailVerifyCheck(data) {
         const emailVerifyEl = document.getElementById("email_verify");
         emailVerifyEl.parentElement.removeChild(emailVerifyEl);
 
-        // 3. 이메일 입력 항목 readonly 속성으로 변경
-        frmJoin.email.readonly = true;
+        // 3. 이메일 입력 항목 readonly 속성으로 변경 //readonly, readOnly 확인하기 컴퓨터마다 다른가?
+        frmJoin.email.readOnly = true;
 
         // 4. 인증 성공시 인증코드 입력 영역 제거, 5. 인증 코드 입력 영역에 "확인된 이메일 입니다."라고 출력 처리
         const authBoxEl = document.querySelector(".auth_box");

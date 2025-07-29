@@ -1,18 +1,21 @@
 package xyz.moodf.diary.services;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import xyz.moodf.diary.entities.Diary;
+import xyz.moodf.diary.entities.DiaryId;
 import xyz.moodf.diary.entities.QDiary;
-import xyz.moodf.diary.repositories.DiaryRepository;
+import xyz.moodf.diary.entities.QSentiment;
+import xyz.moodf.member.entities.Member;
+import xyz.moodf.member.exceptions.MemberNotFoundException;
+import xyz.moodf.member.repositories.MemberRepository;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Lazy
 @Service
@@ -20,27 +23,65 @@ import java.util.Map;
 public class DiaryInfoService {
 
     private final JPAQueryFactory jpaQueryFactory;
-    private final DiaryRepository repository;
-    private final HttpServletRequest request;
-    private final ModelMapper mapper;
+    private final MemberRepository memberRepository;
 
-    public List<Diary> getList(long seq) {
+    public List<Diary> getList(long memberSeq) {
         QDiary diary = QDiary.diary;
 
         return jpaQueryFactory
                 .selectFrom(diary)
-                .where(diary.member.seq.eq(seq))
+                .where(diary.member.seq.eq(memberSeq))
                 .fetch();
     }
 
-    public String getMostFrequentSentiment(long diarySeq) {
+    public Map<String, Long> getSentimentFrequencies(long memberSeq, int year, int month) {
+        Member member = memberRepository.findById(memberSeq)
+                .orElseThrow(() -> new MemberNotFoundException());
+
+        LocalDate firstDate = LocalDate.of(year, month, 1);
+        LocalDate lastDate = firstDate.withDayOfMonth(firstDate.lengthOfMonth());
+
         QDiary diary = QDiary.diary;
 
-        List<String> allSentiments = jpaQueryFactory
-                .select(diary.sentiment.sentiment)
+        // 지정된 기간 동안 해당 멤버가 작성한 일기들의 날짜 리스트
+        List<LocalDate> diaryDateList = jpaQueryFactory
+                .select(diary.date)
                 .from(diary)
-                .where(diary.did.eq(diarySeq))
+                .where(
+                        diary.member.seq.eq(memberSeq),
+                        diary.date.between(firstDate, lastDate)
+                )
                 .fetch();
+
+        // 각 날짜의 대표 감정 리스트
+        List<String> sentList = new ArrayList<>();
+        for (LocalDate diaryDate : diaryDateList) {
+            sentList.add(getMostFrequentSentiment(new DiaryId(memberSeq, diaryDate)));
+        }
+
+        // 지정된 기간 동안의 대표 감정 빈도 수
+        Map<String, Long> sentimentFrequencyMap = sentList.stream()
+                .filter(Objects::nonNull)  // null 값 제외
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+        return sentimentFrequencyMap;
+    }
+
+    public String getMostFrequentSentiment(DiaryId diaryId) {
+        QDiary diary = QDiary.diary;
+        QSentiment sentiment = QSentiment.sentiment;
+
+        List<String> allSentiments = jpaQueryFactory
+                .select(sentiment.sentiments)
+                .from(diary)
+                .join(sentiment).on(diary.gid.eq(sentiment.gid))
+                .where(
+                        diary.member.seq.eq(diaryId.getMember())
+                                .and(diary.date.eq(diaryId.getDate()))
+                )
+                .fetch();
+
+        System.out.println("1: " + allSentiments);
 
         // 각 감정의 빈도 수 저장
         Map<String, Integer> frequencyMap = new HashMap<>();
@@ -49,12 +90,14 @@ public class DiaryInfoService {
 
             // string을 [] 형태로 변환
             String[] split = line.split(",");
-            for (String sentiment : split) {
-                String trimmed = sentiment.trim();  // 공백 제거
+            for (String s : split) {
+                String trimmed = s.trim();  // 공백 제거
                 if (trimmed.isEmpty()) continue;
                 frequencyMap.put(trimmed, frequencyMap.getOrDefault(trimmed, 0) + 1);
             }
         }
+
+        System.out.println("2: " + frequencyMap);
 
         // 가장 많이 나온 감정
         return frequencyMap.entrySet().stream()

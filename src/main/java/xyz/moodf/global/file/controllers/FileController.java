@@ -14,13 +14,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import xyz.moodf.global.file.entities.FileInfo;
 import xyz.moodf.global.file.services.*;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,10 +37,13 @@ public class FileController {
     @ApiResponse(responseCode = "201", description = "파일 업로드 성공시 업로드한 파일 목록이 출력")
     @PostMapping("/upload")
     @ResponseStatus(HttpStatus.CREATED)
-    public List<FileInfo> upload(RequestUpload form, @RequestPart("file") MultipartFile[] files) {
-        form.setFiles(files);
-        List<FileInfo> items = uploadService.process(form);
-
+    public List<FileInfo> upload(@ModelAttribute RequestUpload form) {
+        String gid = form.getGid();
+        if (gid == null || gid.trim().isEmpty()) {
+            gid = UUID.randomUUID().toString(); // 자동 생성
+            form.setGid(gid);
+        }
+        List<FileInfo> items = uploadService.uploadProcess(form);
         return items;
     }
 
@@ -65,22 +68,19 @@ public class FileController {
 
     @DeleteMapping("/delete/{seq}")
     public FileInfo delete(@PathVariable("seq") Long seq) {
-        FileInfo item = deleteService.process(seq);
+        FileInfo item = deleteService.deleteProcess(seq);
 
         return item;
     }
 
     @DeleteMapping({"/deletes/{gid}", "/deletes/{gid}/{location}"})
     public List<FileInfo> deletes(@PathVariable("gid") String gid, @PathVariable(name="location", required = false) String location) {
-        List<FileInfo> items = deleteService.process(gid, location);
+        List<FileInfo> items = deleteService.deleteProcess(gid, location);
 
         return items;
     }
     /**
      * 파일 다운로드
-     *
-     *
-     *
      */
     @GetMapping("/download/{seq}")
     public void download(@PathVariable("seq") Long seq) {
@@ -102,7 +102,8 @@ public class FileController {
 
             OutputStream out = response.getOutputStream();
             out.write(bis.readAllBytes());
-
+            System.out.println("썸네일 생성 경로: " + path);
+            System.out.println("파일 존재 여부: " + new File(path).exists());
         } catch (IOException e) {}
     }
 
@@ -123,17 +124,4 @@ public class FileController {
 
         return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
     }
-
-//    @GetMapping("/download/{seq}")
-//    public void download(@PathVariable("seq") Long seq) {
-//        response.setHeader("Content-Disposition", "attachment; filename=test.txt");
-//
-//        try {
-//            PrintWriter out = response.getWriter();
-//            out.println("test1");
-//            out.println("test2");
-//            out.println("test3");
-//
-//        } catch (IOException e) {}
-//    }
 }

@@ -5,9 +5,11 @@ import lombok.Data;
 import lombok.ToString;
 import xyz.moodf.diary.entities.Diary;
 import xyz.moodf.global.entities.BaseEntity;
+import xyz.moodf.global.file.entities.FileInfo;
 import xyz.moodf.member.constants.Authority;
 import xyz.moodf.member.social.constants.SocialType;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +22,13 @@ import java.util.List;
         @Index(name="idx_member_mobile", columnList = "mobile"),
         @Index(name="idx_member_social", columnList = "socialType,socialToken")
 })
-public class Member extends BaseEntity {
+public class Member extends BaseEntity implements Serializable {
     @Id
     @GeneratedValue
     private Long seq;
+  
+    @Column(length = 45)
+    private String gid;
 
     @Column(length=75, unique = true, nullable = false)
     private String email;
@@ -57,4 +62,7 @@ public class Member extends BaseEntity {
     private LocalDateTime expired; // 계정 만료 일자, null이면 만료 X
 
     private LocalDateTime credentialChangedAt; // 비밀번호 변경 일시
+
+    @Transient
+    private FileInfo profileImage;
 }
