@@ -26,8 +26,8 @@ public class Member extends BaseEntity implements Serializable {
     @Id
     @GeneratedValue
     private Long seq;
-
-    @Column(length=45)
+  
+    @Column(length = 45)
     private String gid;
 
     @Column(length=75, unique = true, nullable = false)

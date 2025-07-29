@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+
+:root {
+  --fontc: #2E2E2E;
+  --mainc: #FFB6B9;
+  --subc: #FF8C42;
+  --hlc: #FFFACD;
+  --bgc: #FFF4E6;
+  --bghc: #FFF0ED;
+  --fontf: 'Pretendard', sans-serif;
+}
+
+/* 페이지 전체 배경색 */
+body {
+  background-color: var(--bgc);
+  font-family: var(--fontf);
+  color: var(--fontc);
+}
+
+/* 회원가입 페이지 전체 레이아웃 */
+.join-page {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+  box-sizing: border-box;
+}
+
+/* 가입 폼 스타일 */
+.join-page form {
+  width: 100%;
+  max-width: 450px;
+  min-width: 300px;
+  height: 850px;
+  background: white;
+  padding: 30px 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 리스트 초기화 */
+.join-page ul,
+.join-page dl,
+.join-page li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* 입력 필드 */
+.join-page input[type="text"],
+.join-page input[type="password"] {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+/* 에러 메시지 */
+.join-page .error {
+  color: #e74c3c;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* 인증 관련 박스 */
+.auth_box {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-top: 6px;
+}
+
+/* 인증 타이머 */
+#auth_count {
+  font-weight: bold;
+  font-size: 13px;
+}
+
+/* 확인된 이메일 표시 */
+span.confirmed {
+  color: #27ae60;
+  font-size: 13px;
+}
+
+/* 버튼 스타일 */
+.join-page button {
+  padding: 10px 14px;
+  font-size: 14px;
+  border: none;
+  background-color: var(--mainc);
+  color: var(--fontc);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.join-page button:hover {
+  background-color: var(--subc);
+}
+
+/* 약관 동의 영역 */
+.join-page .terms {
+  background: var(--bghc);
+  padding: 10px;
+  font-size: 13px;
+  border-radius: 6px;
+  max-height: 100px;
+  overflow-y: auto;
+}
+
+/* 프로필 이미지 업로드 박스 */
+.profile-image.file-upload-btn {
+  border: 1px dashed #aaa;
+  padding: 20px;
+  text-align: center;
+  border-radius: 8px;
+  background: var(--bghc);
+  cursor: pointer;
+}
