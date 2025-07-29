@@ -69,7 +69,14 @@ body {
   box-sizing: border-box;
 }
 
-/* 에러 메시지 */
+/* 전송 메세지 */
+#email_message {
+    font-size: 0.9em;
+    color: green;
+    white-space: nowrap;
+}
+
+/* 에러 메세지 */
 .join-page .error {
   color: #e74c3c;
   font-size: 12px;
