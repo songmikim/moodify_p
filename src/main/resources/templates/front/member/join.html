@@ -25,6 +25,7 @@
                     <div>
                         <input type="text" name="email" th:field="*{email}" th:readonly="${session.EmailAuthVerified != null && session.EmailAuthVerified}">
                         <button th:if="${session.EmailAuthVerified == null || !session.EmailAuthVerified}" type="button" id="email_verify" th:text="#{인증코드전송}"></button>
+                        <span id="email_message"></span>
                     </div>
                     <div class="auth_box">
                         <th:block th:if="${session.EmailAuthVerified == null || !session.EmailAuthVerified}">

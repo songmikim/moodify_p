@@ -9,14 +9,14 @@ window.addEventListener("DOMContentLoaded", function() {
             const { ajaxLoad, sendEmailVerify } = commonLib;
             const email = frmJoin.email.value.trim();
             if (!email) {
-                alert('이메일을 입력하세요.');
+                showEmailMessage('이메일을 입력하세요.', true);
                 frmJoin.email.focus();
                 return;
             }
 
             ajaxLoad(`/api/member/email_dup_check?email=${email}`, (data) => {
                  if (data.success) { // 중복이메일인 경우
-                    alert("이미 가입된 이메일입니다.");
+                    showEmailMessage("이미 가입된 이메일입니다.", true);
                         frmJoin.email.focus();
                     } else { // 중복이메일이 아닌 경우
                         sendEmailVerify(email); // 이메일 인증 코드 전송
@@ -36,7 +36,7 @@ window.addEventListener("DOMContentLoaded", function() {
                             emailConfirmEl.addEventListener("click", function() {
                             const authNum = authNumEl.value.trim();
                              if (!authNum) {
-                                alert("인증코드를 입력하세요.");
+                                showEmailMessage("인증코드를 입력하세요.");
                                 authNumEl.focus();
                                 return;
                              }
@@ -55,6 +55,14 @@ window.addEventListener("DOMContentLoaded", function() {
 });
 
 
+function showEmailMessage(msg, isError = false) {
+    const messageEl = document.getElementById("email_message");
+    if (messageEl) {
+        messageEl.textContent = msg;
+        messageEl.style.color = isError ? "red" : "green";
+    }
+}
+
 /**
 * 이메일 인증 메일 전송 후 콜백 처리
 *
@@ -62,13 +70,13 @@ window.addEventListener("DOMContentLoaded", function() {
 */
 function callbackEmailVerify(data) {
     if (data && data.success) { // 전송 성공
-        alert("인증코드가 이메일로 전송되었습니다. 확인후 인증코드를 입력하세요.");
+        showEmailMessage("인증코드가 이메일로 전송되었습니다. 확인 후 인증코드를 입력하세요.");
 
         /** 3분 유효시간 카운트 */
         authCount.start();
 
     } else { // 전송 실패
-        alert("인증코드 전송에 실패하였습니다.");
+        showEmailMessage("인증코드 전송에 실패하였습니다.", true);
     }
 }
 
@@ -103,7 +111,7 @@ function callbackEmailVerifyCheck(data) {
         authBoxEl.innerHTML = "<span class='confirmed'>확인된 이메일 입니다.</span>";
 
     } else { // 인증 실패
-        alert("이메일 인증에 실패하였습니다.");
+        showEmailMessage("인증코드 전송에 실패하였습니다.", true);
     }
 }
 
