@@ -62,7 +62,6 @@ public class SecurityConfig {
             c.requestMatchers("/login", "/join", "/board/**", "/diary/**", "/error/**", "/calendar/**", "/uploads/**", "/mypage/delete/confirm", "/file/**").permitAll()
                     .requestMatchers("/front/**", "/mobile/**", "/member/**", "/common/**").permitAll()
                     .requestMatchers("/api/**").permitAll()
-                    .requestMatchers("/file/upload").permitAll()
                     //.requestMatchers("/admin/**").hasAuthority("ADMIN")
                     .requestMatchers("/admin/**").permitAll()
                     .requestMatchers("/findid", "/find_pw", "/find_pw_done").permitAll()
