@@ -1,28 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<aside th:fragment="common">
-    <button type="button" class="openBtn"><img th:src="@{/common/images/menu-open.png}" alt="메뉴"/></button>
-    <div class="right sideMenu">
-        <button type="button" class="closeBtn"><img th:src="@{/common/images/menu-close.png}" alt="메뉴"/></button>
-        <h3>일기장</h3>
-        <ul>
-            <li>
-                <a th:href="@{/diary/diary}">일기 쓰기</a>
-            </li>
-            <li>
-                <a th:href="@{/diary/calender}">일기 목록</a>
-            </li>
-        </ul>
-        <h3>게시판</h3>
-        <ul>
-            <li>
-                <a th:href="@{/board/notice}">공지사항</a>
-            </li>
-            <li>
-                <a th:href="@{/board/QA}">Q&A</a>
-            </li>
-        </ul>
-    </div>
+<aside th:fragment="common" class="main-menu">
+    <i class="xi-close more-menu"></i>
+    <h3 th:text="#{일기장}" class="first"></h3>
+    <a th:href="@{/diary}" th:text="#{일기_쓰기}"></a>
+    <a th:href="@{/diary/calendar}" th:text="#{일기_목록}"></a>
+
+    <h3 th:text="#{게시판}"></h3>
+    <a th:href="@{/board/list/notice}" th:text="#{공지사항}"></a>
+    <a th:href="@{/board/list/qa}">Q&amp;A</a>
 </aside>
 </html>

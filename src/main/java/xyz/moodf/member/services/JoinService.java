@@ -7,8 +7,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import xyz.moodf.global.file.entities.FileInfo;
-import xyz.moodf.global.file.repositories.FileInfoRepository;
+import xyz.moodf.global.file.services.FileUploadService;
 import xyz.moodf.member.constants.Authority;
 import xyz.moodf.member.controllers.RequestJoin;
 import xyz.moodf.member.entities.Member;
@@ -27,7 +26,8 @@ public class JoinService {
     private final ModelMapper modelMapper;
     private final PasswordEncoder encoder;
     private final MemberRepository repository;
-    private final FileInfoRepository fileRepository;
+    private final FileUploadService uploadService;
+
     private final HttpSession session;
 
     public void process(RequestJoin form) {
@@ -59,11 +59,11 @@ public class JoinService {
         member.setSocialToken(form.getSocialToken());
 
         String gid = form.getGid();
-        if (StringUtils.hasText(form.getGid())) {
-            FileInfo profileImage = fileRepository.findFirstByGidOrderByCreatedAtAsc(form.getGid()).orElse(null);
-            member.setProfileImage(profileImage);
-        }
+        member.setGid(gid);
         repository.saveAndFlush(member);
+
+        // 파일 업로드 완료 처리
+        uploadService.processDone(gid);
 
         // 소셜 로그인 관련 세션값 삭제
         session.removeAttribute("socialType");

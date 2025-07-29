@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import xyz.moodf.global.file.services.FileInfoService;
 import xyz.moodf.global.search.ListData;
 import xyz.moodf.global.search.Pagination;
 import xyz.moodf.member.MemberInfo;
@@ -35,6 +36,7 @@ import static org.springframework.data.domain.Sort.Order.desc;
 public class MemberInfoService implements UserDetailsService {
 
     private final MemberRepository repository;
+    private final FileInfoService fileInfoService;
     private final HttpServletRequest request;
 
     @Override
@@ -44,6 +46,9 @@ public class MemberInfoService implements UserDetailsService {
         Authority authority = Objects.requireNonNullElse(member.getAuthority(), Authority.USER);
 
         List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(authority.name()));
+
+        // 추가 정보 처리
+        addInfo(member);
 
         return MemberInfo.builder()
                 .email(member.getEmail())
@@ -107,7 +112,15 @@ public class MemberInfoService implements UserDetailsService {
         long total = data.getTotalElements();
         Pagination pagination = new Pagination(page, (int)total, 10, limit, request);
 
+        // 추가 정보 처리
+        items.forEach(this::addInfo);
 
         return new ListData<>(items, pagination);
+    }
+
+    private void addInfo(Member member) {
+        // 프로필 이미지 처리
+
+        member.setProfileImage(fileInfoService.get(member.getGid()));
     }
 }

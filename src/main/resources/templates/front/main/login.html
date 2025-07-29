@@ -16,7 +16,7 @@
                 <div class="error" th:each="err : ${#fields.errors('password')}" th:text="${err}"></div>
             </li>
             <li>
-                <div class="left">
+                <div class="left checkbox">
                     <input type="checkbox" name="autoLogin" value="true" th:field="*{autoLogin}" id="auto-login">
                     <label for="auto-login" th:text="#{자동_로그인}"></label>
                 </div>

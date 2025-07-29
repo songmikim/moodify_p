@@ -26,8 +26,7 @@ public class Utils {
     private final HttpServletRequest request;
     private final MessageSource messageSource;
     private final LocaleResolver localeResolver;
-    //private final FileProperties fileProperties;
-    //private final FileInfoService inforservice;
+
 
 
     public int version() {
@@ -122,9 +121,7 @@ public class Utils {
     public String printThumb(Long seq, int width, int height, String addClass, boolean crop) {
         String url = null;
         try {
-//            FileInfo item = infoService.get(seq);
-            long folder = seq % 10L;
-            url = String.format("%s/uploads/thumb?seq=%s&width=%s&height=%s&crop=true", request.getContextPath(), seq, width, height);
+            url = String.format("%s/file/thumb?seq=%s&width=%s&height=%s&crop=true", request.getContextPath(), seq, width, height);
         } catch (Exception e) {
             e.printStackTrace();
         }
