@@ -135,10 +135,13 @@ public class MyPageController {
 
         if (mode.equals("index")) {
             pageTitle = utils.getMessage("마이페이지");
+            addCommonScript.add("chart/chart.umd");
+            addScript.add("mypage/emotion-chart");
         } else if (mode.equals("password")) {
             pageTitle = utils.getMessage("비밀번호_변경");
         } else if (mode.equals("delete")) {
             pageTitle = utils.getMessage("탈퇴하기");
+            addScript.add("member/deleteForm");
         }
 
         model.addAttribute("addCommonScript", addCommonScript);

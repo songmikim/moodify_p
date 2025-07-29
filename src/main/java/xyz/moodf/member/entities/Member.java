@@ -26,7 +26,7 @@ public class Member extends BaseEntity implements Serializable {
     @Id
     @GeneratedValue
     private Long seq;
-
+  
     @Column(length = 45)
     private String gid;
 
@@ -63,6 +63,6 @@ public class Member extends BaseEntity implements Serializable {
 
     private LocalDateTime credentialChangedAt; // 비밀번호 변경 일시
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @Transient
     private FileInfo profileImage;
 }
