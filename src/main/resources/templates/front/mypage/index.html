@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{front/layouts/main}">
 <main layout:fragment="content" class="container mt-4">
-    <h1 th:text="#{마이페이지}"></h1>
+    <h1 th:text="${pageTitle}"></h1>
 
     <h2 th:text="#{내_정보}"></h2>
     <div class="user-info">
