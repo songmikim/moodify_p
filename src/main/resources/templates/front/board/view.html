@@ -30,16 +30,26 @@
             <a th:href="@{/board/list/{bid}(bid=${board.bid})}" class="btn btn-list">목록</a>
 
             <th:block th:if="${canEdit}">
-                <button th:if="${!isGuest}" th:href="@{/board/update/{seq}(seq=${boardData.seq})}" class="btn btn-edit">수정</button>
+                <!-- 회원 글 수정 -->
+                <a th:if="${!isGuest}" th:href="@{/board/update/{seq}(seq=${boardData.seq})}"
+                   class="btn btn-edit">수정</a>
+
+                <!-- 비회원 글 수정 -->
                 <button th:if="${isGuest}" type="button" class="btn btn-edit"
                         th:data-seq="${boardData.seq}"
                         onclick="checkGuestPassword('update', this.dataset.seq)">수정</button>
             </th:block>
 
             <th:block th:if="${canDelete}">
-                <button th:if="${!isGuest}" type="button" class="btn btn-delete" th:data-seq="${boardData.seq}" onclick="deletePost(this.dataset.seq)">삭제</button>
+                <!-- 회원 글 삭제 -->
+                <button th:if="${!isGuest}" type="button" class="btn btn-delete"
+                        th:data-seq="${boardData.seq}"
+                        onclick="performAction('delete',this.dataset.seq)">삭제</button>
+
+                <!-- 비회원 글 삭제 -->
                 <button th:if="${isGuest}" type="button" class="btn btn-delete"
-                        th:data-seq="${boardData.seq}" onclick="checkGuestPassword('delete', this.dataset.seq)">삭제</button>
+                        th:data-seq="${boardData.seq}"
+                        onclick="checkGuestPassword('delete', this.dataset.seq)">삭제</button>
             </th:block>
         </div>
     </div>
