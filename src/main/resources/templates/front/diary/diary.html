@@ -3,43 +3,49 @@
     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
     layout:decorate="~{front/layouts/main}">
 <main layout:fragment="content">
-    <h1>일기장 페이지</h1>
+    <h1 th:text="${pageTitle}"></h1>
 
-    <form th:action="@{/diary/save}" method="post">
+    <form name="frmSave" th:action="@{/diary}" method="post" th:object="${diaryRequest}" autocomplete="off">
+        <div class="error global" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
 
         <input type="hidden" id="gid" name="gid" th:value="${gid}" />
+        <div class="error" th:each="err : ${#fields.errors('gid')}" th:text="${err}"></div>
 
         <div>
-            <label for="date" class="form-label">날짜</label>
+            <label for="date" class="form-label" th:text="#{날짜}"></label>
             <input type="date"
                    class="form-control"
                    id="date"
                    name="date"
+                   th:field="*{date}"
                    th:value="${today}"
                    th:max="${today}">
+            <div class="error" th:each="err : ${#fields.errors('date')}" th:text="${err}"></div>
         </div>
 
         <div>
-            <label for="weather" class="form-label">날씨</label>
-            <select class="form-control" id="weather" name="weather">
+            <label for="weather" class="form-label" th:text="#{날씨}"></label>
+            <select class="form-control" id="weather" name="weather" th:field="*{weather}">
                 <option th:each="w : ${weatherValues}"
                         th:value="${w.name()}"
-                        th:selected="${diary.weather} == ${w}"
                         th:text="${w.description}"></option>
             </select>
+            <div class="error" th:each="err : ${#fields.errors('weather')}" th:text="${err}"></div>
         </div>
 
         <div>
-            <label for="title" class="form-label">제목</label>
-            <input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력하세요">
+            <label for="title" class="form-label" th:text="#{제목}"></label>
+            <input type="text" class="form-control" id="title" name="title" th:field="*{title}" th:placeholder="#{제목을_입력하세요}">
+            <div class="error" th:each="err : ${#fields.errors('title')}" th:text="${err}"></div>
         </div>
 
         <div>
             <label for="content" class="form-label">내용</label>
-            <textarea class="form-control" id="content" name="content" rows="10" placeholder="오늘의 일기를 작성해 보세요"></textarea>
+            <textarea class="form-control" id="content" name="content" rows="10" th:field="*{content}" th:placeholder="#{오늘의_일기를_작성해_보세요}"></textarea>
+            <div class="error" th:each="err : ${#fields.errors('content')}" th:text="${err}"></div>
         </div>
 
-        <button type="submit" class="btn btn-primary">저장하기</button>
+        <button type="submit" class="btn btn-primary" th:text="*{저장하기}"></button>
     </form>
 </main>
 </html>

@@ -1,17 +1,18 @@
 package xyz.moodf.diary.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import xyz.moodf.diary.constants.Weather;
 import xyz.moodf.diary.dtos.DiaryRequest;
 import xyz.moodf.diary.dtos.SentimentRequest;
 import xyz.moodf.diary.entities.Diary;
 import xyz.moodf.diary.entities.DiaryId;
-import xyz.moodf.diary.entities.Sentiment;
 import xyz.moodf.diary.repositories.SentimentRepository;
 import xyz.moodf.diary.services.DiaryInfoService;
 import xyz.moodf.diary.services.DiaryService;
@@ -22,10 +23,7 @@ import xyz.moodf.member.entities.Member;
 import xyz.moodf.member.libs.MemberUtil;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @ApplyCommonController
@@ -44,28 +42,52 @@ public class DiaryController {
     @ModelAttribute("extraData")
     public Map<LocalDate, Object> getExtraData() {
         Map<LocalDate, Object> map = new HashMap<>();
-        map.put(LocalDate.now(), "<img src='/common/images/kakao_login.png'>");
+        //map.put(LocalDate.now(), "<img src='/common/images/kakao_login.png'>");
         return map;
     }
 
     @GetMapping
-    public String diary(Model model) {
-        commonProcess("member", model);
+    public String diary(@ModelAttribute DiaryRequest form, Model model) {
+        commonProcess("diary", model);
 
-        Member member = memberUtil.getMember();
-
-        Diary diary = new Diary();
-        diary.setWeather(Weather.NULL);
+        form.setWeather(Weather.NULL);
+        form.setDate(LocalDate.now());
+        form.setGid(UUID.randomUUID().toString());
 
         model.addAttribute("today", LocalDate.now());
-        model.addAttribute("diary", diary);
         model.addAttribute("weatherValues", Weather.values());
 
-        Sentiment sentiment = sentimentService.create(member.getSeq());
-
-        model.addAttribute("gid", sentiment.getGid());
+//        Member member = memberUtil.getMember();
+//
+//        Diary diary = new Diary();
+//        diary.setWeather(Weather.NULL);
+//
+//        model.addAttribute("today", LocalDate.now());
+//        model.addAttribute("diary", diary);
+//        model.addAttribute("weatherValues", Weather.values());
+//
+//        Sentiment sentiment = sentimentService.create(member.getSeq());
+//
+//        model.addAttribute("gid", sentiment.getGid());
 
         return utils.tpl("diary/diary");
+    }
+
+    @PostMapping
+    public String process(@Valid DiaryRequest form, Errors errors, Model model) {
+        commonProcess("diary", model);
+
+        if (errors.hasErrors()) {
+            return utils.tpl("diary/diary");
+        }
+
+        return "redirect:/diary/result/";
+    }
+
+    @ResponseBody
+    @PostMapping("/sentiment")
+    public void sentiment(DiaryRequest form) {
+        sentimentService.update(form);
     }
 
     @GetMapping("/calendar")
@@ -103,13 +125,13 @@ public class DiaryController {
         System.out.println("sentiments: " + request.getSentiments());
         System.out.println("content: " + request.getContent());
 
-        sentimentService.update(gid, request);
+//        sentimentService.update(gid, request);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/result")
     public String result(Model model) {
-        commonProcess("member", model);
+        commonProcess("diary", model);
 
         return utils.tpl("diary/result");
     }
@@ -133,22 +155,24 @@ public class DiaryController {
         return ResponseEntity.ok().build();
     }
 
-
+    /**
+     * 일기 작성 공통 처리 부분
+     *
+     * @param mode
+     * @param model
+     */
     private void commonProcess(String mode, Model model) {
-        mode = StringUtils.hasText(mode) ? mode : "member";
+        mode = StringUtils.hasText(mode) ? mode : "diary";
         String pageTitle = "";
         List<String> addCommonScript = new ArrayList<>();
         List<String> addScript = new ArrayList<>();
         List<String> addCss = new ArrayList<>();
         List<String> addCommonCss = new ArrayList<>();
 
-        if (mode.equals("member")) {
-            addCommonScript.add("fileManager");
+        if (mode.equals("diary")) {
             addScript.add("diary/sentiment");  // 추가로 만든 sentiment db 관리 js 파일
             pageTitle = utils.getMessage("일기쓰기");
 
-        } else if (mode.equals("login")) { // 로그인 공통 처리
-            pageTitle = utils.getMessage("일기장_관리");
         }
 
         model.addAttribute("addCommonScript", addCommonScript);

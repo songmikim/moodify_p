@@ -35,10 +35,16 @@ public class DiaryService {
         diary.setDate(request.getDate());
         diary.setGid(gid);
         diary.setTitle(request.getTitle());
-        diary.setContent(sentiment.getContent());
+        diary.setContent(request.getContent());
         diary.setWeather(request.getWeather());
         diary.setCreatedAt(LocalDateTime.now());
 
-        return diaryRepository.saveAndFlush(diary);
+        diaryRepository.saveAndFlush(diary);
+
+        // 감정 분석 완료 처리
+        sentiment.setDone(true);
+        sentimentRepository.saveAndFlush(sentiment);
+
+        return diary;
     }
 }

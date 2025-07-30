@@ -19,4 +19,6 @@ public class Sentiment implements Serializable {
 
     @Column(length=2000)
     private String sentiments;
+
+    private boolean done;
 }
