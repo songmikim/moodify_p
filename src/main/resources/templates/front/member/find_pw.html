@@ -3,10 +3,6 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{front/layouts/main}">
 
-<th:block layout:fragment="addCss">
-    <link rel="stylesheet" th:href="@{/front/css/member/find_pw.css}" />
-</th:block>
-
 <main layout:fragment="content" class="find_pw_page">
     <h1 th:text="#{비밀번호_찾기}"></h1>
 
@@ -14,7 +10,6 @@
 
         <input type="text" name="email" th:field="*{email}" th:placeholder="#{이메일}">
         <div class="error" th:each="err : ${#fields.errors('email')}" th:text="${err}"></div>
-
 
         <input type="text" name="email" th:field="*{name}" th:placeholder="#{회원명}">
         <div class="error" th:each="err : ${#fields.errors('name')}" th:text="${err}"></div>
