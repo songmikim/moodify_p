@@ -2,6 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{front/layouts/main}">
+
+<th:block layout:fragment="addCss">
+    <link rel="stylesheet" th:href="@{/front/css/mypage/mypage.css}" />
+</th:block>
+
 <main layout:fragment="content" class="container mt-4">
     <h1 th:text="#{마이페이지}"></h1>
 

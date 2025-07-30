@@ -2,7 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{front/layouts/main}">
-<main layout:fragment="content">
+
+<th:block layout:fragment="addCss">
+    <link rel="stylesheet" th:href="@{/front/css/member/find_pw.css}" />
+</th:block>
+
+<main layout:fragment="content" class="find_pw_page">
     <h1 th:text="#{비밀번호_찾기}"></h1>
 
     <form name="frmFindPw" method="post" th:action="@{/find_pw}" autocomplete="off" th:object="${requestFindPw}">
