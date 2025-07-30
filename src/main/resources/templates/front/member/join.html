@@ -2,11 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{front/layouts/main}">
-
-<th:block layout:fragment="addCss">
-    <link rel="stylesheet" th:href="@{/front/css/member/join.css}" />
-</th:block>
-
 <main layout:fragment="content" class="join-page">
     <form name="frmJoin" method="post" th:action="@{/join}" autocomplete="off" th:object="${requestJoin}">
         <h1 th:text="${pageTitle}"></h1>
