@@ -262,3 +262,105 @@ main {
         background-size: 120px;
     }
 }
+
+:root {
+    --fontc: #2E2E2E;
+    --mainc: #FFB6B9;
+    --subc: #FF8C42;
+    --hlc: #FFFACD;
+    --bgc: #FFF4E6;
+    --bghc: #FFF0ED;
+    --fontf: 'Pretendard', sans-serif;
+}
+
+/* 전체 바디 스타일 */
+body {
+    background-color: var(--bgc);
+    font-family: var(--fontf);
+    color: var(--fontc);
+    margin-top: 62px;
+}
+
+/* 페이지 전체 */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* 사용자 정보 박스 */
+.user-info {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+}
+
+/* 사용자 정보 텍스트 */
+.user-info p {
+    margin: 8px 0;
+    font-size: 15px;
+}
+
+/* 사용자 정보 항목 */
+.user-info strong {
+    width: 120px;
+    display: inline-block;
+    font-weight: 700;
+}
+
+/* 제출 버튼 및 비밀번호 변경 링크 스타일 */
+button[type="submit"], a[href*="/password"] {
+    display: inline-block;
+    background-color: var(--mainc);
+    color: var(--fontc);
+    border: none;
+    padding: 10px 16px;
+    font-size: 14px;
+    border-radius: 6px;
+    margin-top: 12px;
+    cursor: pointer;
+    transition: background 0.3s;
+    text-decoration: none;
+}
+
+/* 버튼 및 링크 hover 시 색상 변경 */
+button:hover, a:hover {
+    background-color: var(--subc);
+}
+
+/* 섹션 제목 스타일 */
+h2 {
+    font-size: 20px;
+    margin-top: 40px;
+    margin-bottom: 12px;
+    border-bottom: 2px solid var(--mainc);
+    padding-bottom: 6px;
+}
+
+/* 월 선택 label 스타일 */
+label[for="month"] {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* 감정 차트 canvas 스타일 */
+canvas#emotionChart {
+    width: 50%;
+    max-width: 700px;
+    height: 300px;
+    margin-top: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 6px rgba(0,0,0,0.03);
+    padding: 10px;
+}
+
+/* 감정별 추천곡 섹션 스타일 */
+h2 + .recommendation-section {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+}
