@@ -17,5 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-
+    if (location.pathname === '/mypage/delete/confirm') {
+        setTimeout(() => location.replace('/'), 3000);
+    }
 });
