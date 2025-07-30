@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{front/layouts/main}">
 <main layout:fragment="content" class="container mt-4">
-    <h1 th:text="#{마이페이지}"></h1>
+    <h1 th:text="${pageTitle}"></h1>
 
     <h2 th:text="#{내_정보}"></h2>
     <div class="user-info">
@@ -26,6 +26,12 @@
         <canvas id="emotionChart" height="100"></canvas>
     </div>
 
+
     <h2 th:text="#{감정별_추천곡_리스트}"></h2>
+    <div id="recommendContainer" class="mt-4">
+        <div class="tabs" id="songTabs"></div> <!-- 버튼이 동적으로 추가될 곳 -->
+        <div class="tab-content" id="tabContents"></div>
+    </div>
+
 </main>
 </html>

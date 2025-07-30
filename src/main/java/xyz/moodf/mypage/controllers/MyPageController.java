@@ -137,6 +137,8 @@ public class MyPageController {
             pageTitle = utils.getMessage("마이페이지");
             addCommonScript.add("chart/chart.umd");
             addScript.add("mypage/emotion-chart");
+            addScript.add("mypage/recommend-songs");
+            addCss.add("mypage/mypage");
         } else if (mode.equals("password")) {
             pageTitle = utils.getMessage("비밀번호_변경");
         } else if (mode.equals("delete")) {

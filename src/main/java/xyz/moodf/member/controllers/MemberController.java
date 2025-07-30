@@ -154,6 +154,14 @@ public class MemberController {
         } else if (mode.equals("login")) { // 로그인 공통 처리
             pageTitle = utils.getMessage("로그인");
             addCss.add("member/login");
+
+        } else if (mode.equals("find_pw")) { // 비밀번호 찾기
+            pageTitle = utils.getMessage("비밀번호 찾기");
+            addCss.add("member/find_pw");
+
+        } else if (mode.equals("find_pw_done")) { // 비밀번호 찾기 완료
+            pageTitle = utils.getMessage("비밀번호 찾기 완료");
+            addCss.add("member/find_pw_done");
         }
 
         model.addAttribute("addCommonScript", addCommonScript);
@@ -199,7 +207,7 @@ public class MemberController {
 
     @GetMapping("find_pw_done")
     public String findPwDone (Model model) {
-        commonProcess("find_pw", model);
+        commonProcess("find_pw_done", model);
 
         return utils.tpl("member/find_pw_done");
     }
