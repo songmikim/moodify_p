@@ -4,7 +4,10 @@ import jakarta.persistence.*;
 import lombok.Data;
 import xyz.moodf.admin.board.entities.Board;
 import xyz.moodf.global.entities.BaseEntity;
+import xyz.moodf.global.file.entities.FileInfo;
 import xyz.moodf.member.entities.Member;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -22,6 +25,8 @@ public class BoardData extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
+
+    private boolean plainText; // true : 에디터(HTML)를 사용하지 않은 일반 텍스트 게시글
 
     @Column(length=60)
     private String category; // 게시글 분류
@@ -48,4 +53,10 @@ public class BoardData extends BaseEntity {
     private String ip; // 작성자 IP 주소
 
     private String ua; // User-Agent 정보, 작성자의 브라우저 정보
+
+    @Transient
+    private List<FileInfo> editorImages;
+
+    @Transient
+    private List<FileInfo> attachFiles;
 }

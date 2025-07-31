@@ -3,6 +3,7 @@ package xyz.moodf.board.services;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.StringExpression;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Lazy;
@@ -17,9 +18,12 @@ import xyz.moodf.admin.board.exceptions.BoardDataNotFoundException;
 import xyz.moodf.board.entities.BoardData;
 import xyz.moodf.board.entities.QBoardData;
 import xyz.moodf.board.repositories.BoardDataRepository;
+import xyz.moodf.global.file.services.FileInfoService;
 import xyz.moodf.global.search.CommonSearch;
 import xyz.moodf.global.search.ListData;
 import xyz.moodf.global.search.Pagination;
+import xyz.moodf.member.entities.Member;
+import xyz.moodf.member.libs.MemberUtil;
 
 import java.util.List;
 
@@ -33,6 +37,8 @@ public class BoardDataInfoService
     private final BoardDataRepository repository;
     private final HttpServletRequest request;
     private final ModelMapper mapper;
+    private final MemberUtil memberUtil;
+    private final FileInfoService fileInfoService;
     private final BoardPermissionService permissionService;
 
     /**
@@ -139,7 +145,11 @@ public class BoardDataInfoService
      * @param item
      */
     private void addInfo(BoardData item) {
+        String gid = item.getGid();
 
+        // 첨부된 이미지 & 파일 목록
+        item.setEditorImages(fileInfoService.getList(gid, "editor"));
+        item.setAttachFiles(fileInfoService.getList(gid, "attach"));
     }
 }
 

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<form th:fragment="form" class="comment-form" name="frmComment" method="POST" th:action="@{/board/comment}" th:object="${requestComment}" th:if="${board.commentable}" >
+  <input type="hidden" name="boardDataSeq" th:field="*{boardDataSeq}">
+
+  <div class="top-section">
+    <span th:text="#{작성자}"></span>
+    <input type="text" name="commenter" th:field="*{commenter}">
+  </div>
+  <div class="content-section">
+    <textarea name="content" th:field="*{content}"></textarea>
+    <button type="button" th:text="#{작성하기}"></button>
+  </div>
+</form>
+</html>

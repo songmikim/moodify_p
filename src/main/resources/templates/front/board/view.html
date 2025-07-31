@@ -24,6 +24,16 @@
             <div th:utext="${boardData.content}">게시글 내용이 여기에 표시됩니다.</div>
         </div>
 
+        <!-- 파일 -->
+        <div th:if="${boardData.attachFiles != null && !boardData.attachFiles.isEmpty()}" class="attach-files">
+            <h4>첨부파일</h4>
+            <ul>
+                <li th:each="file : ${boardData.attachFiles}">
+                    <a th:href="@{/file/download/{seq}(seq=${file.seq})}" th:text="${file.fileName}">파일명</a>
+                </li>
+            </ul>
+        </div>
+
         <!-- 비회원 글인 경우 비밀번호로 수정/삭제 -->
         <!-- 회원 글 수정/삭제 버튼 -->
         <div class="post-actions">
@@ -51,7 +61,9 @@
                         th:data-seq="${boardData.seq}"
                         onclick="checkGuestPassword('delete', this.dataset.seq)">삭제</button>
             </th:block>
+
         </div>
+
     </div>
 
 </main>
