@@ -167,6 +167,9 @@ header .right a i {
 }
 /* 푸터 영역 S */
 footer {
+    position:fixed;
+    bottom:0;
+    width:100%;
     text-align: center;
     background: #FFF0ED;
     min-height: 250px;
@@ -175,10 +178,17 @@ footer {
 footer .top-section {
     min-height: 150px;
     border-bottom: 2px solid #f0f0f0;
+    border-top: 2px solid #f0f0f0;
 }
 
 footer .bottom-section {
     padding: 20px 0;
+}
+
+footer .bottom-section a{
+    display:inline-block;
+    background-color:rgba(0,0,0,0);
+    padding:5px;
 }
 
 footer .bottom-section .text1 {
@@ -235,7 +245,7 @@ body > aside.on {
 /* 더보기 메뉴 영역 E */
 
 main {
-    padding-top: 62px;
+    margin-top: 82px;
     min-height: 600px;
 }
 
