@@ -17,9 +17,9 @@ import java.util.List;
 public class TermsController {
     private final Utils utils;
 
-    @GetMapping("/privacy")
+    @GetMapping("/privacyUsage")
     public String privacyUsage(Model model){
-        commonProcess(model, "privacy");
+        commonProcess(model, "privacyUsage");
         return utils.tpl("terms/privacyUsage");
     }
     @GetMapping("/guide")
@@ -29,12 +29,12 @@ public class TermsController {
     }
     private void commonProcess(Model model, String mode) {
         String pageTitle = "";
-        mode = StringUtils.hasText(mode) ? mode : "privacy";
+        mode = StringUtils.hasText(mode) ? mode : "privacyUsage";
         List<String> addCommonScript = new ArrayList<>();
         List<String> addCss = new ArrayList<>();
         List<String> addCommonCss = new ArrayList<>();
 
-        if (mode.equals("privacy")){
+        if (mode.equals("privacyUsage")){
             addCss.add("terms/privacyUsage");
         } else if (mode.equals("guide")){
             addCss.add("terms/guide");
