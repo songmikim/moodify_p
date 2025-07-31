@@ -1,48 +1,67 @@
 package xyz.moodf.diary.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import xyz.moodf.diary.dtos.SentimentRequest;
+import org.springframework.util.StringUtils;
+import xyz.moodf.diary.dtos.DiaryRequest;
 import xyz.moodf.diary.entities.Sentiment;
 import xyz.moodf.diary.repositories.SentimentRepository;
-import xyz.moodf.member.entities.Member;
-import xyz.moodf.member.repositories.MemberRepository;
 
-import java.util.UUID;
+import java.util.Arrays;
+import java.util.List;
 
+@Lazy
 @Service
 @Transactional  // 여러 Repository 메서드 호출이 하나의 트랜잭션 안에서 처리
 @RequiredArgsConstructor
 public class SentimentService {
     private final SentimentRepository sentimentRepository;
-    private final MemberRepository memberRepository;
+//    private final MemberRepository memberRepository;
+//
+//    public Sentiment create(Long memberSeq) {
+//        Member member = memberRepository.findById(memberSeq)
+//                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 멤버입니다."));
+//
+//        String gid = UUID.randomUUID().toString();
+//
+//        Sentiment sentiment = new Sentiment();
+//        sentiment.setGid(gid);
+//        sentiment.setContent("");
+//        sentiment.setSentiments("");
+//        sentimentRepository.save(sentiment);
+//
+//        return sentimentRepository.saveAndFlush(sentiment);
+//    }
 
-    public Sentiment create(Long memberSeq) {
-        Member member = memberRepository.findById(memberSeq)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 멤버입니다."));
+//    public Sentiment update(String gid, SentimentRequest request) {
+//        // Sentiment 조회
+//        Sentiment sentiment = sentimentRepository.findById(gid)
+//                .orElseThrow(() -> new IllegalArgumentException("해당 감정 분석 데이터가 존재하지 않습니다."));
+//
+//        // 값 업데이트
+//        sentiment.setContent(request.getContent());
+//        sentiment.setSentiments(request.getSentiments());
+//
+//        // 저장 후 반환
+//        return sentimentRepository.saveAndFlush(sentiment);
+//    }
 
-        String gid = UUID.randomUUID().toString();
+    public void update(DiaryRequest form) {
+        Sentiment item = new Sentiment();
+        item.setGid(form.getGid());
+        item.setContent(form.getContent());
 
-        Sentiment sentiment = new Sentiment();
-        sentiment.setGid(gid);
-        sentiment.setContent("");
-        sentiment.setSentiments("");
-        sentimentRepository.save(sentiment);
-
-        return sentimentRepository.saveAndFlush(sentiment);
+        sentimentRepository.saveAndFlush(item);
     }
 
-    public Sentiment update(String gid, SentimentRequest request) {
-        // Sentiment 조회
-        Sentiment sentiment = sentimentRepository.findById(gid)
-                .orElseThrow(() -> new IllegalArgumentException("해당 감정 분석 데이터가 존재하지 않습니다."));
+    public List<String> get(String gid) {
+        Sentiment item = sentimentRepository.findById(gid).orElse(null);
+        if (item == null || !StringUtils.hasText(item.getSentiments()))
+            return List.of();
 
-        // 값 업데이트
-        sentiment.setContent(request.getContent());
-        sentiment.setSentiments(request.getSentiments());
-
-        // 저장 후 반환
-        return sentimentRepository.saveAndFlush(sentiment);
+        return Arrays.stream(item.getSentiments().split(","))
+                .toList();
     }
 }
