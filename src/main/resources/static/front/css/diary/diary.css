@@ -1,0 +1,26 @@
+h1{text-align:center;}
+.date-wea{
+    flex-direction:row-reverse;
+    margin-right::9.5%;
+}
+input#title,textarea{
+    width:90%;
+    margin: 0 5%;
+}
+textarea {
+   min-height: 300px;
+   width: 90%;
+   resize: none;
+   overflow: hidden;
+   box-sizing: border-box;
+   padding: 10px;
+ }
+.tit, .con{
+    width:90%;
+    margin: 0 auto 10px;
+}
+form{position:relative; padding-bottom:84px;}
+button[type="submit"]{
+    position: absolute;
+    right:9.5%; bottom:24px;
+}

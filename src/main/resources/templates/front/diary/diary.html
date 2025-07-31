@@ -13,36 +13,35 @@
         <input type="hidden" id="gid" name="gid" th:value="${gid}" />
         <div class="error" th:each="err : ${#fields.errors('gid')}" th:text="${err}"></div>
 
-        <div>
-            <label for="date" class="form-label" th:text="#{날짜}"></label>
-            <input type="date"
-                   class="form-control"
-                   id="date"
-                   name="date"
-                   th:value="${today}"
-                   th:max="${today}">
-            <div class="error" th:each="err : ${#fields.errors('date')}" th:text="${err}"></div>
+        <div class="date-wea flex">
+            <div>
+                <label for="weather" class="form-label" th:text="#{날씨}"></label>
+                <select class="form-control" id="weather" name="weather" th:field="*{weather}">
+                    <option th:each="w : ${weatherValues}"
+                            th:value="${w.name()}"
+                            th:text="${w.description}"></option>
+                </select>
+                <div class="error" th:each="err : ${#fields.errors('weather')}" th:text="${err}"></div>
+            </div>
+            <div>
+                <label for="date" class="form-label" th:text="#{날짜}"></label>
+                <input type="date"
+                       class="form-control"
+                       id="date"
+                       name="date"
+                       th:value="${today}"
+                       th:max="${today}">
+                <div class="error" th:each="err : ${#fields.errors('date')}" th:text="${err}"></div>
+            </div>
         </div>
 
-        <div>
-            <label for="weather" class="form-label" th:text="#{날씨}"></label>
-            <select class="form-control" id="weather" name="weather" th:field="*{weather}">
-                <option th:each="w : ${weatherValues}"
-                        th:value="${w.name()}"
-                        th:text="${w.description}"></option>
-            </select>
-            <div class="error" th:each="err : ${#fields.errors('weather')}" th:text="${err}"></div>
-        </div>
-
-        <div>
-            <label for="title" class="form-label" th:text="#{제목}"></label>
+        <div class="tit">
             <input type="text" class="form-control" id="title" name="title" th:field="*{title}" th:placeholder="#{제목을_입력하세요}">
             <div class="error" th:each="err : ${#fields.errors('title')}" th:text="${err}"></div>
         </div>
 
-        <div>
-            <label for="content" class="form-label">내용</label>
-            <textarea class="form-control" id="content" name="content" rows="10" th:field="*{content}" th:placeholder="#{오늘의_일기를_작성해_보세요}"></textarea>
+        <div class="con">
+            <textarea class="form-control" id="autoResize" name="content" rows="10" th:field="*{content}" th:placeholder="#{오늘의_일기를_작성해_보세요}"></textarea>
             <div class="error" th:each="err : ${#fields.errors('content')}" th:text="${err}"></div>
         </div>
 
