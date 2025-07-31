@@ -49,6 +49,7 @@ public class DiaryController {
     public String diary(@ModelAttribute DiaryRequest form, Model model) {
         commonProcess("diary", model);
 
+        LocalDate today = LocalDate.now();
         LocalDate date = form.getDate();
         date = date == null || date.isAfter(today) ? today : date;
 
