@@ -62,10 +62,8 @@ public class DiaryController {
 //        Diary diary = new Diary();
 //        diary.setWeather(Weather.NULL);
 //
-//        model.addAttribute("today", LocalDate.now());
 //        model.addAttribute("diary", diary);
-//        model.addAttribute("weatherValues", Weather.values());
-//
+
 //        Sentiment sentiment = sentimentService.create(member.getSeq());
 //
 //        model.addAttribute("gid", sentiment.getGid());

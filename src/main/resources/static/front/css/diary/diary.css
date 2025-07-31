@@ -1,11 +1,26 @@
 h1{text-align:center;}
 .date-wea{
     flex-direction:row-reverse;
-    margin-right::9.5%;
+    margin:0 9.5% 10px 0;
+}
+.date-wea>div{
+    margin-left:10px;
+}
+.date-wea>div>select,.date-wea>div>input{
+    height:25px;
+    line-height:25px;
+    border-radius:3px;
+    width:100px;
+    text-align:center
 }
 input#title,textarea{
     width:90%;
     margin: 0 5%;
+    border-radius:8px;
+    padding:0 15px;
+}
+input#title{
+    font-size:1.1em;
 }
 textarea {
    min-height: 300px;
@@ -19,8 +34,27 @@ textarea {
     width:90%;
     margin: 0 auto 10px;
 }
-form{position:relative; padding-bottom:84px;}
-button[type="submit"]{
+.tit>div, .con>div{
+    margin-left:5%;
+}
+form{position:relative; padding-bottom:69px;}
+form>button{
+    width:150px;
     position: absolute;
-    right:9.5%; bottom:24px;
+    bottom:24px;
+}
+form>button[type="submit"]{right:9.5%;}
+form>button[type="button"]{
+    right:calc(9.5% + 160px);
+    display: inline-block;
+    background-color: var(--mainc);
+    color: var(--fontc);
+    border: none;
+    padding: 10px 16px;
+    font-size: 14px;
+    border-radius: 6px;
+    margin-top: 12px;
+    cursor: pointer;
+    transition: background 0.3s;
+    text-decoration: none;
 }
