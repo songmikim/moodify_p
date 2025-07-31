@@ -37,6 +37,7 @@ public class BoardDataUpdateService {
             item.setBoard(board);
             item.setIp(request.getRemoteAddr());
             item.setUa(request.getHeader("User-Agent"));
+            item.setPlainText(!board.isEditor());
         }
 
         if (memberUtil.isLogin()) {
