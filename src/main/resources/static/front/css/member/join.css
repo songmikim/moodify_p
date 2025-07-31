@@ -71,7 +71,7 @@ body {
 
 /* 전송 메세지 */
 #email_message {
-    font-size: 0.9em;
+    font-size: 1rem;
     color: green;
     white-space: nowrap;
 }
@@ -83,8 +83,16 @@ body {
     margin-top: 4px;
 }
 
-#email_verify {
-    margin-top: 6px;
+/* 이메일 텍스트 밑 여백 추가 */
+.email-text {
+    margin-bottom: 6px;
+}
+
+/* 로딩 이미지 */
+.loading-icon {
+    display: none;
+    height: 30px;
+    vertical-align: middle;
 }
 
 /* 인증 관련 박스 */
