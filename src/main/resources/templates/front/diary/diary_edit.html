@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{front/layouts/main}">
+<main layout:fragment="content">
+    <h1 th:text="${pageTitle}"></h1>
+
+    <div class="current-sentiment"></div>
+
+    <form name="frmSave" th:action="@{/diary}" method="post" th:object="${diaryRequest}" autocomplete="off">
+        <div class="error global" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
+
+        <input type="hidden" id="gid" name="gid" th:field="*{gid}" />
+        <div class="error" th:each="err : ${#fields.errors('gid')}" th:text="${err}"></div>
+
+        <div class="date-wea flex">
+            <div>
+                <label for="weather" class="form-label" th:text="#{날씨}"></label>
+                <select class="form-control" id="weather" name="weather" th:field="*{weather}" th:disabled="${!isEdit}">
+                    <option th:each="w : ${weatherValues}"
+                            th:value="${w.name()}"
+                            th:text="${w.description}"></option>
+                </select>
+                <div class="error" th:each="err : ${#fields.errors('weather')}" th:text="${err}"></div>
+            </div>
+            <div>
+                <label for="date" class="form-label" th:text="#{날짜}"></label>
+                <input type="date"
+                       class="form-control"
+                       id="date"
+                       name="date"
+                       th:field="*{date}"
+                       disabled>
+            </div>
+        </div>
+
+        <div class="tit">
+            <input type="text" class="form-control" id="title" name="title" th:field="*{title}" th:placeholder="#{제목을_입력하세요}" th:disabled="${!isEdit}">
+            <div class="error" th:each="err : ${#fields.errors('title')}" th:text="${err}"></div>
+        </div>
+
+        <div class="con">
+            <label for="content" class="form-label" th:text="#{내용}"></label>
+            <textarea class="form-control" id="content" name="content" rows="10" th:field="*{content}" th:placeholder="#{일기를_작성해_보세요}" th:disabled="${!isEdit}"></textarea>
+            <div class="error" th:each="err : ${#fields.errors('content')}" th:text="${err}"></div>
+        </div>
+
+        <button type="button" id="btn-edit" class="btn btn-primary" th:text="#{수정하기}"></button>
+        <button type="submit" class="btn btn-primary" th:text="#{저장하기}"></button>
+    </form>
+</main>
+</html>

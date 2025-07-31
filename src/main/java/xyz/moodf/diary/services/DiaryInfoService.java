@@ -32,6 +32,16 @@ public class DiaryInfoService {
     private final MemberUtil memberUtil;
 
     /**
+     * 현재 로그인된 회원이 특정 날짜에 작성한 일기가 있는가?
+     *
+     * @param date 날짜
+     * @return 작성 여부
+     */
+    public boolean isWritten(LocalDate date) {
+        return get(date) != null;
+    }
+
+    /**
      * 특정 회원의 특정 날짜 일기 조회
      * @param member 회원 정보
      * @param date 날짜
@@ -210,4 +220,6 @@ public class DiaryInfoService {
                 .map(Map.Entry::getKey) // 가장 많이 나온 감정 문자열 반환
                 .orElse(""); // 감정이 하나도 없을 경우 빈 문자열 반환
     }
+
+
 }

@@ -5,4 +5,9 @@ window.addEventListener("DOMContentLoaded", function () {
       this.style.height = 'auto';           // 높이 초기화
       this.style.height = this.scrollHeight + 'px';  // 내용에 따라 높이 조절
     });
+
+    document.getElementById('btn-edit').addEventListener('click', () => {
+        document.querySelectorAll('form[name=frmSave] input:not([id=date]), textarea, select')
+            .forEach(el => el.removeAttribute('disabled'));
+    });
 });
