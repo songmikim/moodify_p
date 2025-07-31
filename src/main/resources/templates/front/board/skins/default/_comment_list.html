@@ -1,0 +1,20 @@
+<!-- _comment_list.html (새로 생성) -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="list" class="comments-section" th:if="${comments != null && comments.size() > 0}">
+
+    <div class="comments-list">
+        <div th:each="comment : ${commentList}" class="comment-item">
+
+            <!-- 댓글 헤더 -->
+            <div class="comment-header">
+                <span class="comment-author" th:text="${comment.commenter}">작성자</span>
+                <span class="comment-date" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</span>
+            </div>
+            <div th:unless="${comment.deleted}" th:text="${comment.content}">
+                댓글 내용
+            </div>
+
+        </div>
+    </div>
+</div>

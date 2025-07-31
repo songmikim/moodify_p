@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="skin">
-    <form th:replace="~{front/board/skins/default/_comment_form::form}"></form>
+    <div th:replace="~{front/board/skins/default/_comment_form::form}"></div>
+</th:block>
+<th:block th:fragment="skin">
+    <div th:replace="~{front/board/skins/default/_comment_list::list}"></div>
 </th:block>
 </html>

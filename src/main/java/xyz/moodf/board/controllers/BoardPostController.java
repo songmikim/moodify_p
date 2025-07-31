@@ -11,6 +11,8 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import xyz.moodf.admin.board.entities.Board;
 import xyz.moodf.admin.board.services.BoardConfigInfoService;
+import xyz.moodf.board.comment.controllers.CommentController;
+import xyz.moodf.board.comment.search.CommentSearch;
 import xyz.moodf.board.entities.BoardData;
 import xyz.moodf.board.search.BoardSearch;
 import xyz.moodf.board.services.BoardDataDeleteService;
@@ -39,6 +41,7 @@ public class BoardPostController {
     private final BoardDataUpdateService updateService;
     private final BoardDataDeleteService deleteService;
     private final BoardDataValidator boardDataValidator;
+    private final CommentController comment;
 
     @ModelAttribute("board")
     public Board getBoard() {
@@ -98,8 +101,21 @@ public class BoardPostController {
     // 게시글 수정
     @GetMapping("/update/{seq}")
     public String update(@PathVariable("seq") Long seq, HttpSession session, Model model) {
-
+        BoardData boardData = InfoService.get(seq);
         commonProcess(seq, "update", model);
+
+        if (!permissionService.canEdit(boardData)) {
+            return "redirect:/board/view/" + seq + "?error=unauthorized";
+        }
+
+        // 🔒 비회원 글인 경우 세션 검증
+        if (boardData.getMember() == null) {
+            String sessionKey = "guest_verified_" + seq + "_update";
+            Long expireTime = (Long) session.getAttribute(sessionKey);
+            if (expireTime == null || System.currentTimeMillis() > expireTime) {
+                return "redirect:/board/view/" + seq + "?needPassword=true";
+            }
+        }
 
         return utils.tpl("board/update");
     }
@@ -114,16 +130,29 @@ public class BoardPostController {
             return "redirect:/board/list/" + boardData.getBoard().getBid() + "?error=access_denied";
         }
 
+        CommentSearch search= new CommentSearch();
+        comment.comment(seq, model, search);
+
         return utils.tpl("board/view");
     }
 
     // 게시글 삭제
     @GetMapping("/delete/{seq}")
-    public String delete(@PathVariable("seq") Long seq, Model model, @SessionAttribute("board") Board board) {
+    public String delete(@PathVariable("seq") Long seq, Model model, @SessionAttribute("board") Board board,HttpSession session) {
         commonProcess(seq, "delete", model);
         BoardData boardData = InfoService.get(seq);
         if (!permissionService.canDelete(boardData)) {
             return "redirect:/error/forbidden";
+        }
+        if (boardData.getMember() == null && !memberUtil.isAdmin()) {
+            String sessionKey = "guest_verified_" + seq + "_delete";
+            Long expireTime = (Long) session.getAttribute(sessionKey);
+            if (expireTime == null || System.currentTimeMillis() > expireTime) {
+                return "redirect:/board/view/" + seq + "?needPassword=true";
+            }
+
+            // 🔧 사용 후 세션 제거
+            session.removeAttribute(sessionKey);
         }
         deleteService.softDelete(boardData.getSeq());
 
@@ -153,7 +182,7 @@ public class BoardPostController {
 
         addScript.add("board/common"); // 스킨 상관없는 공통 자바스크립트
 
-        if (mode.equals("write") || mode.equals("view")) {
+        if (mode.equals("write") || mode.equals("view") || mode.equals("update")) {
             if (mode.equals("write")) {
                 // write 모드 전용 스크립트
                 if (board.isAttachFile() || (board.isImageUpload() && board.isEditor())) {
@@ -212,6 +241,7 @@ public class BoardPostController {
             model.addAttribute("canEdit", permissionService.canEdit(boardData));
             model.addAttribute("canDelete", permissionService.canDelete(boardData));
             model.addAttribute("isGuest", permissionService.isMember(boardData));
+            model.addAttribute("memberUtil", memberUtil);
 
             pageTitle = boardData.getSubject() + " - " + board.getName();
         }

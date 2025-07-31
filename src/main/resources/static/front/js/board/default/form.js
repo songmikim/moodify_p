@@ -45,3 +45,19 @@ function performAction(action, seq) {
         location.href = '/board/view/' + seq;
     }
 }
+
+function editComment(seq) {
+    // 댓글 수정 로직
+    console.log('Edit comment:', seq);
+}
+
+function deleteComment(seq) {
+    if (confirm('댓글을 삭제하시겠습니까?')) {
+        // 댓글 삭제 요청
+        fetch(`/board/comment/delete/${seq}`, {
+            method: 'POST'
+        }).then(() => {
+            location.reload();
+        });
+    }
+}

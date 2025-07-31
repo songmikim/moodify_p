@@ -1,15 +1,45 @@
+<!-- _comment_form.html 개선 버전 -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<form th:fragment="form" class="comment-form" name="frmComment" method="POST" th:action="@{/board/comment}" th:object="${requestComment}" th:if="${board.commentable}" >
-  <input type="hidden" name="boardDataSeq" th:field="*{boardDataSeq}">
+<form th:fragment="form" class="comment-form" name="frmComment" method="POST"
+      th:action="@{/board/comment/save}" th:object="${requestComment}">
 
-  <div class="top-section">
-    <span th:text="#{작성자}"></span>
-    <input type="text" name="commenter" th:field="*{commenter}">
+  <input type="hidden" name="boardDataSeq" th:field="*{boardDataSeq}">
+  <input type="hidden" name="mode" value="register">
+
+  <!-- 비회원인 경우에만 작성자명 입력 -->
+  <div class="author-section" th:if="${!memberUtil.isLogin()}">
+    <div class="form-group">
+      <label th:text="#{작성자}">작성자</label>
+      <input type="text" name="commenter" th:field="*{commenter}"
+             th:placeholder="#{작성자명을_입력하세요}" required>
+    </div>
+    <div class="form-group">
+      <label th:text="#{비밀번호}">비밀번호</label>
+      <input type="password" name="guestPw" th:field="*{guestPw}"
+             th:placeholder="#{비밀번호를_입력하세요}" required>
+    </div>
   </div>
+
+  <!-- 댓글 내용 -->
   <div class="content-section">
-    <textarea name="content" th:field="*{content}"></textarea>
-    <button type="button" th:text="#{작성하기}"></button>
+    <div class="form-group">
+      <label th:text="#{댓글내용}">댓글 내용</label>
+      <textarea name="content" th:field="*{content}"
+                th:placeholder="#{댓글을_입력하세요}"
+                rows="3" required></textarea>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary" th:text="#{작성하기}">작성하기</button>
+      <button type="button" class="btn btn-secondary" onclick="resetCommentForm()" th:text="#{취소}">취소</button>
+    </div>
   </div>
 </form>
+
+<script>
+  function resetCommentForm() {
+      document.frmComment.reset();
+  }
+</script>
 </html>
