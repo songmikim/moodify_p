@@ -31,7 +31,7 @@ public class ApiMyPageController {
         // 필요하면 여기에 유효성 검증 추가
 
         try {
-            Map<String, Long> result = infoService.getSentimentFrequencies(member.getSeq(), year, month);
+            Map<String, Long> result = infoService.getSentimentFrequencies(member, year, month);
             return new JSONData<>(result);
         } catch (MemberNotFoundException e) {
             throw new AlertBackException(utils.getMessage("NotFound.member"), HttpStatus.NOT_FOUND);

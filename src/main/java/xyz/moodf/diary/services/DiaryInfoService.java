@@ -8,8 +8,10 @@ import xyz.moodf.diary.entities.Diary;
 import xyz.moodf.diary.entities.DiaryId;
 import xyz.moodf.diary.entities.QDiary;
 import xyz.moodf.diary.entities.QSentiment;
+import xyz.moodf.diary.exceptions.DiaryNotFoundException;
+import xyz.moodf.diary.repositories.DiaryRepository;
 import xyz.moodf.member.entities.Member;
-import xyz.moodf.member.exceptions.MemberNotFoundException;
+import xyz.moodf.member.libs.MemberUtil;
 import xyz.moodf.member.repositories.MemberRepository;
 
 import java.time.LocalDate;
@@ -22,8 +24,24 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DiaryInfoService {
 
+    private final DiaryRepository diaryRepository;
     private final JPAQueryFactory jpaQueryFactory;
     private final MemberRepository memberRepository;
+    private final MemberUtil memberUtil;
+
+    public Diary get(Member member, LocalDate date) {
+        DiaryId diaryId = new DiaryId(member, date);
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(DiaryNotFoundException::new);
+
+        return diary;
+    }
+
+    public Diary get(LocalDate date) {
+        Member member = memberUtil.getMember();
+
+        return get(member, date);
+    }
 
     public List<Diary> getList(long memberSeq) {
         QDiary diary = QDiary.diary;
@@ -34,9 +52,7 @@ public class DiaryInfoService {
                 .fetch();
     }
 
-    public Map<String, Long> getSentimentFrequencies(long memberSeq, int year, int month) {
-        Member member = memberRepository.findById(memberSeq)
-                .orElseThrow(() -> new MemberNotFoundException());
+    public Map<String, Long> getSentimentFrequencies(Member member, int year, int month) {
 
         LocalDate firstDate = LocalDate.of(year, month, 1);
         LocalDate lastDate = firstDate.withDayOfMonth(firstDate.lengthOfMonth());
@@ -48,7 +64,7 @@ public class DiaryInfoService {
                 .select(diary.date)
                 .from(diary)
                 .where(
-                        diary.member.seq.eq(memberSeq),
+                        diary.member.eq(member),
                         diary.date.between(firstDate, lastDate)
                 )
                 .fetch();
@@ -56,7 +72,7 @@ public class DiaryInfoService {
         // 각 날짜의 대표 감정 리스트
         List<String> sentList = new ArrayList<>();
         for (LocalDate diaryDate : diaryDateList) {
-            sentList.add(getMostFrequentSentiment(new DiaryId(memberSeq, diaryDate)));
+            sentList.add(getMostFrequentSentiment(member, diaryDate));
         }
 
         // 지정된 기간 동안의 대표 감정 빈도 수
@@ -67,7 +83,8 @@ public class DiaryInfoService {
         return sentimentFrequencyMap;
     }
 
-    public String getMostFrequentSentiment(DiaryId diaryId) {
+    public String getMostFrequentSentiment(Member member, LocalDate date) {
+        DiaryId diaryId = new DiaryId(member, date);
         QDiary diary = QDiary.diary;
         QSentiment sentiment = QSentiment.sentiment;
 
@@ -76,7 +93,7 @@ public class DiaryInfoService {
                 .from(diary)
                 .join(sentiment).on(diary.gid.eq(sentiment.gid))
                 .where(
-                        diary.member.seq.eq(diaryId.getMember())
+                        diary.member.eq(diaryId.getMember())
                                 .and(diary.date.eq(diaryId.getDate()))
                 )
                 .fetch();

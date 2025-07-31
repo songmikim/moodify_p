@@ -12,7 +12,6 @@ import xyz.moodf.diary.constants.Weather;
 import xyz.moodf.diary.dtos.DiaryRequest;
 import xyz.moodf.diary.dtos.SentimentRequest;
 import xyz.moodf.diary.entities.Diary;
-import xyz.moodf.diary.entities.DiaryId;
 import xyz.moodf.diary.repositories.SentimentRepository;
 import xyz.moodf.diary.services.DiaryInfoService;
 import xyz.moodf.diary.services.DiaryService;
@@ -56,6 +55,7 @@ public class DiaryController {
 
         model.addAttribute("today", LocalDate.now());
         model.addAttribute("weatherValues", Weather.values());
+        model.addAttribute("diaryRequest", form);
 
 //        Member member = memberUtil.getMember();
 //
@@ -81,7 +81,11 @@ public class DiaryController {
             return utils.tpl("diary/diary");
         }
 
-        return "redirect:/diary/result/";
+        Member member = memberUtil.getMember();
+
+        Diary diary = diaryService.process(form, member);
+
+        return "redirect:/diary/result/" + diary.getDate();
     }
 
     @ResponseBody
@@ -90,9 +94,25 @@ public class DiaryController {
         sentimentService.update(form);
     }
 
+    @ResponseBody
+    @GetMapping("/sentiment/{gid}")
+    public List<String> currentSentiment(@PathVariable("gid") String gid) {
+        return sentimentService.get(gid);
+    }
+
+    @GetMapping("/result/{date}")
+    public String result(@PathVariable("date") LocalDate date, Model model) {
+        commonProcess("result", model);
+
+        Diary diary = infoService.get(date);
+        System.out.println(diary);
+        model.addAttribute("diaryItem", diary);
+        return utils.tpl("diary/result");
+    }
+
     @GetMapping("/calendar")
     public String calendar(Model model, @ModelAttribute("extraData") Map<LocalDate, Object> extraData) {
-        commonProcess("member", model);
+        commonProcess("result", model);
 
         Member member = memberUtil.getMember();
         List<Diary> diaryList = infoService.getList(member.getSeq());
@@ -100,7 +120,7 @@ public class DiaryController {
         /* 날짜마다 감정 이미지 삽입 */
         for (Diary diary : diaryList) {
             String sentimentString = "";
-            String diarySentiment = infoService.getMostFrequentSentiment(new DiaryId(member.getSeq(), diary.getDate()));
+            String diarySentiment = infoService.getMostFrequentSentiment(member, diary.getDate());
 
             /* 추후에 수정 필요 - 감정 결과에 따라 이미지 다르게 띄우기 */
             switch (diarySentiment) {
@@ -143,7 +163,7 @@ public class DiaryController {
 
         Member member = memberUtil.getMember();
 
-        diaryService.process(diaryRequest, gid, member.getSeq());
+        diaryService.process(diaryRequest, member);
 
         return "redirect:/diary/result";
     }

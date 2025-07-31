@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import xyz.moodf.diary.dtos.DiaryRequest;
 import xyz.moodf.diary.entities.Sentiment;
 import xyz.moodf.diary.repositories.SentimentRepository;
-import xyz.moodf.member.entities.Member;
-import xyz.moodf.member.repositories.MemberRepository;
 
-import java.util.UUID;
+import java.util.Arrays;
+import java.util.List;
 
 @Lazy
 @Service
@@ -18,22 +18,22 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class SentimentService {
     private final SentimentRepository sentimentRepository;
-    private final MemberRepository memberRepository;
-
-    public Sentiment create(Long memberSeq) {
-        Member member = memberRepository.findById(memberSeq)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 멤버입니다."));
-
-        String gid = UUID.randomUUID().toString();
-
-        Sentiment sentiment = new Sentiment();
-        sentiment.setGid(gid);
-        sentiment.setContent("");
-        sentiment.setSentiments("");
-        sentimentRepository.save(sentiment);
-
-        return sentimentRepository.saveAndFlush(sentiment);
-    }
+//    private final MemberRepository memberRepository;
+//
+//    public Sentiment create(Long memberSeq) {
+//        Member member = memberRepository.findById(memberSeq)
+//                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 멤버입니다."));
+//
+//        String gid = UUID.randomUUID().toString();
+//
+//        Sentiment sentiment = new Sentiment();
+//        sentiment.setGid(gid);
+//        sentiment.setContent("");
+//        sentiment.setSentiments("");
+//        sentimentRepository.save(sentiment);
+//
+//        return sentimentRepository.saveAndFlush(sentiment);
+//    }
 
 //    public Sentiment update(String gid, SentimentRequest request) {
 //        // Sentiment 조회
@@ -54,5 +54,14 @@ public class SentimentService {
         item.setContent(form.getContent());
 
         sentimentRepository.saveAndFlush(item);
+    }
+
+    public List<String> get(String gid) {
+        Sentiment item = sentimentRepository.findById(gid).orElse(null);
+        if (item == null || !StringUtils.hasText(item.getSentiments()))
+            return List.of();
+
+        return Arrays.stream(item.getSentiments().split(","))
+                .toList();
     }
 }

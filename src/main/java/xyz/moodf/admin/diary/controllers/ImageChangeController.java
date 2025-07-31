@@ -1,7 +1,6 @@
 package xyz.moodf.admin.diary.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,9 +8,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import xyz.moodf.admin.diary.dtos.SentimentImageDto;
 import xyz.moodf.global.annotations.ApplyCommonController;
+import xyz.moodf.global.configs.FileProperties;
 import xyz.moodf.global.libs.Utils;
 import xyz.moodf.member.libs.MemberUtil;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -26,14 +27,18 @@ public class ImageChangeController {
 
     private final Utils utils;
     private final MemberUtil memberUtil;
+    private final FileProperties fileProperties;
 
     @GetMapping("/image")
     public String changeImages(Model model) {
         commonProcess(model);
 
         List<SentimentImageDto> sentimentImages = new ArrayList<>();
+        String imagePathRoot = "/common/images/sentiments/";
 
-        // 감정 이름, 이미지 경로 정의 필요
+        // 6개의 대분류 감정 하드코딩
+        sentimentImages.add(new SentimentImageDto("happiness", imagePathRoot + "happiness.png"));
+        //sentimentImages.add(new SentimentImageDto("sadness", imagePathRoot + "sadness.png"));
 
         model.addAttribute("sentimentImages", sentimentImages);
         return "admin/diary/image";
@@ -43,22 +48,22 @@ public class ImageChangeController {
     @ResponseBody
     public ResponseEntity<String> uploadSentimentImage(
             @RequestParam("file") MultipartFile file,
-            @RequestParam("sentiment") String sentimentName
-    ) {
-        try {
-            String filename = sentimentName + ".png";
-            String uploadDir = "/common/images/sentiments/";
+            @RequestParam("sentiment") String sentiment) throws IOException {
 
-            // 파일 저장 (경로는 프로젝트 상황에 따라 조정 필요)
-            Path path = Paths.get("src/main/resources/static" + uploadDir + filename);
-            Files.createDirectories(path.getParent());
-            file.transferTo(path.toFile());
+        String fileName = sentiment + ".png";
+        Path savePath = Paths.get(fileProperties.getPath(), "sentiments");
 
-            return ResponseEntity.ok(uploadDir + filename);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Upload failed");
+        // 디렉토리 없으면 생성
+        if (!Files.exists(savePath)) {
+            Files.createDirectories(savePath);
         }
+
+        Path filePath = savePath.resolve(fileName);
+        file.transferTo(filePath.toFile());
+
+        // 클라이언트가 접근 가능한 URL 반환
+        String publicUrl = fileProperties.getUrl() + "/sentiments/" + fileName;
+        return ResponseEntity.ok(publicUrl);
     }
 
     private void commonProcess(Model model) {
@@ -70,7 +75,7 @@ public class ImageChangeController {
         List<String> addCommonCss = new ArrayList<>();
 
         addCommonScript.add("fileManager");
-        addScript.add("admin/js/diary/sentiment_image");
+        addCommonScript.add("sentiment_image");
         pageTitle = utils.getMessage("일기 감정 이미지 관리");
 
         model.addAttribute("addCommonScript", addCommonScript);

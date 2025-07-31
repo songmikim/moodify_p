@@ -5,6 +5,8 @@
 <main layout:fragment="content">
     <h1 th:text="${pageTitle}"></h1>
 
+    <div class="current-sentiment"></div>
+
     <form name="frmSave" th:action="@{/diary}" method="post" th:object="${diaryRequest}" autocomplete="off">
         <div class="error global" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
 
@@ -17,7 +19,6 @@
                    class="form-control"
                    id="date"
                    name="date"
-                   th:field="*{date}"
                    th:value="${today}"
                    th:max="${today}">
             <div class="error" th:each="err : ${#fields.errors('date')}" th:text="${err}"></div>
@@ -45,7 +46,7 @@
             <div class="error" th:each="err : ${#fields.errors('content')}" th:text="${err}"></div>
         </div>
 
-        <button type="submit" class="btn btn-primary" th:text="*{저장하기}"></button>
+        <button type="submit" class="btn btn-primary" th:text="#{저장하기}"></button>
     </form>
 </main>
 </html>

@@ -9,6 +9,8 @@ import xyz.moodf.diary.entities.Sentiment;
 import xyz.moodf.diary.repositories.DiaryRepository;
 import xyz.moodf.diary.repositories.SentimentRepository;
 import xyz.moodf.member.entities.Member;
+import xyz.moodf.member.exceptions.MemberNotFoundException;
+import xyz.moodf.member.libs.MemberUtil;
 import xyz.moodf.member.repositories.MemberRepository;
 
 import java.time.LocalDateTime;
@@ -20,18 +22,19 @@ public class DiaryService {
 
     private final DiaryRepository diaryRepository;
     private final SentimentRepository sentimentRepository;
+    private final MemberUtil memberUtil;
     private final MemberRepository memberRepository;
 
-    public Diary process(DiaryRequest request, String gid, Long memberSeq) {
-        Sentiment sentiment = sentimentRepository.findById(gid)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 감정 분석 결과입니다."));
+    public Diary process(DiaryRequest request, Member member) {
 
-        Member member = memberRepository.findById(memberSeq)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 멤버입니다."));
+        Member loggedMember = memberRepository.findById(member.getSeq())
+                .orElseThrow(MemberNotFoundException::new);     // 영속 상태
+
+        String gid = request.getGid();
 
         Diary diary = new Diary();
 
-        diary.setMember(member);
+        diary.setMember(loggedMember);
         diary.setDate(request.getDate());
         diary.setGid(gid);
         diary.setTitle(request.getTitle());
@@ -39,11 +42,15 @@ public class DiaryService {
         diary.setWeather(request.getWeather());
         diary.setCreatedAt(LocalDateTime.now());
 
-        diaryRepository.saveAndFlush(diary);
-
         // 감정 분석 완료 처리
-        sentiment.setDone(true);
-        sentimentRepository.saveAndFlush(sentiment);
+        Sentiment sentiment = sentimentRepository.findById(gid).orElse(null);
+        if (sentiment != null) {
+            sentiment.setDone(true);
+            diary.setSentiments(sentiment.getSentiments());
+            sentimentRepository.saveAndFlush(sentiment);
+        }
+
+        diaryRepository.saveAndFlush(diary);
 
         return diary;
     }

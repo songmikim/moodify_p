@@ -1,9 +1,22 @@
 window.addEventListener("DOMContentLoaded", function () {
     const { ajaxLoad } = commonLib;
+
+    // 2초마다 감정 분석을 위한 데이터 전송
     setInterval(() => {
-        const formData = new formData(frmSave);
+        const formData = new FormData(frmSave);
         ajaxLoad(`/diary/sentiment`, null, null, "POST", formData, null, true);
     }, 2000);
+
+    // 현재 감정 출력을 위한 데이터 조회
+    const gid = frmSave.gid.value;
+    const el = document.querySelector(".current-sentiment");
+    setInterval(() => {
+        ajaxLoad(`/diary/sentiment/${gid}`, (items) => {
+            const text = items.join(",");
+            el.innerHTML = text;
+        })
+    }, 3500);
+});
 
 //    const gidInput = document.getElementById("gid");
 //    const contentValue = document.getElementById("content");
@@ -57,4 +70,4 @@ window.addEventListener("DOMContentLoaded", function () {
 //            navigator.sendBeacon("/diary/delete", new URLSearchParams({ gid }));
 //        }
 //    });
-});
+//});
