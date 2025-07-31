@@ -1,30 +1,33 @@
 package xyz.moodf.mypage.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import xyz.moodf.diary.constants.StatisticType;
 import xyz.moodf.diary.services.DiaryInfoService;
-import xyz.moodf.global.exceptions.script.AlertBackException;
-import xyz.moodf.global.libs.Utils;
-import xyz.moodf.global.rests.JSONData;
-import xyz.moodf.member.entities.Member;
-import xyz.moodf.member.exceptions.MemberNotFoundException;
-import xyz.moodf.member.libs.MemberUtil;
 
+import java.time.LocalDate;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/mypage")
 @RequiredArgsConstructor
 public class ApiMyPageController {
-    private final MemberUtil memberUtil;
     private final DiaryInfoService infoService;
-    private final Utils utils;
 
     @GetMapping("/emotion")
+    public Map<LocalDate, Map<String, Integer>> emotionData(@ModelAttribute StatisticSearch search) {
+        LocalDate sDate = Objects.requireNonNullElse(search.getSDate(), LocalDate.now().minusYears(1L));
+        LocalDate eDate = search.getEDate();
+        StatisticType type = Objects.requireNonNullElse(search.getType(), StatisticType.MONTHLY);
+
+        return infoService.getStatistics(sDate, eDate, type);
+    }
+
+/*    @GetMapping("/emotion")
     public JSONData<Map<String, Long>> emotionData(@RequestParam int year, @RequestParam int month) {
         Member member = memberUtil.getMember();
 
@@ -36,5 +39,5 @@ public class ApiMyPageController {
         } catch (MemberNotFoundException e) {
             throw new AlertBackException(utils.getMessage("NotFound.member"), HttpStatus.NOT_FOUND);
         }
-    }
+    }*/
 }
