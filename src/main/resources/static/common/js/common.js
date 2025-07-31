@@ -55,7 +55,7 @@ var commonLib = {
         },
     /**
     * ContextPath 기준 경로
-    *
+    * 잘못된 주소로 가지 않기 위해 설정
     */
     getUrl(url) {
         let baseUrl = document.querySelector("meta[name='base_url']").content;
