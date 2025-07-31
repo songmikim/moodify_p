@@ -4,7 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import xyz.moodf.board.entities.BoardData;
 import xyz.moodf.global.exceptions.UnAuthorizedException;
+import xyz.moodf.member.entities.Member;
 import xyz.moodf.member.libs.MemberUtil;
+
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -18,12 +21,15 @@ public class BoardPermissionService {
 
         // 회원 글인 경우 본인 확인
         if (boardData.getMember() != null) {
-            if (!memberUtil.isLogin() ||
-                    !boardData.getMember().getEmail().equals(memberUtil.getMember().getEmail())) {
-                return false;
-            } else {
-                return true;
+            Member currentMember = memberUtil.getMember();
+            if (currentMember == null) {
+                return false; // NPE 방지
             }
+
+            return Objects.equals(
+                    boardData.getMember().getEmail(),
+                    currentMember.getEmail()
+            );
         } else {
             // 비회원 글은 비밀번호 확인이 필요
             return true;
@@ -41,12 +47,15 @@ public class BoardPermissionService {
 
         // 회원 글인 경우 본인 확인
         if (boardData.getMember() != null) {
-            if (!memberUtil.isLogin() ||
-                    !boardData.getMember().getEmail().equals(memberUtil.getMember().getEmail())) {
-                return false;
-            } else {
-                return true;
+            Member currentMember = memberUtil.getMember();
+            if (currentMember == null) {
+                return false; // NPE 방지
             }
+
+            return Objects.equals(
+                    boardData.getMember().getEmail(),
+                    currentMember.getEmail()
+            );
         } else {
             // 비회원 글은 비밀번호 확인이 필요
             return true;
@@ -99,6 +108,9 @@ public class BoardPermissionService {
         // trim()으로 공백 제거 후 비교
         return guestPw.trim().equals(boardData.getGuestPw().trim());
     }
+
+
+
 
 
 

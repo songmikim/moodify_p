@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="skin">
+  <nav th:replace="~{front/board/skins/default/_category::skin}"></nav>
+  <ul class="items">
+    <li th:if="${items == null || items.isEmpty()}" class="no-data" th:text="#{조회된_게시글이_없습니다}"></li>
+    <li th:unless="${items == null || items.isEmpty()}" th:each="item : ${items}" th:object="${item}">
+      <a th:href="@{/board/view/{seq}(seq=*{seq})}" class="subject">
+        <span th:if="*{notice}" class="notice" th:text="#{공지}"></span>
+        <th:block th:text="*{subject}"></th:block>
+      </a>
+      <span class="post-info">
+                <span class="user-info">
+                    <th:block th:text="*{poster}"></th:block>
+                    <th:block th:if="*{!guest}" th:text="*{#strings.concat('(', member.email, ')')}"></th:block>
+                </span>
+                <span class="date-info" th:text="*{#temporals.format(createdAt, 'yyyy.MM.dd HH:mm')}"></span>
+                <span class="view-count" th:if="*{viewCount > 0}" th:text="*{viewCount >= 1000 ? #numbers.formatInteger(viewCount, 3, 'COMMA') : viewCount}"></span>
+            </span>
+    </li>
+  </ul>
+  <form class="frm-search" name="frmSearch" method="GET" th:action="@{/board/list/{bid}(bid=${board.bid})}" autocomplete="off" th:object="${boardSearch}">
+    <select name="sopt" th:field="*{sopt}">
+      <option value="ALL" th:text="#{통합검색}"></option>
+      <option value="SUBJECT" th:text="#{제목}"></option>
+      <option value="CONTENT" th:text="#{내용}"></option>
+      <option value="SUBJECT_CONTENT" th:text="#{제목_내용}"></option>
+      <option value="NAME" th:text="#{이름}"></option>
+    </select>
+    <input type="text" name="skey" th:field="*{skey}">
+    <button type="submit" th:text="#{검색하기}"></button>
+  </form>
+  <th:block th:replace="~{common/_pagination::pagination}"></th:block>
+</th:block>
+</html>

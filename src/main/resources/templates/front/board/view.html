@@ -24,24 +24,83 @@
             <div th:utext="${boardData.content}">게시글 내용이 여기에 표시됩니다.</div>
         </div>
 
+        <!-- 파일 -->
+        <div th:if="${boardData.attachFiles != null && !boardData.attachFiles.isEmpty()}" class="attach-files">
+            <h4>첨부파일 (<span th:text="${boardData.attachFiles.size()}">0</span>개)</h4>
+            <div class="files-container">
+                <div th:each="file : ${boardData.attachFiles}" class="file-item">
+
+                    <!-- 이미지인 경우 썸네일 표시 -->
+                    <div th:if="${file.image}" class="image-file">
+                        <div class="thumbnail-wrapper">
+                            <a th:href="@{/file/image/{seq}(seq=${file.seq})}" target="_blank">
+                                <img th:src="@{/file/thumb(seq=${file.seq}, width=120, height=120, crop=true)}"
+                                     th:alt="${file.fileName}"
+                                     class="thumbnail">
+                            </a>
+                        </div>
+                        <div class="file-info">
+                            <span th:text="${file.fileName}" class="file-name">이미지명</span>
+                            <div class="file-actions">
+                                <a th:href="@{/file/image/{seq}(seq=${file.seq})}" target="_blank" class="view-btn">보기</a>
+                                <a th:href="@{/file/download/{seq}(seq=${file.seq})}" class="download-btn">다운로드</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 일반 파일인 경우 아이콘과 링크 -->
+                    <div th:unless="${file.image}" class="regular-file">
+                        <div class="file-icon-wrapper">
+                            <span class="file-icon" th:classappend="${file.extension}">📄</span>
+                        </div>
+                        <div class="file-info">
+                            <a th:href="@{/file/download/{seq}(seq=${file.seq})}"
+                               th:text="${file.fileName}"
+                               class="file-name">파일명</a>
+                            <span class="file-extension" th:text="${file.extension}">확장자</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- 비회원 글인 경우 비밀번호로 수정/삭제 -->
         <!-- 회원 글 수정/삭제 버튼 -->
         <div class="post-actions">
             <a th:href="@{/board/list/{bid}(bid=${board.bid})}" class="btn btn-list">목록</a>
 
             <th:block th:if="${canEdit}">
-                <button th:if="${!isGuest}" th:href="@{/board/update/{seq}(seq=${boardData.seq})}" class="btn btn-edit">수정</button>
+                <!-- 회원 글 수정 -->
+                <a th:if="${!isGuest}" th:href="@{/board/update/{seq}(seq=${boardData.seq})}"
+                   class="btn btn-edit">수정</a>
+
+                <!-- 비회원 글 수정 -->
                 <button th:if="${isGuest}" type="button" class="btn btn-edit"
                         th:data-seq="${boardData.seq}"
                         onclick="checkGuestPassword('update', this.dataset.seq)">수정</button>
             </th:block>
 
             <th:block th:if="${canDelete}">
-                <button th:if="${!isGuest}" type="button" class="btn btn-delete" th:data-seq="${boardData.seq}" onclick="deletePost(this.dataset.seq)">삭제</button>
+                <!-- 회원 글 삭제 -->
+                <button th:if="${!isGuest}" type="button" class="btn btn-delete"
+                        th:data-seq="${boardData.seq}"
+                        onclick="performAction('delete',this.dataset.seq)">삭제</button>
+
+                <!-- 비회원 글 삭제 -->
                 <button th:if="${isGuest}" type="button" class="btn btn-delete"
-                        th:data-seq="${boardData.seq}" onclick="checkGuestPassword('delete', this.dataset.seq)">삭제</button>
+                        th:data-seq="${boardData.seq}"
+                        onclick="checkGuestPassword('delete', this.dataset.seq)">삭제</button>
             </th:block>
+
         </div>
+
+        <div class="comments-wrapper">
+
+            <!-- 댓글 -->
+            <div th:replace="~{front/board/skins/default/_comment::skin}"></div>
+
+        </div>
+
     </div>
 
 </main>

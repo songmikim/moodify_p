@@ -67,5 +67,9 @@
         <th:block th:replace="~{common/_pagination::pagination}"></th:block>
     </div>
 
+    <script th:if="${param.error}">
+        alert('[[${param.error}]]');
+    </script>
+
 </section>
 </html>
