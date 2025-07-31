@@ -62,10 +62,8 @@ public class DiaryController {
 //        Diary diary = new Diary();
 //        diary.setWeather(Weather.NULL);
 //
-//        model.addAttribute("today", LocalDate.now());
 //        model.addAttribute("diary", diary);
-//        model.addAttribute("weatherValues", Weather.values());
-//
+
 //        Sentiment sentiment = sentimentService.create(member.getSeq());
 //
 //        model.addAttribute("gid", sentiment.getGid());
@@ -191,12 +189,13 @@ public class DiaryController {
 
         if (mode.equals("diary")) {
             addScript.add("diary/sentiment");  // 추가로 만든 sentiment db 관리 js 파일
+            addScript.add("diary/diary");
+            addCss.add("diary/diary");
             pageTitle = utils.getMessage("일기쓰기");
         } else if (mode.equals("result")) {
             pageTitle = utils.getMessage("일기결과");
         }
 
-        addCss.add("diary/diary");
 
         model.addAttribute("addCommonScript", addCommonScript);
         model.addAttribute("addScript", addScript);
