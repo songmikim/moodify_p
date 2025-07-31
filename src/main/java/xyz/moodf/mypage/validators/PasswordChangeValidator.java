@@ -47,9 +47,8 @@ public class PasswordChangeValidator implements Validator, PasswordValidator {
 
         // 비어 있는 입력 필드 검증
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "currentPassword", "NotBlank.currentPassword");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotBlank");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "confirmPassword", "NotBlank");
-
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotBlank.password");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "confirmPassword", "NotBlank.confirmPassword");
         if (errors.hasErrors()) return; // 필수값 미입력 에러가 있으면 이후 검증 생략
 
         // 현재 비밀번호가 회원 정보와 일치하는지 확인
@@ -63,12 +62,12 @@ public class PasswordChangeValidator implements Validator, PasswordValidator {
 
         // 새로운 비밀번호 복잡도 체크 (영문자, 숫자, 특수문자 포함 여부)
         if (!checkAlpha(password, false) || !checkNumber(password) || !checkSpecialChars(password)) {
-            errors.rejectValue("password", "Complexity");
+            errors.rejectValue("password", "Complexity.password");
         }
 
         // 비밀번호 확인값과 일치하는지 검증
         if (!password.equals(form.getConfirmPassword())) {
-            errors.rejectValue("confirmPassword", "Mismatch");
+            errors.rejectValue("confirmPassword", "Mismatch.confirmPassword");
         }
     }
 }
