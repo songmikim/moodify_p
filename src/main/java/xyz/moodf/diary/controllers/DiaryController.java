@@ -192,8 +192,11 @@ public class DiaryController {
         if (mode.equals("diary")) {
             addScript.add("diary/sentiment");  // 추가로 만든 sentiment db 관리 js 파일
             pageTitle = utils.getMessage("일기쓰기");
-
+        } else if (mode.equals("result")) {
+            pageTitle = utils.getMessage("일기결과");
         }
+
+        addCss.add("diary/diary");
 
         model.addAttribute("addCommonScript", addCommonScript);
         model.addAttribute("addScript", addScript);
