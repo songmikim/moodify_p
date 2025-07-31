@@ -10,7 +10,7 @@
     <form name="frmSave" th:action="@{/diary}" method="post" th:object="${diaryRequest}" autocomplete="off">
         <div class="error global" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
 
-        <input type="hidden" id="gid" name="gid" th:value="${gid}" />
+        <input type="hidden" id="gid" name="gid" th:field="*{gid}" />
         <div class="error" th:each="err : ${#fields.errors('gid')}" th:text="${err}"></div>
 
         <div class="date-wea flex">
@@ -19,7 +19,8 @@
                 <select class="form-control" id="weather" name="weather" th:field="*{weather}">
                     <option th:each="w : ${weatherValues}"
                             th:value="${w.name()}"
-                            th:text="${w.description}"></option>
+                            th:text="${w.description}"
+                            th:selected="${w.name()} == *{weather}"></option>
                 </select>
                 <div class="error" th:each="err : ${#fields.errors('weather')}" th:text="${err}"></div>
             </div>
@@ -29,7 +30,7 @@
                        class="form-control"
                        id="date"
                        name="date"
-                       th:value="${today}"
+                       th:field="*{date}"
                        th:max="${today}">
                 <div class="error" th:each="err : ${#fields.errors('date')}" th:text="${err}"></div>
             </div>
@@ -41,6 +42,7 @@
         </div>
 
         <div class="con">
+            <label for="content" class="form-label" th:text="#{내용}"></label>
             <textarea class="form-control" id="content" name="content" rows="10" th:field="*{content}" th:placeholder="#{일기를_작성해_보세요}"></textarea>
             <div class="error" th:each="err : ${#fields.errors('content')}" th:text="${err}"></div>
         </div>

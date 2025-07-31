@@ -1,9 +1,11 @@
 package xyz.moodf.diary.services;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import xyz.moodf.diary.entities.Diary;
 import xyz.moodf.diary.entities.DiaryId;
 import xyz.moodf.diary.entities.QDiary;
@@ -29,27 +31,113 @@ public class DiaryInfoService {
     private final MemberRepository memberRepository;
     private final MemberUtil memberUtil;
 
+    /**
+     * 특정 회원의 특정 날짜 일기 조회
+     * @param member 회원 정보
+     * @param date 날짜
+     * @return 일기
+     */
     public Diary get(Member member, LocalDate date) {
         DiaryId diaryId = new DiaryId(member, date);
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(DiaryNotFoundException::new);
 
+        // 추가 정보 처리
+        addInfo(diary);
+
         return diary;
     }
 
+    /**
+     * 로그인한 회원의 특정 날짜 일기 조회
+     *
+     * @param date 날짜
+     * @return 일기
+     */
     public Diary get(LocalDate date) {
         Member member = memberUtil.getMember();
 
         return get(member, date);
     }
 
-    public List<Diary> getList(long memberSeq) {
+    public List<Diary> getList(Member member, LocalDate sDate, LocalDate eDate) {
         QDiary diary = QDiary.diary;
 
-        return jpaQueryFactory
-                .selectFrom(diary)
-                .where(diary.member.seq.eq(memberSeq))
+        BooleanBuilder andBuilder = new BooleanBuilder();
+        andBuilder.and(diary.member.eq(member));
+
+        // 일기 작성일 기간 조회
+        if (sDate != null) {
+            andBuilder.and(diary.createdAt.goe(sDate.atStartOfDay()));
+        }
+
+        if (eDate != null) {
+            andBuilder.and(diary.createdAt.loe(eDate.atTime(23, 59, 59)));
+        }
+
+        List<Diary> items = jpaQueryFactory.selectFrom(diary)
+                .leftJoin(diary.member)
+                .fetchJoin()
+                .where(andBuilder)
+                .orderBy(diary.createdAt.asc())
                 .fetch();
+
+        // 추가 정보 러리
+        items.forEach(this::addInfo);
+
+        return items;
+    }
+
+    public List<Diary> getList(Member member, int year, int month) {
+        LocalDate currMonth = LocalDate.of(year, month, 1);
+        LocalDate prevMonth = currMonth.minusMonths(1L);
+        LocalDate nextMonth = currMonth.plusMonths(2L).minusMonths(1L);
+
+        return getList(member, prevMonth, nextMonth);
+    }
+
+    public List<Diary> getList(Member member) {
+        LocalDate today = LocalDate.now();
+        return getList(member, today.getYear(), today.getMonthValue());
+    }
+
+    public List<Diary> getList(int year, int month) {
+        return getList(memberUtil.getMember(), year, month);
+    }
+
+    public List<Diary> getList() {
+        return getList(memberUtil.getMember());
+    }
+
+    /**
+     * 추가 정보 처리
+     *
+     * @param item
+     */
+    private void addInfo(Diary item) {
+        String sentiments = item.getSentiments();
+        if (StringUtils.hasText(sentiments)) {
+            Map<String, Integer> statistics = new HashMap<>();
+
+            for (String sentiment : sentiments.split(",")) {
+                sentiment = sentiments.split(" ")[0];
+                int cnt = statistics.getOrDefault(sentiment, 0);
+                statistics.put(sentiment, ++cnt);
+            }
+
+            List<String> tmp = new ArrayList<>();
+            for (Map.Entry<String, Integer> entry : statistics.entrySet()) {
+                tmp.add(String.format("%s_%s", entry.getValue(), entry.getKey()));
+            }
+
+            Collections.sort(tmp, Comparator.reverseOrder());
+
+            List<String> items = tmp.stream().map(s -> s.split("_")[1]).toList();
+
+            item.setStrongest(items.getFirst());  // 가장 강한 감정
+            item.setStatistics(statistics);
+            item.setRanking(items);  // 순위별 감정 목록
+        }
     }
 
     public Map<String, Long> getSentimentFrequencies(Member member, int year, int month) {

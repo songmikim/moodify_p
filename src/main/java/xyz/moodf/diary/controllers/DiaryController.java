@@ -49,24 +49,17 @@ public class DiaryController {
     public String diary(@ModelAttribute DiaryRequest form, Model model) {
         commonProcess("diary", model);
 
+        LocalDate today = LocalDate.now();
+        LocalDate date = form.getDate();
+        date = date == null || date.isAfter(today) ? today : date;
+
+        form.setDate(date);
         form.setWeather(Weather.NULL);
-        form.setDate(LocalDate.now());
+        form.setDate(today);
         form.setGid(UUID.randomUUID().toString());
 
         model.addAttribute("today", LocalDate.now());
         model.addAttribute("weatherValues", Weather.values());
-        model.addAttribute("diaryRequest", form);
-
-//        Member member = memberUtil.getMember();
-//
-//        Diary diary = new Diary();
-//        diary.setWeather(Weather.NULL);
-//
-//        model.addAttribute("diary", diary);
-
-//        Sentiment sentiment = sentimentService.create(member.getSeq());
-//
-//        model.addAttribute("gid", sentiment.getGid());
 
         return utils.tpl("diary/diary");
     }
@@ -109,25 +102,38 @@ public class DiaryController {
     }
 
     @GetMapping("/calendar")
-    public String calendar(Model model, @ModelAttribute("extraData") Map<LocalDate, Object> extraData) {
-        commonProcess("result", model);
+    public String calendar(
+            @RequestParam(name = "year", required = false) Integer year,
+            @RequestParam(name = "month", required = false) Integer month,
+            Model model, @ModelAttribute("extraData") Map<LocalDate, Object> extraData) {
+        commonProcess("calendar", model);
 
-        Member member = memberUtil.getMember();
-        List<Diary> diaryList = infoService.getList(member.getSeq());
+        LocalDate today = LocalDate.now();
+        year = Objects.requireNonNullElse(year, today.getYear());
+        month = Objects.requireNonNullElse(month, today.getMonthValue());
 
-        /* 날짜마다 감정 이미지 삽입 */
-        for (Diary diary : diaryList) {
-            String sentimentString = "";
-            String diarySentiment = infoService.getMostFrequentSentiment(member, diary.getDate());
+        List<Diary> items = infoService.getList(year, month);
+        items.forEach(item -> extraData.put(item.getDate(), item.getStrongest()));
 
-            /* 추후에 수정 필요 - 감정 결과에 따라 이미지 다르게 띄우기 */
-            switch (diarySentiment) {
-                case "기쁨": sentimentString = "happiness"; break;
-                default: break;
-            }
+        model.addAttribute("year", year);
+        model.addAttribute("month", month);
 
-            extraData.put(diary.getDate(), "<img src='/common/images/sentiments/" + sentimentString + ".png'>");
-        }
+//        Member member = memberUtil.getMember();
+//        List<Diary> diaryList = infoService.getList(member);
+//
+//        /* 날짜마다 감정 이미지 삽입 */
+//        for (Diary diary : diaryList) {
+//            String sentimentString = "";
+//            String diarySentiment = infoService.getMostFrequentSentiment(member, diary.getDate());
+//
+//            /* 추후에 수정 필요 - 감정 결과에 따라 이미지 다르게 띄우기 */
+//            switch (diarySentiment) {
+//                case "기쁨": sentimentString = "happiness"; break;
+//                default: break;
+//            }
+//
+//            extraData.put(diary.getDate(), "<img src='/common/images/sentiments/" + sentimentString + ".png'>");
+//        }
 
         return utils.tpl("diary/calendar");
     }
@@ -192,10 +198,11 @@ public class DiaryController {
             addScript.add("diary/diary");
             addCss.add("diary/diary");
             pageTitle = utils.getMessage("일기쓰기");
-        } else if (mode.equals("result")) {
-            pageTitle = utils.getMessage("일기결과");
+            addCss.add("diary/diary");
+        } else if (mode.equals("calendar")) {
+            pageTitle = utils.getMessage("일기목록");
+            addScript.add("diary/calendar");
         }
-
 
         model.addAttribute("addCommonScript", addCommonScript);
         model.addAttribute("addScript", addScript);
