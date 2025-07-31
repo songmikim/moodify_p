@@ -41,6 +41,11 @@ public class SecurityConfig {
                     .authenticationSuccessHandler(new LoginSuccessHandler());
         });
 
+        /* CSRF 보호 설정 비활성화 (/diary/delete) - sendBeacon()을 사용하기 위해서 */
+        http.csrf(csrf -> csrf
+                .ignoringRequestMatchers("/diary/delete")  // 삭제용 비콘 요청만 제외
+        );
+
         /* 인가 설정 - 자원에 대한 접근 권한 설정 */
         /**
          * authenticated() : 인증 받은 사용자만 접근 가능 (회원)
@@ -53,15 +58,15 @@ public class SecurityConfig {
          * anyRequest().permitAll() : 비회원 페이지가 기본, 일부 페이지 -> 회원 전용 사이트
          * anyRequest().authenticated() : 회원 전용 페이지가 기본, 일부 페이지 -> 비회원 사이트
          */
-//        http.authorizeHttpRequests(c -> {
-//            c.requestMatchers("/login", "/join", "/board/**", "/diary/**", "/error/**", "/calendar/**").permitAll()
-//                    .requestMatchers("/front/**", "/mobile/**", "/member/**", "/common/**").permitAll()
-//                    .requestMatchers("/api/**").permitAll()
-//                    //.requestMatchers("/admin/**").hasAuthority("ADMIN")
-//                    .requestMatchers("/admin/**").permitAll()
-//                   .anyRequest().authenticated();
-//
-//        });
+        http.authorizeHttpRequests(c -> {
+            c.requestMatchers("/login", "/join", "/board/**", "/diary/**", "/error/**", "/calendar/**", "/uploads/**", "/mypage/delete/confirm", "/file/**").permitAll()
+                    .requestMatchers("/front/**", "/mobile/**", "/member/**", "/common/**").permitAll()
+                    .requestMatchers("/api/**").permitAll()
+                    //.requestMatchers("/admin/**").hasAuthority("ADMIN")
+                    .requestMatchers("/admin/**").permitAll()
+                    .requestMatchers("/findid", "/find_pw", "/find_pw_done").permitAll()
+                    .anyRequest().authenticated();
+        });
 
         http.exceptionHandling(c -> {
             c.authenticationEntryPoint(new MemberAuthenticationExceptionHandler()); // 미로그인 상태에서의 인가 실패에 대한 처리

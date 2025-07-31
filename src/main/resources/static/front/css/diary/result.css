@@ -1,0 +1,15 @@
+/* 실시간 감정 분석 결과 S */
+.current-sentiment {
+    position: absolute;
+    top: 100px;
+    left: 100px;
+    opacity: 0;
+    transition: all 1s;
+}
+
+.current-sentiment.show {
+    color: red;
+    opacity: 1;
+    font-size: 3rem;
+}
+/* 실시간 감정 분석 결과 E */

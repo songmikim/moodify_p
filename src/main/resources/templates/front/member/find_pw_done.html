@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{front/layouts/main}">
+
+<main layout:fragment="content" class="find_pw_done_page">
+    <h1 th:text="#{비밀번호_찾기}"></h1>
+
+    <form>
+        <div th:text="#{비밀번호를_가입하신_이메일로_전송하였습니다.}"></div>
+        <a th:href="@{/login}" th:text="#{로그인}"></a>
+    </form>
+</main>
+</html>

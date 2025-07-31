@@ -29,7 +29,7 @@ public class FileDeleteService {
      * @param seq
      * @return 삭제된 파일 정보
      */
-    public FileInfo process(Long seq) {
+    public FileInfo deleteProcess(Long seq) {
         FileInfo item = infoService.get(seq);
 
         // 파일 삭제 권한 체크 S
@@ -62,12 +62,12 @@ public class FileDeleteService {
      * @param location
      * @return
      */
-    public List<FileInfo> process(String gid, String location) {
+    public List<FileInfo> deleteProcess(String gid, String location) {
         List<FileInfo> items = infoService.getList(gid, location, FileStatus.ALL);
         List<FileInfo> deletedItems = new ArrayList<>();
         for (FileInfo item : items) {
             try {
-                process(item.getSeq());
+                deleteProcess(item.getSeq());
                 deletedItems.add(item); // 삭제된 파일 정보
             } catch (Exception e) {}
         }
@@ -75,7 +75,7 @@ public class FileDeleteService {
         return deletedItems;
     }
 
-    public List<FileInfo> process(String gid) {
-        return process(gid, null);
+    public List<FileInfo> deleteProcess(String gid) {
+        return deleteProcess(gid, null);
     }
 }

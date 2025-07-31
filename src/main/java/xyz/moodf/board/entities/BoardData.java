@@ -7,11 +7,14 @@ import xyz.moodf.global.entities.BaseEntity;
 import xyz.moodf.global.file.entities.FileInfo;
 import xyz.moodf.member.entities.Member;
 
+
 import java.util.List;
+import java.io.Serializable;
+
 
 @Data
 @Entity
-public class BoardData extends BaseEntity {
+public class BoardData extends BaseEntity implements Serializable {
     @Id
     @GeneratedValue
     private Long seq;
