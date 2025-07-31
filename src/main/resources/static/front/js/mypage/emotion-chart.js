@@ -1,45 +1,45 @@
 window.addEventListener('DOMContentLoaded', () => {
-  const monthEl = document.getElementById('month');
-  const ctx     = document.getElementById('emotionChart').getContext('2d');
-  let chart;
+  const monthEl = document.getElementById('month');                         // <input type="month">
+  const ctx     = document.getElementById('emotionChart').getContext('2d'); // 차트 그릴 컨텍스트
+  let chart;                                                                // Chart.js 인스턴스
 
+  // 감정별 색상 매핑
   const colors = {
     '행복':'#fcbf49','기쁨':'#fcbf49','슬픔':'#4e79a7',
     '분노':'#e15759','불안':'#76b7b2','상처':'#a05195','당황':'#59a14f'
   };
 
-  // 선택한 년·월에 해당하는 한 달치 감정 통계 불러오기
-  const loadMonthData = async (year, month) => {
-    const start  = `${year}-${month}-01`;
-    const endDay = new Date(year, month, 0).getDate();
-    const end    = `${year}-${month}-${endDay}`;
+  //한 달치 통계 로드 → 차트 렌더링
+  const loadChart = async monthStr => {
+    // 시작일: YYYY-MM-01
+    const start = `${monthStr}-01`;
+    // 해당 월 마지막 일 계산해서 YYYY-MM-DD 생성
+    const [year, month] = monthStr.split('-');
+    const endDay        = new Date(year, month, 0).getDate();
+    const end           = `${monthStr}-${endDay}`;
 
-    const params = new URLSearchParams({
-      type:  'MONTHLY',
-      sDate: start,
-      eDate: end
-    });
+    // 서버 호출
+    const res = await fetch(
+      `/api/mypage/emotion?type=MONTHLY&sDate=${start}&eDate=${end}`
+    ).then(r => r.json());
 
-    // 서버 호출 및 JSON 응답 파싱
-    const res = await fetch(`/api/mypage/emotion?${params}`).then(r => r.json());
-
+    // 날짜별 감정 키, 합계 계산
     const dates    = Object.keys(res).sort();
-    // 모든 날짜에 등장하는 감정 이름을 중복 제거해 추출
     const emotions = [...new Set(dates.flatMap(d => Object.keys(res[d] || {})))];
-    // 각 감정별로 한 달 동안의 총합 계산
     const totals   = emotions.map(e =>
-      dates.reduce((sum, date) => sum + (res[date]?.[e] || 0), 0)
+      dates.reduce((sum, d) => sum + (res[d]?.[e] || 0), 0)
     );
 
+    // 기존 차트 제거 후 새로 그리기
     chart?.destroy();
     chart = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: emotions,  // X축: 감정 이름들
+        labels: emotions,
         datasets: [{
-          label: `${year}-${month} 감정 합계`,  // 범례에 표시될 텍스트
-          data: totals,  // Y축 값: 각 감정별 총합
-          backgroundColor: emotions.map(e => colors[e] || '#4e79a7') // 색상 매핑, 없으면 기본 파랑
+          label: `${monthStr} 감정 합계`,
+          data: totals,
+          backgroundColor: emotions.map(e => colors[e] || '#4e79a7')
         }]
       },
       options: {
@@ -52,16 +52,14 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  // 이번 달 로 설정
-  const now   = new Date();
-  const currY = now.getFullYear();
-  const currM = String(now.getMonth() + 1).padStart(2, '0');
+  // 초기값: 이번 달로 세팅
+  (() => {
+    const now = new Date();
+    const MM  = String(now.getMonth() + 1).padStart(2, '0');
+    monthEl.value = `${now.getFullYear()}-${MM}`;
+  })();
 
-  monthEl.value = `${currY}-${currM}`;
-  loadMonthData(currY, currM);
-  // 월 선택 입력값이 바뀔 때마다 데이터를 불러와 차트 갱신
-  monthEl.addEventListener('change', () => {
-    const [y, m] = monthEl.value.split('-');
-    loadMonthData(y, m);
-  });
+  // 첫 로드 & 변경 시 차트 갱신
+  loadChart(monthEl.value);
+  monthEl.addEventListener('change', () => loadChart(monthEl.value));
 });
