@@ -41,10 +41,11 @@
         </div>
 
         <div class="con">
-            <textarea class="form-control" id="autoResize" name="content" rows="10" th:field="*{content}" th:placeholder="#{오늘의_일기를_작성해_보세요}"></textarea>
+            <textarea class="form-control" id="content" name="content" rows="10" th:field="*{content}" th:placeholder="#{일기를_작성해_보세요}"></textarea>
             <div class="error" th:each="err : ${#fields.errors('content')}" th:text="${err}"></div>
         </div>
 
+        <button type="button" class="btn btn-primary" th:text="#{임시_저장하기}"></button>
         <button type="submit" class="btn btn-primary" th:text="#{저장하기}"></button>
     </form>
 </main>
