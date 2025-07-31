@@ -167,8 +167,6 @@ header .right a i {
 }
 /* 푸터 영역 S */
 footer {
-    position:fixed;
-    bottom:0;
     width:100%;
     text-align: center;
     background: #FFF0ED;
@@ -333,11 +331,6 @@ button[type="submit"], a[href*="/password"] {
     cursor: pointer;
     transition: background 0.3s;
     text-decoration: none;
-}
-
-/* 버튼 및 링크 hover 시 색상 변경 */
-button:hover, a:hover {
-    background-color: var(--subc);
 }
 
 /* 섹션 제목 스타일 */
