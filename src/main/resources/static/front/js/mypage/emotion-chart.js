@@ -3,6 +3,7 @@ window.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('emotionChart').getContext('2d');
     let chart;
 
+    // 감정별 색상 매핑
     const emotionColors = {
         '행복': '#fcbf49',
         '기쁨': '#fcbf49',
@@ -13,28 +14,60 @@ window.addEventListener('DOMContentLoaded', function() {
         '당황': '#59a14f'
     };
 
-    const loadData = (year, month) => {
+
+    /**
+     * API에서 받은 데이터를 차트에 필요한 형태로 변환
+     * {"2025-06-01": {"불안":1, "상처":1}, ...}
+     * -> { labels: ["2025-06", "2025-07"...], datasets: [{label:"불안", data:[1,2...]}, ...] }
+     */
+    const convertData = (raw) => {
+        const months = Object.keys(raw).sort();
+        const emotions = new Set();
+
+        // 모든 감정 키 수집
+        months.forEach(date => {
+            const stat = raw[date] || {};
+            Object.keys(stat).forEach(e => emotions.add(e));
+        });
+
+        const labels = months.map(d => d.substring(0,7));
+        const datasets = [];
+
+        emotions.forEach(emotion => {
+            const data = months.map(date => {
+                const stat = raw[date] || {};
+                return stat[emotion] || 0;
+            });
+            datasets.push({
+                label: emotion,
+                backgroundColor: emotionColors[emotion] || '#4e79a7',
+                data
+            });
+        });
+
+        return { labels, datasets };
+    };
+
+    const loadData = (sDate, eDate) => {
         const { ajaxLoad } = commonLib;
-        ajaxLoad(`/api/mypage/emotion?year=${year}&month=${month}`, (res) => {
-            const labels = Object.keys(res.data);
-            const data = Object.values(res.data);
-            const colors = labels.map(l => emotionColors[l] || '#4e79a7');
+
+        const params = new URLSearchParams({ type: 'MONTHLY' });
+        if (sDate) params.append('sDate', sDate);
+        if (eDate) params.append('eDate', eDate);
+
+        ajaxLoad(`/api/mypage/emotion?${params.toString()}`, (res) => {
+            const { labels, datasets } = convertData(res);
 
             if (chart) chart.destroy();
             chart = new Chart(ctx, {
                 type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: '감정 수',
-                        backgroundColor: colors,
-                        data: data
-                    }]
-                },
+                data: { labels, datasets },
                 options: {
                     responsive: true,
                     scales: {
+                        x: { stacked: true },
                         y: {
+                            stacked: true,
                             beginAtZero: true
                         }
                     }
@@ -45,11 +78,15 @@ window.addEventListener('DOMContentLoaded', function() {
 
     const now = new Date();
     monthEl.value = now.toISOString().slice(0,7);
-    const [y, m] = monthEl.value.split('-');
-    loadData(y, m);
+
+    // 최근 1년 데이터를 기본 로드
+    loadData();
 
     monthEl.addEventListener('change', function() {
         const [year, month] = this.value.split('-');
-        loadData(year, month);
+        const start = `${year}-${month}-01`;
+        const endDate = new Date(year, parseInt(month, 10), 0).getDate();
+        const end = `${year}-${month}-${endDate}`;
+        loadData(start, end);
     });
 });
