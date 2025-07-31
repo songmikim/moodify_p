@@ -20,24 +20,10 @@ public class ApiMyPageController {
 
     @GetMapping("/emotion")
     public Map<LocalDate, Map<String, Integer>> emotionData(@ModelAttribute StatisticSearch search) {
-        LocalDate sDate = Objects.requireNonNullElse(search.getSDate(), LocalDate.now().minusYears(1L));
-        LocalDate eDate = search.getEDate();
+        LocalDate sDate = Objects.requireNonNullElse(search.getSDate(), LocalDate.now().minusMonths(1L));
+        LocalDate eDate = Objects.requireNonNullElse(search.getEDate(), LocalDate.now());
         StatisticType type = Objects.requireNonNullElse(search.getType(), StatisticType.MONTHLY);
 
         return infoService.getStatistics(sDate, eDate, type);
     }
-
-/*    @GetMapping("/emotion")
-    public JSONData<Map<String, Long>> emotionData(@RequestParam int year, @RequestParam int month) {
-        Member member = memberUtil.getMember();
-
-        // 필요하면 여기에 유효성 검증 추가
-
-        try {
-            Map<String, Long> result = infoService.getSentimentFrequencies(member, year, month);
-            return new JSONData<>(result);
-        } catch (MemberNotFoundException e) {
-            throw new AlertBackException(utils.getMessage("NotFound.member"), HttpStatus.NOT_FOUND);
-        }
-    }*/
 }
