@@ -6,7 +6,7 @@
 <section layout:fragment="content">
 
   <!-- 검색 폼 -->
-  <form name="frmSearch" method="GET" th:action="@{/admin/board/posts}" autocomplete="off" th:object="${boardSearch}"
+  <form name="frmSearch" method="GET" th:action="@{/admin/board/posts}" autocomplete="off" th:object="${boardSearch}">
     <div class="search-box">
       <select name="sopt" th:field="*{sopt}">
         <option value="ALL">통합검색</option>

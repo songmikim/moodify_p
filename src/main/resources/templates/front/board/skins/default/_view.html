@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="skin" th:object="${boardData}">
+  <div class="subject-wrap">
+    <span th:if="*{notice}" class="notice" th:text="#{공지글}"></span>
+    <span th:if="*{category != ''}" class='category' th:text="*{category}"></span>
+    <span class="subject" th:text="*{subject}"></span>
+  </div>
+  <div class="post-info">
+    <div class="left">
+            <span class="user-info">
+                <th:block th:text="#{작성자}"></th:block>:
+                <th:block th:text="*{poster}"></th:block>
+            </span>
+    </div>
+    <div class="right">
+            <span class="view-count" th:if="*{viewCount > 0}">
+                <th:block th:text="#{조회수}"></th:block>:
+                <th:block th:text="*{viewCount > 1000 ? #numbers.formatInteger(viewCount, 3, 'COMMA') : viewCount}"></th:block>
+            </span>
+      <span class="post-date">
+                <th:block th:text="#{작성일시}"></th:block>:
+                <th:block th:text="*{#temporals.format(createdAt, 'yyyy.MM.dd HH:mm')}"></th:block>
+            </span>
+    </div>
+  </div>
+  <div class="content">
+    <th:block th:if="*{plainText}" th:utext="*{@utils.nl2br(content)}"></th:block>
+    <th:block th:unless="*{plainText}" th:utext="*{content}"></th:block>
+  </div>
+  <ul th:if="*{attachFiles != null && !attachFiles.isEmpty()}">
+    <li th:each="file, status : *{attachFiles}" th:object="${file}">
+      #<th:block th:text="${status.count}"></th:block>.
+      <a th:href="@{/file/download/{seq}(seq=*{seq})}" th:text="*{fileName}"></a>
+    </li>
+  </ul>
+
+  <div class="post-actions">
+    <a th:href="@{/board/list/{bid}(bid=${board.bid})}" class="btn btn-list">목록</a>
+
+    <th:block th:if="${canEdit}">
+      <!-- 회원 글 수정 -->
+      <a th:if="${!isGuest}" th:href="@{/board/update/{seq}(seq=${boardData.seq})}"
+         class="btn btn-edit">수정</a>
+
+      <!-- 비회원 글 수정 -->
+      <button th:if="${isGuest}" type="button" class="btn btn-edit"
+              th:data-seq="${boardData.seq}"
+              onclick="checkGuestPassword('update', this.dataset.seq)">수정</button>
+    </th:block>
+
+    <th:block th:if="${canDelete}">
+      <!-- 회원 글 삭제 -->
+      <button th:if="${!isGuest}" type="button" class="btn btn-delete"
+              th:data-seq="${boardData.seq}"
+              onclick="performAction('delete',this.dataset.seq)">삭제</button>
+
+      <!-- 비회원 글 삭제 -->
+      <button th:if="${isGuest}" type="button" class="btn btn-delete"
+              th:data-seq="${boardData.seq}"
+              onclick="checkGuestPassword('delete', this.dataset.seq)">삭제</button>
+    </th:block>
+  </div>
+</th:block>
+</html>
