@@ -170,9 +170,10 @@ footer {
     width:100%;
     text-align: center;
     background: #FFF0ED;
-    min-height: 250px;
+    min-height: 150px;
 }
 
+footer .bottom-section p{}
 footer .top-section {
     min-height: 150px;
     border-bottom: 2px solid #f0f0f0;
@@ -185,6 +186,8 @@ footer .bottom-section {
 
 footer .bottom-section a{
     display:inline-block;
+    line-height:1em;
+    margin-block:0;
     background-color:rgba(0,0,0,0);
     padding:5px;
 }
