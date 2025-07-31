@@ -18,8 +18,9 @@
                 <dt th:text="#{이메일}"></dt>
                 <dd>
                     <div>
-                        <input type="text" name="email" th:field="*{email}" th:readonly="${session.EmailAuthVerified != null && session.EmailAuthVerified}">
+                        <input type="text" class="email-text" name="email" th:field="*{email}" th:readonly="${session.EmailAuthVerified != null && session.EmailAuthVerified}">
                         <button th:if="${session.EmailAuthVerified == null || !session.EmailAuthVerified}" type="button" id="email_verify" th:text="#{인증코드전송}"></button>
+                        <img id="loading_icon" src="/common/images/loading.gif" alt="로딩 중" class="loading-icon" />
                         <span id="email_message"></span>
                     </div>
                     <div class="auth_box">

@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+
+:root {
+    --fontc: #2E2E2E;
+    --mainc: #FFB6B9;
+    --subc: #FF8C42;
+    --bgc: #FFF4E6;
+    --fontf: 'Pretendard', sans-serif;
+}
+
+/* 페이지 배경과 폰트 */
+body {
+    background-color: var(--bgc);
+    font-family: var(--fontf);
+    color: var(--fontc);
+    margin: 0;
+    padding: 0;
+}
+
+/* 컨테이너 중앙 정렬 */
+.container {
+    max-width: 480px;
+    margin: 120px auto 80px auto;
+    background: white;
+    padding: 40px 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+/* 안내 문구 스타일 */
+.container p {
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--mainc);
+    margin: 0;
+}

@@ -14,12 +14,21 @@ window.addEventListener("DOMContentLoaded", function() {
                 return;
             }
 
+            // 로딩 gif
+            const loadingIconEl = document.getElementById("loading_icon");
+
             ajaxLoad(`/api/member/email_dup_check?email=${email}`, (data) => {
                  if (data.success) { // 중복이메일인 경우
                     showEmailMessage("이미 가입된 이메일입니다.", true);
                         frmJoin.email.focus();
                     } else { // 중복이메일이 아닌 경우
+
+                        // 버튼 숨기고 로딩
+                        emailVerifyEl.style.display = "none";
+                        if (loadingIconEl) loadingIconEl.style.display = "inline";
+
                         sendEmailVerify(email); // 이메일 인증 코드 전송
+
                         this.disabled = frmJoin.email.readonly = true;
 
                         /* 인증코드 재전송 처리 S */
@@ -58,7 +67,7 @@ window.addEventListener("DOMContentLoaded", function() {
 function showEmailMessage(msg, isError = false) {
     const messageEl = document.getElementById("email_message");
     if (messageEl) {
-        messageEl.textContent = msg;
+        messageEl.innerHTML = msg;
         messageEl.style.color = isError ? "red" : "green";
     }
 }
@@ -70,7 +79,12 @@ function showEmailMessage(msg, isError = false) {
 */
 function callbackEmailVerify(data) {
     if (data && data.success) { // 전송 성공
-        showEmailMessage("인증코드가 이메일로 전송되었습니다. 확인 후 인증코드를 입력하세요.");
+
+        // 로딩버튼 제거
+        const loadingIconEl = document.getElementById("loading_icon");
+        if (loadingIconEl) loadingIconEl.style.display = "none";
+
+        showEmailMessage("&nbsp;&nbsp;인증코드가 이메일로 전송되었습니다. <br>&nbsp;&nbsp;확인 후 인증코드를 입력하세요.");
 
         /** 3분 유효시간 카운트 */
         authCount.start();

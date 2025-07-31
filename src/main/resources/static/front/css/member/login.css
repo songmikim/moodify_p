@@ -1,6 +1,6 @@
 body{background:#FFF0ED;}
 
-h1{margin:70px auto 0; text-align:center;}
+h1{margin:0 auto; text-align:center;}
 
 form{
     width:80%;
@@ -50,9 +50,4 @@ form a{
     border-right:1px solid #dadada;
 }
 .link>a:last-child{border:0;}
-footer{
-    width:100%;
-    position:absolute;
-    bottom:0;
-}
 footer>.top-section{height:30px; min-height:0;}
