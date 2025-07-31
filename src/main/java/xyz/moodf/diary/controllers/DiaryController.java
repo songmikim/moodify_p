@@ -13,7 +13,6 @@ import xyz.moodf.diary.dtos.DiaryRequest;
 import xyz.moodf.diary.dtos.SentimentRequest;
 import xyz.moodf.diary.entities.Diary;
 import xyz.moodf.diary.entities.DiaryId;
-import xyz.moodf.diary.exceptions.DiaryNotFoundException;
 import xyz.moodf.diary.repositories.DiaryRepository;
 import xyz.moodf.diary.repositories.SentimentRepository;
 import xyz.moodf.diary.services.DiaryInfoService;
@@ -50,46 +49,52 @@ public class DiaryController {
     }
 
     @GetMapping
-    public String diary(@ModelAttribute DiaryRequest form, Model model) {
+    public String firstDiary() {
+        LocalDate today = LocalDate.now();
+        return "redirect:/diary/" + today;
+    }
+
+    @GetMapping("/{date}")
+    public String diary(@PathVariable("date") LocalDate date,
+                        @ModelAttribute DiaryRequest request, Model model) {
         commonProcess("diary", model);
 
-        LocalDate today = LocalDate.now();
+        Member member = memberUtil.getMember();
+        DiaryRequest form = new DiaryRequest();
 
-        if (!infoService.isWritten(today)) {
-            LocalDate date = form.getDate();
-            date = date == null || date.isAfter(today) ? today : date;
+        Optional<Diary> optional = diaryRepository.findById(new DiaryId(member, date));
+        boolean isSaved;
+
+        if (!optional.isPresent()) {
 
             form.setDate(date);
             form.setWeather(Weather.NULL);
-            form.setDate(today);
             form.setGid(UUID.randomUUID().toString());
 
-            model.addAttribute("today", LocalDate.now());
-            model.addAttribute("weatherValues", Weather.values());
+            isSaved = true;
 
-            return utils.tpl("diary/diary");
         } else {
-            Member member = memberUtil.getMember();
 
-            Diary diary = diaryRepository.findById(new DiaryId(member, today))
-                    .orElseThrow(() -> new DiaryNotFoundException());
-
-            DiaryRequest request = new DiaryRequest();
+            Diary diary = optional.get();
             request.setDate(diary.getDate());
             request.setTitle(diary.getTitle());
             request.setWeather(diary.getWeather());
             request.setContent(diary.getContent());
             request.setGid(diary.getGid());
 
-            System.out.println("작성된 일기 정보: " + request);
+            isSaved = false;
 
-            model.addAttribute("diaryRequest", request);
-            model.addAttribute("isEdit", false);
-            model.addAttribute("weatherValues", Weather.values());
-            model.addAttribute("date", request.getDate());
-
-            return utils.tpl("diary/diary_edit");
         }
+
+        model.addAttribute("today", LocalDate.now());
+        model.addAttribute("weatherValues", Weather.values());
+        model.addAttribute("diaryRequest", request);
+        model.addAttribute("isSaved", isSaved);
+        model.addAttribute("weatherValues", Weather.values());
+        model.addAttribute("date", request.getDate());
+
+
+        return utils.tpl("diary/diary");
     }
 
     @PostMapping
