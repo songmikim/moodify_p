@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
@@ -34,7 +35,7 @@ import java.util.*;
 public class BoardPostController {
     private final Utils utils;
     private final MemberUtil memberUtil;
-    private final BoardDataInfoService infoService;
+    private final BoardDataInfoService InfoService;
     private final BoardPermissionService permissionService;
     private final BoardConfigInfoService configInfoService;
     private final BoardDataUpdateService updateService;
@@ -51,7 +52,7 @@ public class BoardPostController {
     @GetMapping("/list/{bid}")
     public String list(@PathVariable("bid") String bid, @ModelAttribute BoardSearch search, Model model) {
         commonProcess(bid, "list", model);
-        ListData<BoardData> data = infoService.getList(search, bid);
+        ListData<BoardData> data = InfoService.getList(search, bid);
         model.addAttribute("items", data.getItems());
         model.addAttribute("pagination", data.getPagination());
 
@@ -100,7 +101,7 @@ public class BoardPostController {
     // 게시글 수정
     @GetMapping("/update/{seq}")
     public String update(@PathVariable("seq") Long seq, HttpSession session, Model model) {
-        BoardData boardData = infoService.get(seq);
+        BoardData boardData = InfoService.get(seq);
         commonProcess(seq, "update", model);
 
         if (!permissionService.canEdit(boardData)) {
@@ -124,7 +125,7 @@ public class BoardPostController {
     public String view(@PathVariable("seq") Long seq, Model model) {
         commonProcess(seq, "view", model);
 
-        BoardData boardData = infoService.get(seq);
+        BoardData boardData = InfoService.get(seq);
         if (!permissionService.canView(boardData)) {
             return "redirect:/board/list/" + boardData.getBoard().getBid() + "?error=access_denied";
         }
@@ -139,7 +140,7 @@ public class BoardPostController {
     @GetMapping("/delete/{seq}")
     public String delete(@PathVariable("seq") Long seq, Model model, @SessionAttribute("board") Board board,HttpSession session) {
         commonProcess(seq, "delete", model);
-        BoardData boardData = infoService.get(seq);
+        BoardData boardData = InfoService.get(seq);
         if (!permissionService.canDelete(boardData)) {
             return "redirect:/error/forbidden";
         }
@@ -178,11 +179,6 @@ public class BoardPostController {
         String skin = board.getSkin();
         addCss.add("board/style"); // 스킨과 상관없는 공통 스타일
         addCss.add(String.format("board/%s/style", skin)); // 스킨별 스타일
-        addCss.add(String.format("board/%s/%s", skin, mode)); // 모드별 스타일
-        if (mode.equals("update")){
-            addCss.add(String.format("board/%s/write", skin)); // 모드별 스타일
-            addScript.add(String.format("board/%s/write", skin)); // 모드별 스타일
-        }
 
         addScript.add("board/common"); // 스킨 상관없는 공통 자바스크립트
 
@@ -217,14 +213,14 @@ public class BoardPostController {
      */
     private void commonProcess(Long seq, String mode, Model model) {
         // 게시글 정보 조회
-        BoardData boardData = infoService.get(seq);
+        BoardData boardData = InfoService.get(seq);
         Board board = boardData.getBoard();
         String pageTitle = board.getName();
 
         commonProcess(board.getBid(),mode,model);
 
         if (mode.equals("update")) { // 수정 모드
-
+            
             // 수정 폼 데이터 설정
             RequestPostBoard form = new RequestPostBoard();
             form.setMode("update");
@@ -258,7 +254,7 @@ public class BoardPostController {
     public Map<String, Object> checkGuestPassword(@RequestParam Long seq, @RequestParam String password,@RequestParam String action, HttpSession session) {
         Map<String, Object> result = new HashMap<>();
         try {
-            BoardData boardData = infoService.get(seq);
+            BoardData boardData = InfoService.get(seq);
 
             // guestPwCheck 메서드 사용
             if (permissionService.guestPwCheck(boardData, password)) {
@@ -279,4 +275,5 @@ public class BoardPostController {
 
         return result;
     }
+
 }

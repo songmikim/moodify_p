@@ -3,11 +3,11 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{front/layouts/main}">
 
-<main layout:fragment="content">
+<section layout:fragment="content">
 
     <!-- 검색 폼 -->
     <form name="frmSearch" method="GET" th:action="@{/board/list/{bid}(bid=${board.bid})}" autocomplete="off" th:object="${boardSearch}">
-        <div class="search-box flex">
+        <div class="search-box">
             <select name="sopt" th:field="*{sopt}">
                 <option value="ALL">통합검색</option>
                 <option value="SUBJECT">제목</option>
@@ -71,5 +71,5 @@
         alert('[[${param.error}]]');
     </script>
 
-</main>
+</section>
 </html>
