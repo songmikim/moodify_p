@@ -80,4 +80,7 @@ public class Music {
     private double similarityScore3;
 
     private String youtubeUrl;
+
+    @Transient
+    private String youtubeId;
 }

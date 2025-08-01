@@ -17,11 +17,16 @@ import xyz.moodf.diary.repositories.DiaryRepository;
 import xyz.moodf.diary.repositories.SentimentRepository;
 import xyz.moodf.diary.services.DiaryInfoService;
 import xyz.moodf.diary.services.DiaryService;
+import xyz.moodf.diary.services.RecommendService;
 import xyz.moodf.diary.services.SentimentService;
 import xyz.moodf.global.annotations.ApplyCommonController;
+import xyz.moodf.global.codevalue.services.CodeValueService;
+import xyz.moodf.global.file.entities.FileInfo;
+import xyz.moodf.global.file.services.FileInfoService;
 import xyz.moodf.global.libs.Utils;
 import xyz.moodf.member.entities.Member;
 import xyz.moodf.member.libs.MemberUtil;
+import xyz.moodf.spotify.entities.Music;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -35,11 +40,17 @@ public class DiaryController {
 
     private final Utils utils;
     private final MemberUtil memberUtil;
+
+    private final DiaryRepository diaryRepository;
+    private final SentimentRepository sentimentRepository;
+
+    private final CodeValueService codeValueService;
+    private final FileInfoService fileInfoService;
+
     private final DiaryService diaryService;
     private final DiaryInfoService infoService;
     private final SentimentService sentimentService;
-    private final DiaryRepository diaryRepository;
-    private final SentimentRepository sentimentRepository;
+    private final RecommendService recommendService;
 
     @ModelAttribute("extraData")
     public Map<LocalDate, Object> getExtraData() {
@@ -131,12 +142,20 @@ public class DiaryController {
     public String result(@PathVariable("date") LocalDate date, Model model) {
         commonProcess("result", model);
 
+        // 감정 분석에 따른 추천 콘텐츠 리스트
+        Diary diary = infoService.get(date);
+        String sentiment = diary.getStrongest();
+        List<Music> items = recommendService.getContents(sentiment);
+        model.addAttribute("items", items);
+
         // 캘린더로 이동할 때 쿼리스트링 구하기
         Integer year = date.getYear();
         Integer month = date.getMonthValue();
 
         model.addAttribute("year", year);
         model.addAttribute("month", month);
+
+
 
         return utils.tpl("diary/result");
     }
@@ -153,7 +172,17 @@ public class DiaryController {
         month = Objects.requireNonNullElse(month, today.getMonthValue());
 
         List<Diary> items = infoService.getList(year, month);
-        items.forEach(item -> extraData.put(item.getDate(), item.getStrongest()));
+        items.forEach(item -> {
+            String emo = item.getStrongest();
+            String gid = codeValueService.get(emo, String.class);
+            if (StringUtils.hasText(gid)) {
+                FileInfo fileItem = fileInfoService.get(gid);
+                if (fileItem != null) {
+                    emo = String.format("<img src='%s'>", fileItem.getFileUrl());
+                }
+            }
+            extraData.put(item.getDate(), emo);
+        });
 
         model.addAttribute("year", year);
         model.addAttribute("month", month);
@@ -219,6 +248,15 @@ public class DiaryController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/recommend/{seq}")
+    public String content(@PathVariable("seq") Long seq, Model model) {
+        Music item = recommendService.get(seq);
+
+        model.addAttribute("item", item);
+
+        return utils.tpl("diary/recommend");
+    }
+
     /**
      * 일기 작성 공통 처리 부분
      *
@@ -241,6 +279,7 @@ public class DiaryController {
         } else if (mode.equals("result")) {
             pageTitle = utils.getMessage("일기_분석_결과");
             addScript.add("diary/calendar");
+            addCommonScript.add("modal");
         } else if (mode.equals("calendar")) {
             pageTitle = utils.getMessage("일기_목록");
             addScript.add("diary/calendar");
