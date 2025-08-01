@@ -8,6 +8,7 @@ window.addEventListener("DOMContentLoaded", function() {
         emailVerifyEl.addEventListener("click", function() {
             const { ajaxLoad, sendEmailVerify } = commonLib;
             const email = frmJoin.email.value.trim();
+            showEmailMessage(" ");
             if (!email) {
                 showEmailMessage('이메일을 입력하세요.', true);
                 frmJoin.email.focus();
@@ -90,7 +91,24 @@ function callbackEmailVerify(data) {
         authCount.start();
 
     } else { // 전송 실패
-        showEmailMessage("인증코드 전송에 실패하였습니다.", true);
+        showEmailMessage("<br>인증코드 전송에 실패하였습니다. <br>이메일을 다시 확인해주세요", true);
+
+        // 타이머 초기화
+                authCount.initialize();
+
+                // 로딩버튼 제거
+                const loadingIconEl = document.getElementById("loading_icon");
+                if (loadingIconEl) loadingIconEl.style.display = "none";
+
+                // 전송버튼 다시 추가
+                const emailVerifyEl = document.getElementById("email_verify");
+                if (emailVerifyEl) {
+                        emailVerifyEl.style.display = "inline";
+                        emailVerifyEl.disabled = false;
+                    }
+
+                // 이메일 다시 입력 가능
+                frmJoin.email.readOnly = false;
     }
 }
 
@@ -125,7 +143,7 @@ function callbackEmailVerifyCheck(data) {
         authBoxEl.innerHTML = "<span class='confirmed'>확인된 이메일 입니다.</span>";
 
     } else { // 인증 실패
-        showEmailMessage("인증코드 전송에 실패하였습니다.", true);
+        showEmailMessage("인증확인에 실패하였습니다.", true);
     }
 }
 
