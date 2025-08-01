@@ -5,6 +5,9 @@
       th:action="@{/board/comment/save}" th:object="${requestComment}">
 
   <input type="hidden" name="boardDataSeq" th:field="*{boardDataSeq}">
+  <div th:if="${@memberUtil.isLogin()}">
+    <input type="hidden" name="commenter" th:value="${@memberUtil.member.name}">
+  </div>
   <input type="hidden" name="mode" value="register">
 
   <!-- 비회원인 경우에만 작성자명 입력 -->

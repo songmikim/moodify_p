@@ -240,7 +240,7 @@ public class BoardPostController {
             // 조회수 증가 (별도 서비스에서 처리하는 것이 좋음)
             model.addAttribute("canEdit", permissionService.canEdit(boardData));
             model.addAttribute("canDelete", permissionService.canDelete(boardData));
-            model.addAttribute("isGuest", permissionService.isMember(boardData));
+            model.addAttribute("isGuest", permissionService.isGuest(boardData));
             model.addAttribute("memberUtil", memberUtil);
 
             pageTitle = boardData.getSubject() + " - " + board.getName();
