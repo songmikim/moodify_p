@@ -39,12 +39,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
     /* 더보기 메뉴 클릭 처리 E */
-    /* textarea 자동 늘리기 */
-    const textareas = document.querySelectorAll('textarea');
-    const editBtn = document.getElementById('btn-edit');
-    const dateInput = document.getElementById('date');
-    const editable = document.querySelectorAll('#title, #weather, #content');
 
+    /* textarea 자동 늘리기 S */
+    const textareas = document.querySelectorAll('textarea');
     textareas.forEach(function (textarea) {
         // 처음 로드 시에도 높이 조절
         textarea.style.height = 'auto';
@@ -56,4 +53,5 @@ document.addEventListener('DOMContentLoaded', function () {
             this.style.height = this.scrollHeight + 'px'; // 내용에 따라 높이 조절
         });
     });
+    /* textarea 자동 늘리기 E */
 });

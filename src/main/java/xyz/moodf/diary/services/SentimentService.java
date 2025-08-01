@@ -58,8 +58,11 @@ public class SentimentService {
         
         Sentiment sentiment = sentimentRepository.findById(form.getGid()).orElse(null);
 
+        System.out.println("감정 데이터: " + sentiment);
+        System.out.println("전달된 일기: " + form.getContent());
+
         if (sentiment == null) {
-            // sentiment가 없으면, 새로 추가ㄴ
+            // sentiment가 없으면, 새로 추가
             Sentiment newSent = new Sentiment();
             newSent.setGid(form.getGid());
             newSent.setContent(form.getContent());
@@ -90,5 +93,11 @@ public class SentimentService {
         }
 
         return items;
+    }
+
+    public void resetDone(String gid) {
+        Sentiment sentiment = sentimentRepository.findById(gid).orElse(null);
+
+        sentiment.setDone(false);
     }
 }
