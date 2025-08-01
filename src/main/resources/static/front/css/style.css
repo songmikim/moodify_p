@@ -247,7 +247,7 @@ body > aside.on {
 
 main {
     margin-top: 82px;
-    min-height: 600px;
+    min-height: calc(100vh - 82px - 150px);
 }
 
 /* 모달 */
