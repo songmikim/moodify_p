@@ -17,7 +17,7 @@ window.addEventListener("DOMContentLoaded", function () {
             let timeoutId = null;
             if (items.length > 0) {
                 const item = items.pop();
-                text = item.split(" ")[0];  // 감정 단어 중 대분류 6개만 사용
+                text = item.startsWith("<img") ? item : item.split(" ")[0];  // 감정 단어 중 대분류 6개만 사용
 
                 console.log("text");
                 if (text && text !== prevText) {

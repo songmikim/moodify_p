@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layouts/main}">
+<section layout:fragment="content">
+    <h1>이미지 관리</h1>
+    <form name="frmRegist" method="POST" th:action="@{/admin/config/image}" target="ifrmProcess" enctype="multipart/form-data" autocomplete="off">
+        <table class="table-cols">
+            <tr>
+                <th width="120">이미지코드</th>
+                <td>
+                    <input type="text" name="code">
+                </td>
+            </tr>
+            <tr>
+                <th>파일 업로드</th>
+                <td>
+                    <input type="file" name="file">
+                </td>
+            </tr>
+        </table>
+        <button type="submit" class="submit-btn">등록하기</button>
+    </form>
+</section>
+</html>

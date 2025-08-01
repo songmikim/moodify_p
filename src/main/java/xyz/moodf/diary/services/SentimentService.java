@@ -8,7 +8,11 @@ import org.springframework.util.StringUtils;
 import xyz.moodf.diary.dtos.DiaryRequest;
 import xyz.moodf.diary.entities.Sentiment;
 import xyz.moodf.diary.repositories.SentimentRepository;
+import xyz.moodf.global.codevalue.services.CodeValueService;
+import xyz.moodf.global.file.entities.FileInfo;
+import xyz.moodf.global.file.services.FileInfoService;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,6 +22,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SentimentService {
     private final SentimentRepository sentimentRepository;
+    private final CodeValueService codeValueService;
+    private final FileInfoService fileInfoService;
 //    private final MemberRepository memberRepository;
 //
 //    public Sentiment create(Long memberSeq) {
@@ -71,7 +77,18 @@ public class SentimentService {
         if (item == null || !StringUtils.hasText(item.getSentiments()))
             return List.of();
 
-        return Arrays.stream(item.getSentiments().split(","))
-                .toList();
+        List<String> items = new ArrayList<>(Arrays.stream(item.getSentiments().split(","))
+                .toList());
+
+        for (int i = 0; i < items.size(); i++) {
+            String code = items.get(i).split(" ")[0];  // 대분류만 가져오기
+            String iconGid = codeValueService.get(code, String.class);
+            FileInfo fileItem = fileInfoService.get(iconGid);
+            if (fileItem != null) {
+                items.set(i, String.format("<img src='%s'>", fileItem.getFileUrl()));
+            }
+        }
+
+        return items;
     }
 }

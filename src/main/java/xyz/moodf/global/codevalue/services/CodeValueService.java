@@ -1,0 +1,66 @@
+package xyz.moodf.global.codevalue.services;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
+import xyz.moodf.global.codevalue.entities.CodeValue;
+import xyz.moodf.global.codevalue.repositories.CodeValueRepository;
+
+@Lazy
+@Service("codeValue")
+@RequiredArgsConstructor
+public class CodeValueService {
+
+    private final CodeValueRepository repository;
+    private final ObjectMapper om;
+
+    public void set(String code, Object value, boolean json) {
+        if (json) {
+            try {
+                value = om.writeValueAsString(value);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
+
+        repository.saveAndFlush(new CodeValue(code, (String) value));
+    }
+
+    /**
+     * json을 true로 고정
+     *
+     * @param code
+     * @param value
+     */
+    public void set(String code, Object value) {
+        set(code, value, true);
+    }
+
+    public <R> R get(String code, Class<R> clazz) {
+
+        CodeValue item = repository.findById(code).orElse(null);
+        if (item != null) {
+
+            // clazz가 JSON 문자열일 때
+            if (clazz == String.class) {
+                return (R) item.getValue();
+            }
+            // clazz가 변환된 객체일 때
+            else {
+                try {
+                    return om.readValue(item.getValue(), clazz);
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
+
+    public void remove(String code) {
+        repository.deleteById(code);
+        repository.flush();
+    }
+}
