@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import xyz.moodf.diary.dtos.DiaryRequest;
 import xyz.moodf.diary.entities.Sentiment;
+import xyz.moodf.diary.exceptions.SentimentNotFoundException;
 import xyz.moodf.diary.repositories.SentimentRepository;
 
 import java.util.Arrays;
@@ -49,11 +50,12 @@ public class SentimentService {
 //    }
 
     public void update(DiaryRequest form) {
-        Sentiment item = new Sentiment();
-        item.setGid(form.getGid());
-        item.setContent(form.getContent());
+        // content만 수정
+        Sentiment sentiment = sentimentRepository.findById(form.getGid())
+                .orElseThrow(SentimentNotFoundException::new);
+        sentiment.setContent(form.getContent());
 
-        sentimentRepository.saveAndFlush(item);
+        sentimentRepository.saveAndFlush(sentiment);
     }
 
     public List<String> get(String gid) {

@@ -26,7 +26,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         String redirectUrl = form.getRedirectUrl();
 
-        redirectUrl = StringUtils.hasText(redirectUrl) ? redirectUrl : "/diary";
+        redirectUrl = !StringUtils.hasText(redirectUrl) || "/".equals(redirectUrl) ? "/diary" : redirectUrl;
 
         session.removeAttribute("requestLogin");
 

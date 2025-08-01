@@ -60,18 +60,19 @@ public class DiaryController {
         commonProcess("diary", model);
 
         Member member = memberUtil.getMember();
-        DiaryRequest form = new DiaryRequest();
 
         Optional<Diary> optional = diaryRepository.findById(new DiaryId(member, date));
         boolean isSaved;
 
         if (!optional.isPresent()) {
 
+            DiaryRequest form = new DiaryRequest();
             form.setDate(date);
             form.setWeather(Weather.NULL);
             form.setGid(UUID.randomUUID().toString());
 
             isSaved = true;
+            model.addAttribute("diaryRequest", form);
 
         } else {
 
@@ -84,11 +85,11 @@ public class DiaryController {
 
             isSaved = false;
 
+            model.addAttribute("diaryRequest", request);
         }
 
         model.addAttribute("today", LocalDate.now());
         model.addAttribute("weatherValues", Weather.values());
-        model.addAttribute("diaryRequest", request);
         model.addAttribute("isSaved", isSaved);
         model.addAttribute("weatherValues", Weather.values());
         model.addAttribute("date", request.getDate());
@@ -100,6 +101,8 @@ public class DiaryController {
     @PostMapping
     public String process(@Valid DiaryRequest form, Errors errors, Model model) {
         commonProcess("diary", model);
+
+        System.out.println("결과 전달 중...");
 
         if (errors.hasErrors()) {
             return utils.tpl("diary/diary");
