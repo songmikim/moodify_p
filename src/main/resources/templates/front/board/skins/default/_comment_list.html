@@ -1,7 +1,7 @@
 <!-- _comment_list.html (새로 생성) -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<div th:fragment="list" class="comments-section" th:if="${comments != null && comments.size() > 0}">
+<div th:fragment="list" class="comments-section" th:if="${commentList != null && commentList.size() > 0}">
 
     <div class="comments-list">
         <div th:each="comment : ${commentList}" class="comment-item">
@@ -14,6 +14,18 @@
             <div th:unless="${comment.deleted}" th:text="${comment.content}">
                 댓글 내용
             </div>
+
+            <th:block th:if="${canDelete}">
+                <!-- 회원 글 삭제 -->
+                <button th:if="${!isGuest}" type="button" class="btn btn-delete"
+                        th:data-seq="${comment.seq}"
+                        onclick="performAction('delete',this.dataset.seq,true)">삭제</button>
+
+                <!-- 비회원 글 삭제 -->
+                <button th:if="${isGuest}" type="button" class="btn btn-delete"
+                        th:data-seq="${comment.seq}"
+                        onclick="checkGuestPassword('delete', this.dataset.seq,true)">삭제</button>
+            </th:block>
 
         </div>
     </div>

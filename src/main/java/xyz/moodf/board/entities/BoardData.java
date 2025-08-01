@@ -11,7 +11,7 @@ import java.util.List;
 
 @Data
 @Entity
-public class BoardData extends BaseEntity {
+public class BoardData extends BaseEntity implements GuestAuth {
     @Id
     @GeneratedValue
     private Long seq;
