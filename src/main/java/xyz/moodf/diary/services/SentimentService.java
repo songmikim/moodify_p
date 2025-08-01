@@ -49,11 +49,21 @@ public class SentimentService {
 //    }
 
     public void update(DiaryRequest form) {
-        Sentiment item = new Sentiment();
-        item.setGid(form.getGid());
-        item.setContent(form.getContent());
+        
+        Sentiment sentiment = sentimentRepository.findById(form.getGid()).orElse(null);
 
-        sentimentRepository.saveAndFlush(item);
+        if (sentiment == null) {
+            // sentiment가 없으면, 새로 추가ㄴ
+            Sentiment newSent = new Sentiment();
+            newSent.setGid(form.getGid());
+            newSent.setContent(form.getContent());
+            newSent.setDone(false);
+            sentimentRepository.saveAndFlush(newSent);
+        } else {
+            // 이미 sentiment가 존재하면, content만 수정
+            sentiment.setContent(form.getContent());
+            sentimentRepository.saveAndFlush(sentiment);
+        }
     }
 
     public List<String> get(String gid) {

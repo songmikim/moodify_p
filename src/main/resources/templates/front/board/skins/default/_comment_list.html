@@ -10,19 +10,21 @@
             <div class="comment-header">
                 <span class="comment-author" th:text="${comment.commenter}">작성자</span>
                 <span class="comment-date" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</span>
+                <span th:if="${comment.member != null}" class="member-badge" title="회원">🔵</span>
+                <span th:unless="${comment.member != null}" class="guest-badge" title="비회원">⚪</span>
             </div>
-            <div th:unless="${comment.deleted}" th:text="${comment.content}">
+            <div th:text="${comment.content}">
                 댓글 내용
             </div>
 
-            <th:block th:if="${canDelete}">
+            <th:block th:if="${comment.canDelete}">
                 <!-- 회원 글 삭제 -->
-                <button th:if="${!isGuest}" type="button" class="btn btn-delete"
+                <button th:if="${!comment.needAuth}" type="button" class="btn btn-delete"
                         th:data-seq="${comment.seq}"
-                        onclick="performAction('delete',this.dataset.seq,true)">삭제</button>
+                        onclick="performCommentAction('delete',this.dataset.seq,true)">삭제</button>
 
                 <!-- 비회원 글 삭제 -->
-                <button th:if="${isGuest}" type="button" class="btn btn-delete"
+                <button th:if="${comment.needAuth}" type="button" class="btn btn-delete"
                         th:data-seq="${comment.seq}"
                         onclick="checkGuestPassword('delete', this.dataset.seq,true)">삭제</button>
             </th:block>

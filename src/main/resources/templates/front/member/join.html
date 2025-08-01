@@ -32,7 +32,7 @@
                             <button type="button" id="email_re_verify" th:text="#{재전송}" disabled></button>
                         </th:block>
                         <th:block th:unless="${session.EmailAuthVerified == null || !session.EmailAuthVerified}">
-                            <span class='confirmed' th:text="#{확인된_이메일_입니다.}"></span>
+                            <span class='confirmed' th:text="#{인증에_성공하셨습니다}"></span>
                         </th:block>
                     </div>
                     <div class="error" th:each="err : ${#fields.errors('email')}" th:text="${err}"></div>

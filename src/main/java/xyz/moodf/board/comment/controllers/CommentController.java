@@ -55,25 +55,23 @@ public class CommentController {
 
     public void comment(@PathVariable Long seq, Model model, CommentSearch search) {
         ListData<Comment> CommentList=infoService.getList(seq,search);
+
         model.addAttribute("commentList",CommentList.getItems());
         System.out.println(CommentList);
 
         RequestComment newComment = new RequestComment();
         newComment.setBoardDataSeq(seq); // 초기값 세팅 가능
         model.addAttribute("requestComment", newComment);
-
     }
 
     @PostMapping("/check-guest-password")
     @ResponseBody
     public Map<String, Object> checkGuestPassword(@RequestParam Long seq, @RequestParam String password, @RequestParam String action, HttpSession session) {
         Map<String, Object> result = new HashMap<>();
-        System.out.println("ㅠㅣ카츄");
         try {
             Comment comment = infoService.get(seq);
             // guestPwCheck 메서드 사용
             if (permissionService.guestPwCheck(comment, password)) {
-                System.out.println("피카");
                 String sessionKey = "guest_verified_" + seq + "_" + action;
                 long expireTime = System.currentTimeMillis() + (5 * 60 * 1000); // 5분
                 session.setAttribute(sessionKey, expireTime);

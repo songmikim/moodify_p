@@ -31,7 +31,7 @@ public class Diary extends BaseEntity implements Serializable {
     private String title;
 
     @Lob
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String content;
 
     @Column(nullable = false, length = 10)  // DB에서 직접 null로 세팅할 경우를 막기 위해 추가

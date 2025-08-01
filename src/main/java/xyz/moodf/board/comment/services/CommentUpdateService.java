@@ -32,8 +32,10 @@ public class CommentUpdateService {
 
         if (memberUtil.isLogin()) {
             comment.setMember(memberUtil.getMember());
+            comment.setCommenter(memberUtil.getMember().getName());
         } else {
             comment.setGuestPw(form.getGuestPw());
+            comment.setCommenter(form.getCommenter());
         }
 
         repository.save(comment);
