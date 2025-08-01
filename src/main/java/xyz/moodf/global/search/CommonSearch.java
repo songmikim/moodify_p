@@ -1,12 +1,16 @@
 package xyz.moodf.global.search;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
 @Data
 public class CommonSearch {
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate sDate; // 검색 시작일
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate eDate; // 검색 종료일
     private String sopt; // 검색 옵션,
     private String skey; // 검색 키워드

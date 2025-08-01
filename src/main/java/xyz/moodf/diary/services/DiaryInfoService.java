@@ -1,11 +1,13 @@
 package xyz.moodf.diary.services;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import xyz.moodf.diary.constants.StatisticType;
 import xyz.moodf.diary.entities.Diary;
 import xyz.moodf.diary.entities.DiaryId;
 import xyz.moodf.diary.entities.QDiary;
@@ -30,6 +32,16 @@ public class DiaryInfoService {
     private final JPAQueryFactory jpaQueryFactory;
     private final MemberRepository memberRepository;
     private final MemberUtil memberUtil;
+
+    /**
+     * 현재 로그인된 회원이 특정 날짜에 작성한 일기가 있는가?
+     *
+     * @param date 날짜
+     * @return 작성 여부
+     */
+    public boolean isWritten(LocalDate date) {
+        return get(date) != null;
+    }
 
     /**
      * 특정 회원의 특정 날짜 일기 조회
@@ -107,6 +119,79 @@ public class DiaryInfoService {
 
     public List<Diary> getList() {
         return getList(memberUtil.getMember());
+    }
+
+
+    /**
+     * 회원별 기간 감정 통계
+     *  일별 통계 : DAILY - LocalDate : 2025-07-13
+     *  주별 통계 : WEEKLY - LocalDate : 매주 월요일
+     *  월별 통계 : MONTHLY - LocalDate : 매월의 1일
+     * @param member
+     * @param sDate
+     * @param eDate
+     * @return
+     */
+    public Map<LocalDate, Map<String, Integer>> getStatistics(Member member, LocalDate sDate, LocalDate eDate, StatisticType type) {
+        BooleanBuilder andBuilder = new BooleanBuilder();
+        QDiary diary = QDiary.diary;
+        andBuilder.and(diary.member.eq(member));
+
+        if (sDate != null) {
+            andBuilder.and(diary.date.goe(sDate));
+        }
+
+        if (eDate != null) {
+            andBuilder.and(diary.date.loe(eDate));
+        }
+
+        List<Tuple> items = jpaQueryFactory.select(diary.date, diary.sentiments).from(diary)
+                .where(andBuilder)
+                .fetch();
+
+        Map<LocalDate, Map<String, Integer>> data = new HashMap<>();
+        for (Tuple item : items) {
+            LocalDate date = item.get(diary.date);
+            LocalDate key = null;
+            if (date == null) continue;
+
+            switch(type) {
+                case WEEKLY: // 주별
+                    int yoil = date.getDayOfWeek().getValue();
+                    // 월(1), 화(2), 수(3)
+                    key = date.minusDays(yoil - 1); // 매 주의 월요일
+                    break;
+                case MONTHLY: // 월별
+                    key = LocalDate.of(date.getYear(), date.getMonthValue(), 1);
+                    break;
+                default: // 일별
+                    key = date;
+            }
+
+            Map<String, Integer> stat = data.getOrDefault(key, new HashMap<>());
+            String text = item.get(diary.sentiments);
+            if (!StringUtils.hasText(text)) continue;
+
+            List<String> sentiments = Arrays.stream(text.split(","))
+                    .map(s -> s.split(" ")[0]).toList();
+
+            for (String sentiment : sentiments) {
+                int cnt = stat.getOrDefault(sentiment, 0);
+                stat.put(sentiment, ++cnt);
+            }
+
+            data.put(key, stat);
+        }
+
+        return data;
+    }
+
+    public Map<LocalDate, Map<String, Integer>> getStatistics(LocalDate sDate, LocalDate eDate, StatisticType type) {
+        return getStatistics(memberUtil.getMember(), sDate, eDate, type);
+    }
+
+    public Map<LocalDate, Map<String, Integer>> getStatistics(LocalDate sDate,  StatisticType type) {
+        return getStatistics(sDate, null, type);
     }
 
     /**
@@ -210,4 +295,6 @@ public class DiaryInfoService {
                 .map(Map.Entry::getKey) // 가장 많이 나온 감정 문자열 반환
                 .orElse(""); // 감정이 하나도 없을 경우 빈 문자열 반환
     }
+
+
 }

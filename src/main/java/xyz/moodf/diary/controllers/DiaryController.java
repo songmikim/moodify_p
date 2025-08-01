@@ -12,6 +12,8 @@ import xyz.moodf.diary.constants.Weather;
 import xyz.moodf.diary.dtos.DiaryRequest;
 import xyz.moodf.diary.dtos.SentimentRequest;
 import xyz.moodf.diary.entities.Diary;
+import xyz.moodf.diary.entities.DiaryId;
+import xyz.moodf.diary.repositories.DiaryRepository;
 import xyz.moodf.diary.repositories.SentimentRepository;
 import xyz.moodf.diary.services.DiaryInfoService;
 import xyz.moodf.diary.services.DiaryService;
@@ -36,6 +38,7 @@ public class DiaryController {
     private final DiaryService diaryService;
     private final DiaryInfoService infoService;
     private final SentimentService sentimentService;
+    private final DiaryRepository diaryRepository;
     private final SentimentRepository sentimentRepository;
 
     @ModelAttribute("extraData")
@@ -46,20 +49,50 @@ public class DiaryController {
     }
 
     @GetMapping
-    public String diary(@ModelAttribute DiaryRequest form, Model model) {
+    public String firstDiary() {
+        LocalDate today = LocalDate.now();
+        return "redirect:/diary/" + today;
+    }
+
+    @GetMapping("/{date}")
+    public String diary(@PathVariable("date") LocalDate date,
+                        @ModelAttribute DiaryRequest request, Model model) {
         commonProcess("diary", model);
 
-        LocalDate today = LocalDate.now();
-        LocalDate date = form.getDate();
-        date = date == null || date.isAfter(today) ? today : date;
+        Member member = memberUtil.getMember();
+        DiaryRequest form = new DiaryRequest();
 
-        form.setDate(date);
-        form.setWeather(Weather.NULL);
-        form.setDate(today);
-        form.setGid(UUID.randomUUID().toString());
+        Optional<Diary> optional = diaryRepository.findById(new DiaryId(member, date));
+        boolean isSaved;
+
+        if (!optional.isPresent()) {
+
+            form.setDate(date);
+            form.setWeather(Weather.NULL);
+            form.setGid(UUID.randomUUID().toString());
+
+            isSaved = true;
+
+        } else {
+
+            Diary diary = optional.get();
+            request.setDate(diary.getDate());
+            request.setTitle(diary.getTitle());
+            request.setWeather(diary.getWeather());
+            request.setContent(diary.getContent());
+            request.setGid(diary.getGid());
+
+            isSaved = false;
+
+        }
 
         model.addAttribute("today", LocalDate.now());
         model.addAttribute("weatherValues", Weather.values());
+        model.addAttribute("diaryRequest", request);
+        model.addAttribute("isSaved", isSaved);
+        model.addAttribute("weatherValues", Weather.values());
+        model.addAttribute("date", request.getDate());
+
 
         return utils.tpl("diary/diary");
     }
@@ -95,9 +128,13 @@ public class DiaryController {
     public String result(@PathVariable("date") LocalDate date, Model model) {
         commonProcess("result", model);
 
-        Diary diary = infoService.get(date);
-        System.out.println(diary);
-        model.addAttribute("diaryItem", diary);
+        // 캘린더로 이동할 때 쿼리스트링 구하기
+        Integer year = date.getYear();
+        Integer month = date.getMonthValue();
+
+        model.addAttribute("year", year);
+        model.addAttribute("month", month);
+
         return utils.tpl("diary/result");
     }
 
@@ -194,13 +231,15 @@ public class DiaryController {
         List<String> addCommonCss = new ArrayList<>();
 
         if (mode.equals("diary")) {
-            addScript.add("diary/sentiment");  // 추가로 만든 sentiment db 관리 js 파일
+            pageTitle = utils.getMessage("일기_작성하기");
+            addScript.add("diary/sentiment");
             addScript.add("diary/diary");
             addCss.add("diary/diary");
-            pageTitle = utils.getMessage("일기쓰기");
-            addCss.add("diary/diary");
+        } else if (mode.equals("result")) {
+            pageTitle = utils.getMessage("일기_분석_결과");
+            addScript.add("diary/calendar");
         } else if (mode.equals("calendar")) {
-            pageTitle = utils.getMessage("일기목록");
+            pageTitle = utils.getMessage("일기_목록");
             addScript.add("diary/calendar");
         }
 
