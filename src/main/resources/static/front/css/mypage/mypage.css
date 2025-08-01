@@ -62,11 +62,6 @@ button[type="submit"], a[href*="/password"] {
     text-decoration: none;
 }
 
-/* 버튼 및 링크 hover 시 색상 변경 */
-button:hover, a:hover {
-    background-color: var(--subc);
-}
-
 /* 섹션 제목 스타일 */
 h2 {
     font-size: 20px;
