@@ -14,6 +14,7 @@ import xyz.moodf.board.comment.repositories.CommentRepository;
 import xyz.moodf.board.comment.search.CommentSearch;
 import xyz.moodf.global.search.ListData;
 import xyz.moodf.global.search.Pagination;
+import xyz.moodf.member.libs.MemberUtil;
 
 import java.util.List;
 
@@ -24,6 +25,8 @@ import static org.springframework.data.domain.Sort.Order.desc;
 public class CommentInfoService {
     private final HttpServletRequest request;
     private final CommentRepository repository;
+    private final MemberUtil memberUtil;
+    private final CommentPermissionService permission;
 
     public Comment get(Long seq) {
         return repository.findById(seq)
@@ -48,6 +51,12 @@ public class CommentInfoService {
         Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(desc("createdAt")));
         Page<Comment> data = repository.findAll(andBuilder, pageable);
         List<Comment> items = data.getContent();
+
+        for (Comment commentItem : items) {
+            commentItem.setCanDelete( (commentItem.getMember()==null) || memberUtil.isAdmin() || (memberUtil.isLogin() &&
+                    commentItem.getMember().getEmail().equals(memberUtil.getMember().getEmail())));
+            commentItem.setNeedAuth(permission.needAuth(commentItem));
+        }
 
         int total = (int)data.getTotalElements();
         Pagination pagination = new Pagination(page, total, 10, limit, request);
