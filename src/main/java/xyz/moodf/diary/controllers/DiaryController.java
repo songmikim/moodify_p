@@ -113,8 +113,6 @@ public class DiaryController {
     public String process(@Valid @ModelAttribute("diaryRequest") DiaryRequest form, Errors errors, Model model) {
         commonProcess("diary", model);
 
-        System.out.println("다이어리 요청...");
-
         diaryValidator.validate(form, errors);
 
         if (errors.hasErrors()) {

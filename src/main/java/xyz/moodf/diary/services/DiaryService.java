@@ -10,7 +10,6 @@ import xyz.moodf.diary.repositories.DiaryRepository;
 import xyz.moodf.diary.repositories.SentimentRepository;
 import xyz.moodf.member.entities.Member;
 import xyz.moodf.member.exceptions.MemberNotFoundException;
-import xyz.moodf.member.libs.MemberUtil;
 import xyz.moodf.member.repositories.MemberRepository;
 
 import java.time.LocalDateTime;
@@ -22,8 +21,8 @@ public class DiaryService {
 
     private final DiaryRepository diaryRepository;
     private final SentimentRepository sentimentRepository;
-    private final MemberUtil memberUtil;
     private final MemberRepository memberRepository;
+    private final DiaryInfoService infoService;
 
     public Diary process(DiaryRequest request, Member member) {
 
@@ -49,6 +48,9 @@ public class DiaryService {
             diary.setSentiments(sentiment.getSentiments());
             sentimentRepository.saveAndFlush(sentiment);
         }
+
+        // 추가 정보 세팅
+        infoService.addInfo(diary);
 
         diaryRepository.saveAndFlush(diary);
 
