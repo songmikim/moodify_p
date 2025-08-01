@@ -96,6 +96,8 @@ public class DiaryController {
             request.setContent(diary.getContent());
             request.setGid(diary.getGid());
 
+            sentimentService.resetDone(diary.getGid());  // 다시 감정 분석할 수 있게 done을 false로 변환
+
             isSaved = true;
             model.addAttribute("diaryRequest", request);
         }

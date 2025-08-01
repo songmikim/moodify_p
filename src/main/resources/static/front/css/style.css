@@ -370,3 +370,14 @@ h2 + .recommendation-section {
     border-radius: 10px;
     margin-top: 20px;
 }
+
+/* 클릭이 막힌 버튼 스타일 S */
+button:disabled,
+button:disabled:hover {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.7;
+}
+/* 클릭이 막힌 버튼 스타일 E */
