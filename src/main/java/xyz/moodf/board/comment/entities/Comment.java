@@ -2,6 +2,7 @@ package xyz.moodf.board.comment.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import xyz.moodf.board.entities.GuestAuth;
 import xyz.moodf.global.entities.BaseEntity;
 import xyz.moodf.member.entities.Member;
 
@@ -10,7 +11,7 @@ import xyz.moodf.member.entities.Member;
 @Table(name = "comments", indexes = {
         @Index(name = "idx_comment_board", columnList = "boardDataSeq,deleted,createdAt")
 })
-public class Comment extends BaseEntity {
+public class Comment extends BaseEntity implements GuestAuth {
     @Id
     @GeneratedValue
     private Long seq;           // 댓글 ID

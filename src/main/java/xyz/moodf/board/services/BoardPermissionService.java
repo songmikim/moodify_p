@@ -3,6 +3,7 @@ package xyz.moodf.board.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import xyz.moodf.board.entities.BoardData;
+import xyz.moodf.board.entities.GuestAuth;
 import xyz.moodf.global.exceptions.UnAuthorizedException;
 import xyz.moodf.member.entities.Member;
 import xyz.moodf.member.libs.MemberUtil;
@@ -99,14 +100,14 @@ public class BoardPermissionService {
             } else {return true;}
     }
 
-    public boolean guestPwCheck(BoardData boardData, String guestPw) {
+    public boolean guestPwCheck(GuestAuth data, String guestPw) {
         // null 체크 추가
-        if (boardData.getGuestPw() == null || guestPw == null) {
+        if (data.getGuestPw() == null || guestPw == null) {
             return false;
         }
 
         // trim()으로 공백 제거 후 비교
-        return guestPw.trim().equals(boardData.getGuestPw().trim());
+        return guestPw.trim().equals(data.getGuestPw().trim());
     }
 
 

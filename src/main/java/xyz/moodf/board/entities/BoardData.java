@@ -14,7 +14,7 @@ import java.io.Serializable;
 
 @Data
 @Entity
-public class BoardData extends BaseEntity implements Serializable {
+public class BoardData extends BaseEntity implements GuestAuth {
     @Id
     @GeneratedValue
     private Long seq;

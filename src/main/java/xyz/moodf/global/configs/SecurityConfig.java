@@ -59,14 +59,13 @@ public class SecurityConfig {
          * anyRequest().authenticated() : 회원 전용 페이지가 기본, 일부 페이지 -> 비회원 사이트
          */
         http.authorizeHttpRequests(c -> {
-            c.requestMatchers("/login", "/join", "/board/**", "/diary/**", "/error/**", "/calendar/**", "/uploads/**", "/mypage/delete/confirm", "/file/**").permitAll()
+            c.requestMatchers("/login", "/join", "/board/**", "/diary/**", "/error/**", "/calendar/**").permitAll()
                     .requestMatchers("/front/**", "/mobile/**", "/member/**", "/common/**").permitAll()
                     .requestMatchers("/api/**").permitAll()
-                    //.requestMatchers("/admin/**").hasAuthority("ADMIN")
                     .requestMatchers("/admin/**").permitAll()
-                    .requestMatchers("/findid", "/find_pw", "/find_pw_done").permitAll()
                     .anyRequest().authenticated();
         });
+
 
         http.exceptionHandling(c -> {
             c.authenticationEntryPoint(new MemberAuthenticationExceptionHandler()); // 미로그인 상태에서의 인가 실패에 대한 처리
@@ -77,7 +76,7 @@ public class SecurityConfig {
         http.headers(c -> c.frameOptions(f -> f.sameOrigin()));
 
         http.csrf(csrf -> csrf
-                .ignoringRequestMatchers("/board/check-guest-password") // CSRF 제외
+                .ignoringRequestMatchers("/board/check-guest-password").ignoringRequestMatchers("/board/comment/**") // CSRF 제외
         );
 
         return http.build();
