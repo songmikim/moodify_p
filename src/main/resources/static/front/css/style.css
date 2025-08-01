@@ -1,45 +1,372 @@
+@import url('https://fonts.googleapis.com/css2?family=Hi+Melody&family=Noto+Sans+KR:wght@100..900&display=swap');
+* {
+    box-sizing: border-box;
+    outline: none;
+    font-family: "Nanum Gothic", sans-serif;
+}
 
-h1{
-    margin:20px auto;
-    text-align:center;
+.melody {
+    font-family: "Hi Melody", sans-serif;
 }
-main{
-    margin:0 10%;
-    max-width:80%;
+
+html {
+    font-size: 13px;
 }
-footer{
-    position:fixed;
-    bottom:30px;
-    height:50px;
-    text-align:center
+
+body {
+    margin: 0;
+    color: #003049;
+    background: #fff;
 }
-footer a{}
-main, body{padding-bottom:80px; box-sizing:border-box; height:100%;}
-html{height:100%;}
-/* 사이드 메뉴 S*/
-aside{
-    max-width:200px; width:100%;
-    height:100%;
-    position:fixed;
-    left:0; top:0;
-    background:rgba(0,0,0,0);
+
+body.dark {
+    background: #003049;
+    color: #fff;
 }
-aside>button{
-    position:fixed;
-    top:10px; left:10px;
-    width: 30px; height:30px;
-    border:0;
+
+a {
+    color: #003049;
+    text-decoration: none;
 }
-aside img{width: 100%; height:100%;}
-.sideMenu{position:relative;color:var(--fontc);display:none;z-index:100;}
-.sideMenu>button{
-    position:fixed;
-    top:10px; right:-40px;
-    width: 30px; height:30px;
-    border:0;
+
+ol, ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
-.sideMenu>h3{
-    height:80px;
-    line-height:80px;
+
+li, dl, dt, dd {
+    padding: 0;
+    margin: 0;
 }
-/* 사이드 메뉴 E*/
+
+img {
+    border: 0;
+}
+
+/* 기본 제목 공통 */
+h1, h2, h3, h4 {
+    padding: 0;
+    margin: 0;
+}
+
+h1 {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+/* 입력 항목 공통 S */
+input[type='text'],
+input[type='email'],
+input[type='password'],
+input[type='number'] {
+    border: 1px solid #e2e2e2;
+    border-radius: 3px;
+    height: 45px;
+    width: 100%;
+}
+/* 입력 항목 공통 E */
+
+/* 체크박스 공통 S */
+input[type='checkbox'] {
+    display: none;
+}
+
+input[type='checkbox'] + label,
+.checkbox input[type='checkbox'] ~ label {
+    background:url("../images/check.png") no-repeat left center;
+    padding: 0 20px 0 33px;
+    height: 40px;
+    line-height: 40px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+input[type='checkbox']:checked + label,
+.checkbox input[type='checkbox']:checked ~ label {
+    background:url("../images/check_on.png") no-repeat left center;
+}
+
+input[type='checkbox'] + label.standalone {
+    padding: 0;
+    width: 23px;
+    height: 23px;
+}
+/* 체크박스 공통 E */
+
+/* 기준 너비 */
+.layout-width {
+    max-width: 1280px;
+    padding: 0 15px;
+    margin: 0 auto;
+}
+
+
+/* 헤더 영역 S */
+header {
+    height: 62px;
+    background: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+}
+
+body.dark header {
+    background: #e2e2e2;
+}
+/* 헤더 영역 E */
+header .logo {
+    display: block;
+    height: 62px;
+    background: url('../../common/images/logo_wmode.png') no-repeat center center;
+    background-size: 150px;
+}
+
+body.dark header .logo {
+     background: url('../../common/images/logo_bmode.png') no-repeat center center;
+     background-size: 150px;
+}
+
+header .left, header .right {
+    width: 80px;
+}
+
+header .logo-section {
+    flex-grow: 1;
+}
+
+header .right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+header .profile-image {
+    border-radius: 50%;
+    border: 2px solid #FFF0ED;
+    width: 40px;
+    margin-right: 10px;
+}
+
+header .left button {
+    background: transparent;
+    font-size: 30px;
+    color: #003049;
+    border: 0;
+    cursor: pointer;
+}
+
+header .right a i {
+    font-size: 30px;
+    color: #003049;
+}
+/* 푸터 영역 S */
+footer {
+    width:100%;
+    text-align: center;
+    background: #FFF0ED;
+    min-height: 150px;
+}
+
+footer .bottom-section p{}
+footer .top-section {
+    min-height: 150px;
+    border-bottom: 2px solid #f0f0f0;
+    border-top: 2px solid #f0f0f0;
+}
+
+footer .bottom-section {
+    padding: 20px 0;
+}
+
+footer .bottom-section a{
+    display:inline-block;
+    line-height:1em;
+    margin-block:0;
+    background-color:rgba(0,0,0,0);
+    padding:5px;
+}
+
+footer .bottom-section .text1 {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+}
+/* 푸터 영역 E */
+
+/* 더보기 메뉴 영역 S */
+body > aside {
+    position: fixed;
+    left: -300px;
+    top: 0;
+    width: 300px;
+    height: 100%;
+    background: #fff;
+    z-index: 30;
+    transition: all 0.8s;
+}
+
+body > aside.on {
+    left: 0;
+}
+
+.main-menu {
+    padding: 70px 30px 30px;
+}
+
+.main-menu i.more-menu {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    font-size: 25px;
+    color: #003049;
+}
+
+.main-menu h3 {
+    padding:0;
+    margin: 0 0 15px;
+    font-size: 1.35rem;
+}
+
+.main-menu h3:not(.first) {
+    margin-top: 50px;
+}
+
+.main-menu a {
+    display: block;
+    font-size: 1.25rem;
+    padding: 8px 0;
+}
+
+/* 더보기 메뉴 영역 E */
+
+main {
+    margin-top: 82px;
+    min-height: 600px;
+}
+
+/* 모달 */
+#modal-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 20;
+    opacity: 0;
+    transition: opacity 0.3s;
+    background: rgba(0, 0, 0, 0.7);
+}
+#modal-bg.show {
+    opacity:1;
+}
+@media screen and (max-width: 350px) {
+    header .profile-image {
+        width: 30px;
+    }
+    header .logo {
+        background-size: 120px;
+    }
+}
+
+:root {
+    --fontc: #2E2E2E;
+    --mainc: #FFB6B9;
+    --subc: #FF8C42;
+    --hlc: #FFFACD;
+    --bgc: #FFF4E6;
+    --bghc: #FFF0ED;
+    --fontf: 'Pretendard', sans-serif;
+}
+
+/* 전체 바디 스타일 */
+body {
+    background-color: var(--bgc);
+    font-family: var(--fontf);
+    color: var(--fontc);
+    margin-top: 62px;
+}
+
+/* 페이지 전체 */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* 사용자 정보 박스 */
+.user-info {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+}
+
+/* 사용자 정보 텍스트 */
+.user-info p {
+    margin: 8px 0;
+    font-size: 15px;
+}
+
+/* 사용자 정보 항목 */
+.user-info strong {
+    width: 120px;
+    display: inline-block;
+    font-weight: 700;
+}
+
+/* 제출 버튼 및 비밀번호 변경 링크 스타일 */
+button[type="submit"], a[href*="/password"] {
+    display: inline-block;
+    background-color: var(--mainc);
+    color: var(--fontc);
+    border: none;
+    padding: 10px 16px;
+    font-size: 14px;
+    border-radius: 6px;
+    margin-top: 12px;
+    cursor: pointer;
+    transition: background 0.3s;
+    text-decoration: none;
+}
+
+/* 섹션 제목 스타일 */
+h2 {
+    font-size: 20px;
+    margin-top: 40px;
+    margin-bottom: 12px;
+    border-bottom: 2px solid var(--mainc);
+    padding-bottom: 6px;
+}
+
+/* 월 선택 label 스타일 */
+label[for="month"] {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* 감정 차트 canvas 스타일 */
+canvas#emotionChart {
+    width: 50%;
+    max-width: 700px;
+    height: 300px;
+    margin-top: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 6px rgba(0,0,0,0.03);
+    padding: 10px;
+}
+
+/* 감정별 추천곡 섹션 스타일 */
+h2 + .recommendation-section {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+}

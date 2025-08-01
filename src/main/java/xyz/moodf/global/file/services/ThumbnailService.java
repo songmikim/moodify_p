@@ -26,8 +26,8 @@ public class ThumbnailService {
     public String create(RequestThumb form) {
         Long seq = form.getSeq();
         String url = form.getUrl();
-        int width = Math.max(form.getWidth(), 50);
-        int height = Math.max(form.getHeight(), 50);
+        int width = Math.max(form.getWidth(), 20);
+        int height = Math.max(form.getHeight(), 20);
         boolean crop = form.isCrop();
 
         // 썸네일 경로, 이미 생성된 썸네일이 있다면 생성되어 있는 경로로 반환
@@ -62,7 +62,7 @@ public class ThumbnailService {
     }
 
     public String getThumbPath(Long seq, String url, int width, int height, boolean crop) {
-        String basePath = properties.getPath() + "/thumbs";
+        String basePath = properties.getPath() + "/thumb";
 
         String thumbPath = "";
         if (seq != null && seq > 0L) { // 직접 업로드한 파일 기준
@@ -72,7 +72,6 @@ public class ThumbnailService {
             if (!file.exists() || !file.isDirectory()) {
                 file.mkdirs();
             }
-
             thumbPath = basePath + String.format("/%s/%s_%s_%s_%s%s", folder, width, height, crop, seq, Objects.requireNonNullElse(item.getExtension(), ""));
 
         } else if (StringUtils.hasText(url)) { // 원격 URL 이미지인 기준

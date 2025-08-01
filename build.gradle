@@ -30,9 +30,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.springframework.session:spring-session-data-redis'
 	implementation 'net.coobird:thumbnailator:0.4.20'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
-
+	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv'
 
 	// ModelMapper
 	implementation 'org.modelmapper:modelmapper:3.2.3'

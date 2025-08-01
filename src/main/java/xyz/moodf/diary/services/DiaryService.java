@@ -7,7 +7,13 @@ import xyz.moodf.diary.dtos.DiaryRequest;
 import xyz.moodf.diary.entities.Diary;
 import xyz.moodf.diary.entities.Sentiment;
 import xyz.moodf.diary.repositories.DiaryRepository;
+import xyz.moodf.diary.repositories.SentimentRepository;
 import xyz.moodf.member.entities.Member;
+import xyz.moodf.member.exceptions.MemberNotFoundException;
+import xyz.moodf.member.libs.MemberUtil;
+import xyz.moodf.member.repositories.MemberRepository;
+
+import java.time.LocalDateTime;
 
 @Service
 @Transactional  // 여러 Repository 메서드 호출이 하나의 트랜잭션 안에서 처리
@@ -15,23 +21,37 @@ import xyz.moodf.member.entities.Member;
 public class DiaryService {
 
     private final DiaryRepository diaryRepository;
+    private final SentimentRepository sentimentRepository;
+    private final MemberUtil memberUtil;
+    private final MemberRepository memberRepository;
 
     public Diary process(DiaryRequest request, Member member) {
-        Diary diary = new Diary();
-        Sentiment sentiment = new Sentiment();
 
+        Member loggedMember = memberRepository.findById(member.getSeq())
+                .orElseThrow(MemberNotFoundException::new);     // 영속 상태
+
+        String gid = request.getGid();
+
+        Diary diary = new Diary();
+
+        diary.setMember(loggedMember);
+        diary.setDate(request.getDate());
+        diary.setGid(gid);
         diary.setTitle(request.getTitle());
         diary.setContent(request.getContent());
-        diary.setDate(request.getDate());
         diary.setWeather(request.getWeather());
-        diary.setMember(member);
+        diary.setCreatedAt(LocalDateTime.now());
 
-        sentiment.setSentiment("");
-        sentiment.setContent("");
+        // 감정 분석 완료 처리
+        Sentiment sentiment = sentimentRepository.findById(gid).orElse(null);
+        if (sentiment != null) {
+            sentiment.setDone(true);
+            diary.setSentiments(sentiment.getSentiments());
+            sentimentRepository.saveAndFlush(sentiment);
+        }
 
-        diary.setSentiment(sentiment);
-        sentiment.setDiary(diary);
+        diaryRepository.saveAndFlush(diary);
 
-        return diaryRepository.save(diary);
+        return diary;
     }
 }

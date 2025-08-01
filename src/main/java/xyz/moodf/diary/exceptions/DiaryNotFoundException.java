@@ -1,7 +1,11 @@
 package xyz.moodf.diary.exceptions;
 
-public class DiaryNotFoundException extends RuntimeException {
-    public DiaryNotFoundException(String message) {
-        super(message);
+import org.springframework.http.HttpStatus;
+import xyz.moodf.global.exceptions.script.AlertBackException;
+
+public class DiaryNotFoundException extends AlertBackException {
+    public DiaryNotFoundException() {
+        super("NotFound.diary", HttpStatus.NOT_FOUND);
+        setErrorCode(true);
     }
 }
