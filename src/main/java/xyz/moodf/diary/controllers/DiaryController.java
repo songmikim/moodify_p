@@ -19,6 +19,7 @@ import xyz.moodf.diary.services.DiaryInfoService;
 import xyz.moodf.diary.services.DiaryService;
 import xyz.moodf.diary.services.RecommendService;
 import xyz.moodf.diary.services.SentimentService;
+import xyz.moodf.diary.validators.DiaryValidator;
 import xyz.moodf.global.annotations.ApplyCommonController;
 import xyz.moodf.global.codevalue.services.CodeValueService;
 import xyz.moodf.global.file.entities.FileInfo;
@@ -52,6 +53,8 @@ public class DiaryController {
     private final SentimentService sentimentService;
     private final RecommendService recommendService;
 
+    private final DiaryValidator diaryValidator;
+
     @ModelAttribute("extraData")
     public Map<LocalDate, Object> getExtraData() {
         Map<LocalDate, Object> map = new HashMap<>();
@@ -73,7 +76,7 @@ public class DiaryController {
         Member member = memberUtil.getMember();
 
         Optional<Diary> optional = diaryRepository.findById(new DiaryId(member, date));
-        boolean isSaved;
+        boolean isSaved = false;
 
         if (!optional.isPresent()) {
 
@@ -82,7 +85,6 @@ public class DiaryController {
             form.setWeather(Weather.NULL);
             form.setGid(UUID.randomUUID().toString());
 
-            isSaved = true;
             model.addAttribute("diaryRequest", form);
 
         } else {
@@ -94,28 +96,30 @@ public class DiaryController {
             request.setContent(diary.getContent());
             request.setGid(diary.getGid());
 
-            isSaved = false;
-
+            isSaved = true;
             model.addAttribute("diaryRequest", request);
         }
 
         model.addAttribute("today", LocalDate.now());
         model.addAttribute("weatherValues", Weather.values());
         model.addAttribute("isSaved", isSaved);
-        model.addAttribute("weatherValues", Weather.values());
         model.addAttribute("date", request.getDate());
 
 
         return utils.tpl("diary/diary");
     }
 
-    @PostMapping
-    public String process(@Valid DiaryRequest form, Errors errors, Model model) {
+    @PostMapping("/{date}")
+    public String process(@Valid @ModelAttribute("diaryRequest") DiaryRequest form, Errors errors, Model model) {
         commonProcess("diary", model);
 
-        System.out.println("결과 전달 중...");
+        diaryValidator.validate(form, errors);
 
         if (errors.hasErrors()) {
+            model.addAttribute("isSaved", false);
+            model.addAttribute("today", LocalDate.now());
+            model.addAttribute("date", form.getDate());
+            model.addAttribute("weatherValues", Weather.values());
             return utils.tpl("diary/diary");
         }
 

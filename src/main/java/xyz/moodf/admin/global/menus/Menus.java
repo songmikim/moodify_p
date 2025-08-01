@@ -10,9 +10,9 @@ public class Menus {
     static {
         // 사이트 설정 메뉴
         menus.put("basic", List.of(
-                new Menu("basic", "기본설정", "/admin/config"),
-                new Menu("terms", "약관설정", "/admin/config/terms"),
-                new Menu("image", "이미지 관리", "/admin/config/image")
+                new Menu("basic", "기본설정", "/admin/basic"),
+                new Menu("terms", "약관설정", "/admin/basic/terms"),
+                new Menu("image", "이미지 관리", "/admin/basic/image")
         ));
 
         // 회원 관리 메뉴

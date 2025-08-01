@@ -18,7 +18,7 @@ import java.util.UUID;
 @Controller
 @ApplyCommonController
 @RequiredArgsConstructor
-@RequestMapping("/admin/config")
+@RequestMapping("/admin/basic")
 public class BasicController extends CommonController {
 
     private final FileUploadService fileUploadService;
@@ -42,6 +42,13 @@ public class BasicController extends CommonController {
         commonProcess("image", model);
 
         return "admin/basic/image";
+    }
+
+    @GetMapping("/terms")
+    public String termsConfig(Model model) {
+        commonProcess("terms", model);
+
+        return "admin/basic/terms";
     }
 
     @PostMapping("/image")
