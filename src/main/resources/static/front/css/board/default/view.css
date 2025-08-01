@@ -1,0 +1,12 @@
+
+    display: inline-block;
+    background-color: var(--mainc);
+    color: var(--fontc);
+    border: none;
+    padding: 10px 16px;
+    font-size: 14px;
+    border-radius: 6px;
+    margin-top: 12px;
+    cursor: pointer;
+    transition: background 0.3s;
+    text-decoration: none;
