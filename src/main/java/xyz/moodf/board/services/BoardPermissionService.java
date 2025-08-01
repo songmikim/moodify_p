@@ -6,8 +6,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import xyz.moodf.board.entities.BoardData;
 import xyz.moodf.board.entities.GuestAuth;
+
 import xyz.moodf.global.entities.BaseEntity;
 import xyz.moodf.global.exceptions.UnAuthorizedException;
+
 import xyz.moodf.member.entities.Member;
 import xyz.moodf.member.libs.MemberUtil;
 
@@ -119,3 +121,7 @@ public class BoardPermissionService {
     }
 
 }
+
+
+}
+
