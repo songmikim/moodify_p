@@ -5,8 +5,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // 감정별 색상 매핑
   const colors = {
-    '행복':'#fcbf49','기쁨':'#fcbf49','슬픔':'#4e79a7',
-    '분노':'#e15759','불안':'#76b7b2','상처':'#a05195','당황':'#59a14f'
+    '기쁨':'#fcbf49','슬픔':'#4e79a7','분노':'#e15759',
+    '불안':'#76b7b2','상처':'#a05195','당황':'#59a14f'
   };
 
   //한 달치 통계 로드 → 차트 렌더링
@@ -23,12 +23,10 @@ window.addEventListener('DOMContentLoaded', () => {
       `/api/mypage/emotion?type=MONTHLY&sDate=${start}&eDate=${end}`
     ).then(r => r.json());
 
-    // 날짜별 감정 키, 합계 계산
-    const dates    = Object.keys(res).sort();
-    const emotions = [...new Set(dates.flatMap(d => Object.keys(res[d] || {})))];
-    const totals   = emotions.map(e =>
-      dates.reduce((sum, d) => sum + (res[d]?.[e] || 0), 0)
-    );
+    // 감정별 통계 데이터 바로 사용
+    const monthData = Object.values(res)[0] || {};
+    const emotions  = Object.keys(monthData);
+    const totals    = Object.values(monthData);
 
     // 기존 차트 제거 후 새로 그리기
     chart?.destroy();
