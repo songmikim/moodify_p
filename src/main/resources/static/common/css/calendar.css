@@ -59,3 +59,18 @@
 }
 
 /* 감정 이미지 E */
+
+/* 캘린더 클릭 S */
+.select-day:not(.disabled):hover {
+    cursor: pointer;
+    background-color: var(--mainc);
+}
+
+.select-day.disabled {
+    pointer-events: none;
+    opacity: 0.4;
+    background-color: #eee;
+    color: #888;
+    cursor: default;
+}
+/* 캘린더 클릭 E */

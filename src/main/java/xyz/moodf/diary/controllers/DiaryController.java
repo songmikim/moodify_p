@@ -67,10 +67,11 @@ public class DiaryController {
 
         Member member = memberUtil.getMember();
 
-        Optional<Diary> optional = diaryRepository.findById(new DiaryId(member, date));
+        Diary diary = diaryRepository.findById(new DiaryId(member, date))
+                .orElse(null);
         boolean isSaved = false;
 
-        if (!optional.isPresent()) {
+        if (diary == null) {
 
             DiaryRequest form = new DiaryRequest();
             form.setDate(date);
@@ -81,7 +82,6 @@ public class DiaryController {
 
         } else {
 
-            Diary diary = optional.get();
             request.setDate(diary.getDate());
             request.setTitle(diary.getTitle());
             request.setWeather(diary.getWeather());
@@ -149,17 +149,12 @@ public class DiaryController {
         List<Music> items = recommendService.recMusicToMusicList(recMusic);
         model.addAttribute("items", items);
 
-        //List<Music> items = recommendService.getContents(sentiment);
-        //model.addAttribute("items", items);
-
-        // 캘린더로 이동할 때 쿼리스트링 구하기
+        // 캘린더로 이동 시 사용할 쿼리스트링 구하기
         Integer year = date.getYear();
         Integer month = date.getMonthValue();
 
         model.addAttribute("year", year);
         model.addAttribute("month", month);
-
-
 
         return utils.tpl("diary/result");
     }
@@ -191,13 +186,6 @@ public class DiaryController {
         return utils.tpl("diary/calendar");
     }
 
-    @GetMapping("/result")
-    public String result(Model model) {
-        commonProcess("diary", model);
-
-        return utils.tpl("diary/result");
-    }
-
     @PostMapping("/save")
     public String saveDiary(@ModelAttribute DiaryRequest diaryRequest,
                             @RequestParam("gid") String gid,
@@ -210,9 +198,24 @@ public class DiaryController {
         return "redirect:/diary/result";
     }
 
+    @PostMapping("/delete/{gid}")
+    @ResponseBody
+    public ResponseEntity<?> deleteDiary(@PathVariable("gid") String gid,
+                              @RequestBody Map<String, String> payload) {
+
+        String dateStr = payload.get("date");
+        LocalDate date = LocalDate.parse(dateStr);
+
+        diaryService.delete(gid, date);
+
+        return ResponseEntity.ok(Map.of("status", "ok"));
+    }
+
     @PostMapping("/delete")
-    public ResponseEntity<?> deleteSentiment(@RequestParam String gid) {
-        System.out.println("삭제요청");
+    @ResponseBody
+    public ResponseEntity<?> deleteSentiment(@RequestBody Map<String, String> payload) {
+        String gid = payload.get("gid");
+        System.out.println("삭제요청: " + gid);
         sentimentRepository.deleteById(gid);
         return ResponseEntity.ok().build();
     }

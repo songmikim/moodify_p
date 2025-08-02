@@ -14,16 +14,21 @@ window.addEventListener("DOMContentLoaded", function() {
 
     /* 캘린더 클릭 이벤트: 날짜 클릭 시 해당 날짜의 일기 페이지로 이동 S */
     const selectDays = document.getElementsByClassName("select-day");
-    for (const el of selectDays) {
-        el.addEventListener("click", function() {
-            if (typeof parent.calendarSelectCallback === 'function') {
-                const {date} = this.dataset;
+    const now = new Date();
+    now.setHours(0, 0, 0, 0); // 오늘 날짜 기준으로 시간 제거
 
-                const clickedDate = new Date(date);
-                const now = new Date();
-                if (clickedDate <= now) {
-                    parent.calendarSelectCallback(date);
-                }
+    for (const el of selectDays) {
+        const { date } = el.dataset;
+        const clickedDate = new Date(date);
+        clickedDate.setHours(0, 0, 0, 0);
+
+        if (clickedDate > now) {
+            el.classList.add("disabled");
+        }
+
+        el.addEventListener("click", function () {
+            if (typeof parent.calendarSelectCallback === 'function' && clickedDate <= now) {
+                parent.calendarSelectCallback(date);
             }
         });
     }

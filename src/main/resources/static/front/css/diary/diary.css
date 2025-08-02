@@ -37,18 +37,24 @@ textarea {
 .tit>div, .con>div{
     margin-left:5%;
 }
-form{position:relative; padding-bottom:69px;}
-form>button{
+
+form {
+    position:relative;
+    padding-bottom:69px;
+}
+
+form>button {
     width:150px;
     position: absolute;
     bottom:24px;
 }
-form>button[type="submit"]{right:9.5%;}
-form>button[type="button"]{
-    right:calc(9.5% + 160px);
+
+form>button[type="submit"] {
+    right:9.5%;
+}
+
+.btn {
     display: inline-block;
-    background-color: var(--mainc);
-    color: var(--fontc);
     border: none;
     padding: 10px 16px;
     font-size: 14px;
@@ -57,4 +63,22 @@ form>button[type="button"]{
     cursor: pointer;
     transition: background 0.3s;
     text-decoration: none;
+}
+
+form > button#btn-save {
+    right: 9.5%;
+    background-color: var(--mainc);
+    color: var(--fontc);
+}
+
+form > button#btn-edit {
+    right: calc(9.5% + 160px);
+    background-color: var(--mainc);
+    color: var(--fontc);
+}
+
+form > button#btn-delete {
+    right: calc(9.5% + 320px);
+    background-color: var(--dangerc);
+    color: #fff;
 }

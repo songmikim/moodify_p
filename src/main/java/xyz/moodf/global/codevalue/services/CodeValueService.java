@@ -46,6 +46,7 @@ public class CodeValueService {
     }
 
     public <R> R get(String code, Class<R> clazz) {
+        if (code == null) return null;
 
         CodeValue item = repository.findById(code).orElse(null);
         if (item != null) {

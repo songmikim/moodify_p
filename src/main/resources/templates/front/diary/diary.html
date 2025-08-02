@@ -51,6 +51,7 @@
             <div class="error" th:each="err : ${#fields.errors('content')}" th:text="${err}"></div>
         </div>
 
+        <button type="button" id="btn-delete" class="btn btn-primary" th:text="#{삭제하기}" th:if="${isSaved}"></button>
         <button type="button" id="btn-edit" class="btn btn-primary" th:text="#{수정하기}" th:if="${isSaved}"></button>
         <button type="submit" id="btn-save" class="btn btn-primary" th:text="#{저장하기}" th:disabled="${isSaved}"></button>
     </form>

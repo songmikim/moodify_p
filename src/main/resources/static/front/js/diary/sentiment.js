@@ -3,8 +3,9 @@ window.addEventListener("DOMContentLoaded", function () {
     const contentInput = document.getElementById('content');
 
     // 2초마다 감정 분석을 위한 데이터 전송
-    setInterval(() => {
+    window.intervalId = setInterval(() => {
         if (contentInput.disabled) return;
+
         const formData = new FormData(frmSave);
         ajaxLoad(`/diary/sentiment`, null, null, "POST", formData, null, true);
     }, 2000);

@@ -281,6 +281,7 @@ main {
     --hlc: #FFFACD;
     --bgc: #FFF4E6;
     --bghc: #FFF0ED;
+    --dangerc: #9c4444;
     --fontf: 'Pretendard', sans-serif;
 }
 
@@ -374,8 +375,8 @@ h2 + .recommendation-section {
 /* 클릭이 막힌 버튼 스타일 S */
 button:disabled,
 button:disabled:hover {
-  background-color: #ccc;
-  color: #666;
+  background-color: #ccc !important;
+  color: #666 !important;
   cursor: not-allowed;
   pointer-events: none;
   opacity: 0.7;
