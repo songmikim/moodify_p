@@ -10,7 +10,6 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import xyz.moodf.diary.constants.Weather;
 import xyz.moodf.diary.dtos.DiaryRequest;
-import xyz.moodf.diary.dtos.SentimentRequest;
 import xyz.moodf.diary.entities.Diary;
 import xyz.moodf.diary.entities.DiaryId;
 import xyz.moodf.diary.repositories.DiaryRepository;
@@ -22,8 +21,6 @@ import xyz.moodf.diary.services.SentimentService;
 import xyz.moodf.diary.validators.DiaryValidator;
 import xyz.moodf.global.annotations.ApplyCommonController;
 import xyz.moodf.global.codevalue.services.CodeValueService;
-import xyz.moodf.global.file.entities.FileInfo;
-import xyz.moodf.global.file.services.FileInfoService;
 import xyz.moodf.global.libs.Utils;
 import xyz.moodf.member.entities.Member;
 import xyz.moodf.member.libs.MemberUtil;
@@ -186,6 +183,7 @@ public class DiaryController {
                 if (fileItem != null) {
                     emo = String.format("<img src='%s'>", fileItem.getFileUrl());
                 }
+                emo = utils.printThumb(gid, 50, 50);
             }
             extraData.put(item.getDate(), emo);
         });

@@ -24,35 +24,6 @@ public class SentimentService {
     private final SentimentRepository sentimentRepository;
     private final CodeValueService codeValueService;
     private final FileInfoService fileInfoService;
-//    private final MemberRepository memberRepository;
-//
-//    public Sentiment create(Long memberSeq) {
-//        Member member = memberRepository.findById(memberSeq)
-//                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 멤버입니다."));
-//
-//        String gid = UUID.randomUUID().toString();
-//
-//        Sentiment sentiment = new Sentiment();
-//        sentiment.setGid(gid);
-//        sentiment.setContent("");
-//        sentiment.setSentiments("");
-//        sentimentRepository.save(sentiment);
-//
-//        return sentimentRepository.saveAndFlush(sentiment);
-//    }
-
-//    public Sentiment update(String gid, SentimentRequest request) {
-//        // Sentiment 조회
-//        Sentiment sentiment = sentimentRepository.findById(gid)
-//                .orElseThrow(() -> new IllegalArgumentException("해당 감정 분석 데이터가 존재하지 않습니다."));
-//
-//        // 값 업데이트
-//        sentiment.setContent(request.getContent());
-//        sentiment.setSentiments(request.getSentiments());
-//
-//        // 저장 후 반환
-//        return sentimentRepository.saveAndFlush(sentiment);
-//    }
 
     public void update(DiaryRequest form) {
         
@@ -88,7 +59,7 @@ public class SentimentService {
             String iconGid = codeValueService.get(code, String.class);
             FileInfo fileItem = fileInfoService.get(iconGid);
             if (fileItem != null) {
-                items.set(i, String.format("<img src='%s'>", fileItem.getFileUrl()));
+                items.set(i, String.format("<img src='%s' width=50 height=50>", fileItem.getFileUrl()));
             }
         }
 

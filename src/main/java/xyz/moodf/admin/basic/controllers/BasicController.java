@@ -8,11 +8,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import xyz.moodf.admin.global.controllers.CommonController;
 import xyz.moodf.global.annotations.ApplyCommonController;
+import xyz.moodf.global.codevalue.entities.CodeValue;
 import xyz.moodf.global.codevalue.services.CodeValueService;
 import xyz.moodf.global.exceptions.script.AlertException;
 import xyz.moodf.global.file.controllers.RequestUpload;
+import xyz.moodf.global.file.services.FileDeleteService;
 import xyz.moodf.global.file.services.FileUploadService;
 
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -23,6 +26,7 @@ public class BasicController extends CommonController {
 
     private final FileUploadService fileUploadService;
     private final CodeValueService codeValueService;
+    private final FileDeleteService fileDeleteService;
 
     @Override
     @ModelAttribute("mainCode")
@@ -41,6 +45,11 @@ public class BasicController extends CommonController {
     public String imageConfig(Model model) {
         commonProcess("image", model);
 
+        // "image" 카테고리로 저장된 파일 리스트 불러오기
+        List<CodeValue> items = codeValueService.getList("image");
+
+        model.addAttribute("items", items);
+
         return "admin/basic/image";
     }
 
@@ -52,7 +61,7 @@ public class BasicController extends CommonController {
     }
 
     @PostMapping("/image")
-    public String imageProcess(@RequestParam(name = "code", required = false) String code,
+    public String imageUploadProcess(@RequestParam(name = "code", required = false) String code,
                                @RequestPart(name = "file", required = false) MultipartFile file,
                                Model model) {
 
@@ -74,9 +83,21 @@ public class BasicController extends CommonController {
         fileUploadService.uploadProcess(form);
         fileUploadService.processDone(gid);
 
-        codeValueService.set(code, gid, false);
+        codeValueService.set("image", code, gid, false);
 
         model.addAttribute("script", "parent.location.reload();");
+        return "common/_execute_script";
+    }
+
+    @GetMapping("/image/{code}")
+    public String imageDeleteProcess(@PathVariable("code") String code, Model model) {
+
+        String gid = codeValueService.get(code, String.class);
+        fileDeleteService.deleteProcess(gid);
+        codeValueService.remove(code);
+
+        model.addAttribute("script", "parent.location.reload();");
+
         return "common/_execute_script";
     }
 
