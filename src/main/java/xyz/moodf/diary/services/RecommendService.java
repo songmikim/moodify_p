@@ -7,7 +7,10 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import xyz.moodf.diary.entities.RecMusic;
+import xyz.moodf.diary.entities.Sentiment;
 import xyz.moodf.diary.repositories.RecMusicRepository;
+import xyz.moodf.diary.repositories.SentimentRepository;
+import xyz.moodf.member.entities.Member;
 import xyz.moodf.spotify.entities.Music;
 import xyz.moodf.spotify.entities.QMusic;
 import xyz.moodf.spotify.repositories.MusicRepository;
@@ -25,6 +28,7 @@ public class RecommendService {
     private final JPAQueryFactory queryFactory;
     private final MusicRepository repository;
     private final RecMusicRepository recMusicRepository;
+    private final SentimentRepository sentimentRepository;
 
     // 일기 감정과 음악 감정 매치
     static {
@@ -122,6 +126,36 @@ public class RecommendService {
         }
 
         return item;
+    }
+
+    /**
+     * 감정별 추천곡 목록 조회
+     * @param member
+     * @param emotion
+     * @return
+     */
+    public List<Music> getSongs(Member member, String emotion) {
+        if (member == null || !StringUtils.hasText(emotion)) {
+            return List.of();
+        }
+
+        List<Sentiment> sentiments = sentimentRepository.findByMember(member);
+        List<Music> songs = new ArrayList<>();
+
+        for (Sentiment sentiment : sentiments) {
+            String text = sentiment.getSentiments();
+            if (!StringUtils.hasText(text)) continue;
+
+            String first = text.split(" ")[0];
+            if (!emotion.equals(first)) continue;
+
+            RecMusic recMusic = recMusicRepository.findById(sentiment.getGid()).orElse(null);
+            if (recMusic == null) continue;
+
+            songs.addAll(recMusicToMusicList(recMusic));
+        }
+
+        return songs;
     }
 
     /**
