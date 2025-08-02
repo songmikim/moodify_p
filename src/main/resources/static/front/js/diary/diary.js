@@ -5,14 +5,53 @@ window.addEventListener("DOMContentLoaded", function () {
     const dateInput = document.getElementById('date');
     const editable = document.querySelectorAll('#title, #weather, #content, #btn-save');
 
+    let isSaved = false;
+    const form = document.querySelector("form");
+    const gid = document.querySelector('input[name="gid"]')?.value;
+    const date = document.querySelector('input[name="date"]')?.value;
+    let originalDate = dateInput?.value ?? null;
+
+    // 저장 버튼 클릭 시 저장 완료 처리
+    form?.addEventListener("submit", function () {
+        isSaved = true;
+        clearInterval(intervalId);
+    });
+
+    // 날짜 변경 시 수동 확인 후 이동 or 취소 처리
     if (dateInput) {
-        dateInput.addEventListener('change', function () {
+        dateInput.addEventListener("change", function () {
             const selectedDate = this.value;
-            if (selectedDate) {
+            if (selectedDate === originalDate) return;
+
+            const confirmMessage = "작성 중인 내용을 저장하지 않고 나가시겠습니까?";
+            const proceed = window.confirm(confirmMessage);
+
+            if (proceed) {
+                isSaved = true; // 이탈 허용 → 삭제 안 하도록 플래그 변경
                 window.location.href = `/diary/${selectedDate}`;
+            } else {
+                this.value = originalDate;
             }
         });
     }
+
+    // 페이지 이탈 시 경고
+    window.addEventListener("beforeunload", function (e) {
+        if (!isSaved) {
+            const message = "작성 중인 내용을 저장하지 않고 나가시겠습니까?";
+            e.preventDefault();
+            e.returnValue = message;
+            return message;
+        }
+    });
+
+    // 페이지 이탈 시 삭제 요청 (임시 데이터 정리)
+    window.addEventListener("beforeunload", () => {
+        if (!isSaved && gid) {
+            const payload = JSON.stringify({ gid });
+            navigator.sendBeacon("/diary/delete", new Blob([payload], { type: "application/json" }));
+        }
+    });
 
     if (editBtn) {
         editBtn.addEventListener('click', () => {
@@ -37,8 +76,7 @@ window.addEventListener("DOMContentLoaded", function () {
     if (deleteBtn) {
         deleteBtn.addEventListener('click', () => {
             if (confirm('정말 삭제하시겠습니까?')) {
-                const gid = document.querySelector('input[name="gid"]')?.value;
-                const date = document.querySelector('input[name="date"]')?.value;
+
                 if (!gid || !date) return;
 
                 commonLib.ajaxLoad(
