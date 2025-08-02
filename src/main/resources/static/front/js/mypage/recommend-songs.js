@@ -1,24 +1,13 @@
 window.addEventListener('DOMContentLoaded', function() {
 
-    // JS 내 샘플 추천 곡 데이터 (컨트롤러에서 받을 때까지 임시 사용)
-    const SAMPLE_SONGS = {
-        happiness: ["Happy - Pharrell Williams", "Lovely Day - Bill Withers"],
-        sadness:   ["Someone Like You - Adele", "Fix You - Coldplay"],
-        anger:     ["Break Stuff - Limp Bizkit", "Killing In The Name - Rage Against The Machine"],
-        fear:      ["Creep - Radiohead", "Thriller - Michael Jackson"],
-        hurt:      ["Hurt - Johnny Cash", "Everybody Hurts - R.E.M."],
-        surprise:  ["Surprise Yourself - Jack Garratt", "What A Wonderful World - Louis Armstrong"]
-    };
-
-
     // 이미지 변경 예정..
     const emotions = [
         { emotion: 'happiness', imagePath: '/common/images/sentiments/happiness.png', altText: '기쁨' },
-        { emotion: 'sadness', imagePath: '/common/images/sentiments/happiness.png', altText: '슬픔' },
-        { emotion: 'anger', imagePath: '/common/images/sentiments/happiness.png', altText: '분노' },
-        { emotion: 'fear', imagePath: '/common/images/sentiments/happiness.png', altText: '불안' },
-        { emotion: 'hurt', imagePath: '/common/images/sentiments/happiness.png', altText: '상처' },
-        { emotion: 'surprise', imagePath: '/common/images/sentiments/happiness.png', altText: '당황' }
+        { emotion: 'sadness', imagePath: '/common/images/sentiments/sadness.png', altText: '슬픔' },
+        { emotion: 'anger', imagePath: '/common/images/sentiments/anger.png', altText: '분노' },
+        { emotion: 'fear', imagePath: '/common/images/sentiments/fear.png', altText: '불안' },
+        { emotion: 'hurt', imagePath: '/common/images/sentiments/hurt.png', altText: '상처' },
+        { emotion: 'surprise', imagePath: '/common/images/sentiments/surprise.png', altText: '당황' }
     ];
 
     const tabs = document.getElementById('songTabs');
@@ -28,7 +17,8 @@ window.addEventListener('DOMContentLoaded', function() {
         emotions.forEach(({ emotion, imagePath, altText }) => {
             const button = document.createElement('button');
             button.type = 'button';
-            button.dataset.emotion = emotion;
+            button.dataset.emotion = emotion; // 영문 코드 보관
+            button.dataset.sentiment = altText; // 한글 감정명 저장
 
             const img = document.createElement('img');
             img.src = imagePath;
@@ -41,7 +31,7 @@ window.addEventListener('DOMContentLoaded', function() {
             button.addEventListener('click', function() {
                 tabs.querySelectorAll('button').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
-                loadSongs(emotion);
+                loadSongs(this.dataset.sentiment);
             });
         });
 
@@ -49,38 +39,45 @@ window.addEventListener('DOMContentLoaded', function() {
         const firstButton = tabs.querySelector('button');
         if (firstButton) {
             firstButton.classList.add('active');
-            loadSongs(firstButton.dataset.emotion);
+            loadSongs(firstButton.dataset.sentiment);
         }
     }
 
-    // 곡 로드 함수 (컨트롤러가 준비되면 주석 해제)
+    // 곡 로드 함수
     function loadSongs(emotion) {
-        const songs = SAMPLE_SONGS[emotion] || [];
-
-        // --- 컨트롤러 연동 시 여기를 주석 해제하세요 ---
-        /*
         const { ajaxLoad } = commonLib;
         ajaxLoad(`/api/mypage/recommend-songs?emotion=${emotion}`, (res) => {
             const songs = Array.isArray(res.data) ? res.data : [];
-            renderSongs(songs);
+            renderSongs(songs, res.message);
         }, (err) => console.error(err));
-        return;
-        */
-        // -------------------------------------------
-
-        // 샘플 데이터 렌더링
-        renderSongs(songs);
     }
 
     // 화면에 곡 리스트 렌더링
-    function renderSongs(songs) {
+    function renderSongs(songs, message) {
         contents.innerHTML = '';
         const ul = document.createElement('ul');
-        songs.forEach(song => {
+        const { modal } = commonLib;
+
+        if (songs.length === 0) {
             const li = document.createElement('li');
-            li.textContent = song;
+            li.textContent = message || '추천된 곡이 없습니다.';
             ul.appendChild(li);
-        });
+        } else {
+            songs.forEach(song => {
+                const li = document.createElement('li');
+                li.classList.add('modal-open');
+                li.dataset.url = `/diary/recommend/${song.seq}`;
+                li.dataset.title = `${song.song} - ${song.artist}`;
+                li.dataset.width = '500';
+                li.dataset.height = '500';
+                li.textContent = `${song.song} - ${song.artist}`;
+                li.addEventListener('click', function() {
+                    modal.open(null, this.dataset.url, this.dataset.width, this.dataset.height, this.dataset.title);
+                });
+                ul.appendChild(li);
+            });
+        }
+
         contents.appendChild(ul);
     }
 });
