@@ -12,20 +12,15 @@ import xyz.moodf.diary.constants.Weather;
 import xyz.moodf.diary.dtos.DiaryRequest;
 import xyz.moodf.diary.entities.Diary;
 import xyz.moodf.diary.entities.DiaryId;
-import xyz.moodf.diary.entities.RecMusic;
 import xyz.moodf.diary.repositories.DiaryRepository;
 import xyz.moodf.diary.repositories.SentimentRepository;
 import xyz.moodf.diary.services.DiaryInfoService;
 import xyz.moodf.diary.services.DiaryService;
-import xyz.moodf.diary.services.RecommendService;
 import xyz.moodf.diary.services.SentimentService;
-import xyz.moodf.diary.validators.DiaryValidator;
 import xyz.moodf.global.annotations.ApplyCommonController;
-import xyz.moodf.global.codevalue.services.CodeValueService;
 import xyz.moodf.global.libs.Utils;
 import xyz.moodf.member.entities.Member;
 import xyz.moodf.member.libs.MemberUtil;
-import xyz.moodf.spotify.entities.Music;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -253,6 +248,7 @@ public class DiaryController {
         } else if (mode.equals("result")) {
             pageTitle = utils.getMessage("일기_분석_결과");
             addScript.add("diary/calendar");
+            addCss.add("diary/result");
             addCommonScript.add("modal");
         } else if (mode.equals("calendar")) {
             pageTitle = utils.getMessage("일기_목록");
