@@ -1,15 +1,71 @@
-/* 실시간 감정 분석 결과 S */
-.current-sentiment {
-    position: absolute;
-    top: 100px;
-    left: 100px;
-    opacity: 0;
-    transition: all 1s;
+.diary-result-page {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    font-family: 'Noto Sans KR', sans-serif;
+    color: #2e2e2e;
 }
 
-.current-sentiment.show {
-    color: red;
-    opacity: 1;
-    font-size: 3rem;
+.diary-result-page h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #ffb6b9;
 }
-/* 실시간 감정 분석 결과 E */
+
+.items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.item {
+    background-color: #fff;
+    border: 1px solid #ffb6b9;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.item:hover {
+    background-color: #ffe3e4;
+    transform: translateY(-3px);
+}
+
+.item div {
+    margin-bottom: 6px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.item div:first-child {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.no-data {
+    text-align: center;
+    padding: 40px 0;
+    color: #999;
+    font-size: 16px;
+}
+
+a.btn {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 10px 20px;
+    border: none;
+    background-color: #ffb6b9;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.2s;
+}
+
+a.btn:hover {
+    background-color: #ff9ea2;
+}
