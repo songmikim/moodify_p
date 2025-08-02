@@ -61,7 +61,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
         // 저장 중이라면 삭제하지 않음
         if (!window.isSaved && window.gid && window.date) {
-            const payload = JSON.stringify({ window.gid });
+            const payload = JSON.stringify({ gid: window.gid });
             navigator.sendBeacon(`/diary/delete`, new Blob([payload], {
                 type: "application/json"
             }));
