@@ -20,7 +20,10 @@ window.addEventListener("DOMContentLoaded", function() {
                 const {date} = this.dataset;
 
                 const clickedDate = new Date(date);
+                clickedDate.setHours(0, 0, 0, 0);  // 이거 안 하면 오전 9시로 자동 설정됨
                 const now = new Date();
+
+                //console.log("date", clickedDate, "now", now);
                 if (clickedDate <= now) {
                     parent.calendarSelectCallback(date);
                 }
