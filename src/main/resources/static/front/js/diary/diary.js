@@ -48,13 +48,6 @@ window.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // 삭제 버튼 클릭 시 감정 분석 중단
-    if (deleteBtn) {
-        deleteBtn.addEventListener('click', () => {
-            clearInterval(window.intervalId);
-        });
-    }
-
     // 페이지 이탈 시 감정 분석 중단 및 삭제 요청
     window.addEventListener("beforeunload", (e) => {
         clearInterval(window.intervalId);
@@ -93,6 +86,9 @@ window.addEventListener("DOMContentLoaded", function () {
             if (confirm('정말 삭제하시겠습니까?')) {
 
                 if (!gid || !date) return;
+
+                window.isSaved = true;  // 이탈 시 삭제 방지 + unload 알림 차단
+                clearInterval(window.intervalId);  // 감정 분석 중단
 
                 commonLib.ajaxLoad(
                     `/diary/delete/${gid}`,
