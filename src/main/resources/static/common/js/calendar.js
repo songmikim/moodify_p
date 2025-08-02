@@ -1,5 +1,4 @@
 window.addEventListener("DOMContentLoaded", function() {
-    /* 캘린더 클릭 이벤트: 날짜 클릭 시 해당 날짜의 일기 페이지로 이동 S */
 
     /* 현재 페이지의 년, 월 값을 부모 창에 전달 */
     if (typeof parent.initCalendar === 'function') {
@@ -13,17 +12,20 @@ window.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-
-    /* 캘린더 클릭 이벤트: 날짜 클릭 시 해당 날짜의 일기 페이지로 이동 E */
-
-
+    /* 캘린더 클릭 이벤트: 날짜 클릭 시 해당 날짜의 일기 페이지로 이동 S */
     const selectDays = document.getElementsByClassName("select-day");
     for (const el of selectDays) {
         el.addEventListener("click", function() {
             if (typeof parent.calendarSelectCallback === 'function') {
                 const {date} = this.dataset;
-                parent.calendarSelectCallback(date);
+
+                const clickedDate = new Date(date);
+                const now = new Date();
+                if (clickedDate <= now) {
+                    parent.calendarSelectCallback(date);
+                }
             }
         });
     }
+    /* 캘린더 클릭 이벤트: 날짜 클릭 시 해당 날짜의 일기 페이지로 이동 E */
 });

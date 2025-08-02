@@ -5,3 +5,7 @@ function initCalendar(year, month) {
 
     location.search = searchParams.toString();
 }
+
+function calendarSelectCallback(date) {
+    location.href = `/diary/${date}`;
+}

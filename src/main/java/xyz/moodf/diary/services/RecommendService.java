@@ -6,15 +6,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import xyz.moodf.diary.entities.RecMusic;
+import xyz.moodf.diary.repositories.RecMusicRepository;
 import xyz.moodf.spotify.entities.Music;
 import xyz.moodf.spotify.entities.QMusic;
 import xyz.moodf.spotify.repositories.MusicRepository;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Lazy
 @Service
@@ -23,6 +24,7 @@ public class RecommendService {
     private static Map<String, List<String>> sentiments;
     private final JPAQueryFactory queryFactory;
     private final MusicRepository repository;
+    private final RecMusicRepository recMusicRepository;
 
     // 일기 감정과 음악 감정 매치
     static {
@@ -37,6 +39,43 @@ public class RecommendService {
 
     public static List<String> getMusicEmotion(String sentiment) {
         return sentiment == null ? List.of() : sentiments.get(sentiment);
+    }
+
+    public RecMusic process(String gid, String emotion) {
+        RecMusic recMusic = recMusicRepository.findById(gid).orElse(null);
+
+        if (recMusic != null) return recMusic;
+
+        recMusic.setGid(gid);
+
+        List<Music> musicList = getContents(emotion);
+
+        String musicSeqList = musicList.stream()
+                .map(music -> String.valueOf(music.getSeq()))
+                .collect(Collectors.joining(","));
+
+        recMusic.setMusics(musicSeqList);
+
+        recMusicRepository.saveAndFlush(recMusic);
+
+        return recMusic;
+    }
+
+    public List<Music> recMusicToMusicList(RecMusic recMusic) {
+        String seqString = recMusic.getMusics();
+
+        List<Long> musicSeqList = Arrays.stream(seqString.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .map(Long::valueOf)
+                .toList();
+
+        List<Music> musicList = new ArrayList<>();
+        for (Long seq : musicSeqList) {
+            musicList.add(get(seq));
+        }
+
+        return musicList;
     }
 
     /**

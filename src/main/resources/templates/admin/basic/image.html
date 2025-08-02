@@ -21,5 +21,29 @@
         </table>
         <button type="submit" class="submit-btn">등록하기</button>
     </form>
+
+    <h2>이미지 목록</h2>
+
+    <table class="table-rows">
+        <thead>
+        <tr>
+            <th width="150">이미지 코드</th>
+            <th width="150">이미지</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr th:if="${items == null || items.isEmpty()}">
+                <td colspan="3" class="no-data">등록된 이미지가 없습니다.</td>
+            </tr>
+            <tr th:unless="${items == null || items.isEmpty()}" th:each="item : ${items}" th:object="${item}">
+                <td th:text="*{code}" align="center"></td>
+                <td th:utext="*{@utils.printThumb(value, 130, 130)}" align="center"></td>
+                <td>
+                    <a th:href="@{/admin/config/image/{code}(code=*{code})}" class="sbtn black" onclick="return confirm('정말 삭제하시겠습니까?')" target="ifrmProcess">삭제하기</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </section>
 </html>

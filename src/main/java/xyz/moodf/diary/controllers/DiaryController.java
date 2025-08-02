@@ -10,9 +10,9 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import xyz.moodf.diary.constants.Weather;
 import xyz.moodf.diary.dtos.DiaryRequest;
-import xyz.moodf.diary.dtos.SentimentRequest;
 import xyz.moodf.diary.entities.Diary;
 import xyz.moodf.diary.entities.DiaryId;
+import xyz.moodf.diary.entities.RecMusic;
 import xyz.moodf.diary.repositories.DiaryRepository;
 import xyz.moodf.diary.repositories.SentimentRepository;
 import xyz.moodf.diary.services.DiaryInfoService;
@@ -22,8 +22,6 @@ import xyz.moodf.diary.services.SentimentService;
 import xyz.moodf.diary.validators.DiaryValidator;
 import xyz.moodf.global.annotations.ApplyCommonController;
 import xyz.moodf.global.codevalue.services.CodeValueService;
-import xyz.moodf.global.file.entities.FileInfo;
-import xyz.moodf.global.file.services.FileInfoService;
 import xyz.moodf.global.libs.Utils;
 import xyz.moodf.member.entities.Member;
 import xyz.moodf.member.libs.MemberUtil;
@@ -46,7 +44,6 @@ public class DiaryController {
     private final SentimentRepository sentimentRepository;
 
     private final CodeValueService codeValueService;
-    private final FileInfoService fileInfoService;
 
     private final DiaryService diaryService;
     private final DiaryInfoService infoService;
@@ -151,8 +148,14 @@ public class DiaryController {
         // 감정 분석에 따른 추천 콘텐츠 리스트
         Diary diary = infoService.get(date);
         String sentiment = diary.getStrongest();
-        List<Music> items = recommendService.getContents(sentiment);
+
+        // 추천 콘텐츠 리스트 저장 후 불러오기
+        RecMusic recMusic = recommendService.process(diary.getGid(), sentiment);
+        List<Music> items = recommendService.recMusicToMusicList(recMusic);
         model.addAttribute("items", items);
+
+        //List<Music> items = recommendService.getContents(sentiment);
+        //model.addAttribute("items", items);
 
         // 캘린더로 이동할 때 쿼리스트링 구하기
         Integer year = date.getYear();
@@ -182,10 +185,7 @@ public class DiaryController {
             String emo = item.getStrongest();
             String gid = codeValueService.get(emo, String.class);
             if (StringUtils.hasText(gid)) {
-                FileInfo fileItem = fileInfoService.get(gid);
-                if (fileItem != null) {
-                    emo = String.format("<img src='%s'>", fileItem.getFileUrl());
-                }
+                emo = utils.printThumb(gid, 50, 50);
             }
             extraData.put(item.getDate(), emo);
         });
@@ -193,39 +193,7 @@ public class DiaryController {
         model.addAttribute("year", year);
         model.addAttribute("month", month);
 
-//        Member member = memberUtil.getMember();
-//        List<Diary> diaryList = infoService.getList(member);
-//
-//        /* 날짜마다 감정 이미지 삽입 */
-//        for (Diary diary : diaryList) {
-//            String sentimentString = "";
-//            String diarySentiment = infoService.getMostFrequentSentiment(member, diary.getDate());
-//
-//            /* 추후에 수정 필요 - 감정 결과에 따라 이미지 다르게 띄우기 */
-//            switch (diarySentiment) {
-//                case "기쁨": sentimentString = "happiness"; break;
-//                default: break;
-//            }
-//
-//            extraData.put(diary.getDate(), "<img src='/common/images/sentiments/" + sentimentString + ".png'>");
-//        }
-
         return utils.tpl("diary/calendar");
-    }
-
-    @PostMapping("/update")
-    public ResponseEntity<?> updateDiary(
-            @RequestParam("gid") String gid,
-            @RequestBody SentimentRequest request) {
-
-        // 임시...
-        request.setSentiments("기쁨");
-
-        System.out.println("sentiments: " + request.getSentiments());
-        System.out.println("content: " + request.getContent());
-
-//        sentimentService.update(gid, request);
-        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/result")
