@@ -5,16 +5,19 @@ window.addEventListener("DOMContentLoaded", function () {
     const dateInput = document.getElementById('date');
     const editable = document.querySelectorAll('#title, #weather, #content, #btn-save');
 
-    let isSaved = false;
     const form = document.querySelector("form");
     const gid = document.querySelector('input[name="gid"]')?.value;
     const date = document.querySelector('input[name="date"]')?.value;
     let originalDate = dateInput?.value ?? null;
 
+    window.isSaved = false;
+    window.gid = gid;
+    window.date = date;
+
     // 저장 버튼 클릭 시 저장 완료 처리
     form?.addEventListener("submit", function () {
-        isSaved = true;
-        clearInterval(intervalId);
+        window.isSaved = true;
+        clearInterval(window.intervalId);
     });
 
     // 날짜 변경 시 수동 확인 후 이동 or 취소 처리
@@ -56,9 +59,12 @@ window.addEventListener("DOMContentLoaded", function () {
     window.addEventListener("beforeunload", (e) => {
         clearInterval(window.intervalId);
 
-        if (!window.isSaved && gid && date) {
-            const payload = JSON.stringify({ gid });
-            navigator.sendBeacon("/diary/delete", new Blob([payload], { type: "application/json" }));
+        // 저장 중이라면 삭제하지 않음
+        if (!window.isSaved && window.gid && window.date) {
+            const payload = JSON.stringify({ window.gid });
+            navigator.sendBeacon(`/diary/delete`, new Blob([payload], {
+                type: "application/json"
+            }));
         }
     });
 
