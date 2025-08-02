@@ -43,10 +43,12 @@ public class RecommendService {
 
     public RecMusic process(String gid, String emotion) {
         RecMusic recMusic = recMusicRepository.findById(gid).orElse(null);
-
         if (recMusic != null) return recMusic;
 
-        recMusic.setGid(gid);
+        // 없으면 새로 만들기
+        RecMusic newRecMusic = new RecMusic();
+
+        newRecMusic.setGid(gid);
 
         List<Music> musicList = getContents(emotion);
 
@@ -54,11 +56,11 @@ public class RecommendService {
                 .map(music -> String.valueOf(music.getSeq()))
                 .collect(Collectors.joining(","));
 
-        recMusic.setMusics(musicSeqList);
+        newRecMusic.setMusics(musicSeqList);
 
-        recMusicRepository.saveAndFlush(recMusic);
+        recMusicRepository.saveAndFlush(newRecMusic);
 
-        return recMusic;
+        return newRecMusic;
     }
 
     public List<Music> recMusicToMusicList(RecMusic recMusic) {
