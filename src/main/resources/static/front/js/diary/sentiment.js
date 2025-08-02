@@ -3,19 +3,12 @@ window.addEventListener("DOMContentLoaded", function () {
     const contentInput = document.getElementById('content');
 
     // 2초마다 감정 분석을 위한 데이터 전송
-    const intervalId = setInterval(() => {
+    window.intervalId = setInterval(() => {
         if (contentInput.disabled) return;
+
         const formData = new FormData(frmSave);
         ajaxLoad(`/diary/sentiment`, null, null, "POST", formData, null, true);
     }, 2000);
-
-    // 삭제할 때 감정 분석 중단
-    const deleteBtn = document.getElementById('btn-delete');
-    if (deleteBtn) {
-        deleteBtn.addEventListener('click', () => {
-            clearInterval(intervalId);  // 감정 분석 중단
-        });
-    }
 
     // 현재 감정을 실시간 출력하기 위한 데이터 조회
     const gid = frmSave.gid.value;

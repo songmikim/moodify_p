@@ -45,9 +45,18 @@ window.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // 페이지 이탈 시 삭제 요청 (임시 데이터 정리)
-    window.addEventListener("beforeunload", () => {
-        if (!isSaved && gid) {
+    // 삭제 버튼 클릭 시 감정 분석 중단
+    if (deleteBtn) {
+        deleteBtn.addEventListener('click', () => {
+            clearInterval(window.intervalId);
+        });
+    }
+
+    // 페이지 이탈 시 감정 분석 중단 및 삭제 요청
+    window.addEventListener("beforeunload", (e) => {
+        clearInterval(window.intervalId);
+
+        if (!window.isSaved && gid && date) {
             const payload = JSON.stringify({ gid });
             navigator.sendBeacon("/diary/delete", new Blob([payload], { type: "application/json" }));
         }

@@ -218,8 +218,9 @@ public class DiaryController {
 
     @PostMapping("/delete")
     @ResponseBody
-    public ResponseEntity<?> deleteSentiment(@RequestParam String gid) {
-        System.out.println("삭제요청");
+    public ResponseEntity<?> deleteSentiment(@RequestBody Map<String, String> payload) {
+        String gid = payload.get("gid");
+        System.out.println("삭제요청: " + gid);
         sentimentRepository.deleteById(gid);
         return ResponseEntity.ok().build();
     }
