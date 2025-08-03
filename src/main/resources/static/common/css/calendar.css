@@ -60,17 +60,22 @@
 
 /* 감정 이미지 E */
 
+/* 해당 월 이외의 날짜는 흐리게 표시 */
+.not-current-month {
+    opacity: 0.4;
+}
+
 /* 캘린더 클릭 S */
-.select-day:not(.disabled):hover {
+.select-day:hover {
     cursor: pointer;
     background-color: var(--mainc);
 }
 
 .select-day.disabled {
-    pointer-events: none;
-    opacity: 0.4;
-    background-color: #eee;
-    color: #888;
-    cursor: default;
+    pointer-events: none !important;
+    opacity: 0.6 !important;
+    background-color: #eee !important;
+    color: #aaa !important;
+    cursor: default !important;
 }
 /* 캘린더 클릭 E */

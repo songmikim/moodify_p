@@ -66,9 +66,11 @@ public class SentimentService {
         return items;
     }
 
-    public void resetDone(String gid) {
+    public void setDone(String gid, boolean done) {
         Sentiment sentiment = sentimentRepository.findById(gid).orElse(null);
-
-        sentiment.setDone(false);
+        if (sentiment != null) {
+            sentiment.setDone(done);
+            sentimentRepository.saveAndFlush(sentiment);
+        }
     }
 }

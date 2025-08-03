@@ -102,14 +102,12 @@ public class DiaryController {
             request.setContent(diary.getContent());
             request.setGid(diary.getGid());
 
-            if (sentiment != null)
-                request.setDone(sentiment.isDone());
-            else
+            if (sentiment != null) {
+                request.setDone(true);
+            }
+            else {
                 request.setDone(false);
-
-            System.out.println(request);
-
-//            sentimentService.resetDone(diary.getGid());  // 다시 감정 분석할 수 있게 done을 false로 변환
+            }
 
             isSaved = true;
             model.addAttribute("diaryRequest", request);
@@ -155,6 +153,26 @@ public class DiaryController {
     @GetMapping("/sentiment/{gid}")
     public List<String> currentSentiment(@PathVariable("gid") String gid) {
         return sentimentService.get(gid);
+    }
+
+    @PostMapping("sentiment/updateDone/{gid}")
+    @ResponseBody
+    public ResponseEntity<?> updateDone(@PathVariable("gid") String gid,
+                                        @RequestBody Map<String, Object> payload) {
+        Boolean done = (Boolean) payload.get("done");
+
+        if (done == null) {
+            return ResponseEntity.badRequest().body(Map.of("error", "done 값이 없습니다."));
+        }
+
+        Sentiment sentiment = sentimentRepository.findById(gid)
+                .orElse(null);
+        if (sentiment != null) {
+            sentimentService.setDone(gid, done);
+            return ResponseEntity.ok(Map.of("status", "updated"));
+        } else {
+            return ResponseEntity.status(404).body(Map.of("error", "해당 gid의 감정 정보가 없습니다."));
+        }
     }
 
     @GetMapping("/result/{date}")
@@ -222,10 +240,18 @@ public class DiaryController {
     @PostMapping("/delete/{gid}")
     @ResponseBody
     public ResponseEntity<?> deleteDiary(@PathVariable("gid") String gid,
-                              @RequestBody Map<String, String> payload) {
+                                         @ModelAttribute("extraData") Map<LocalDate, Object> extraData,
+                                         @RequestBody Map<String, String> payload) {
 
         String dateStr = payload.get("date");
         LocalDate date = LocalDate.parse(dateStr);
+
+        // 캘린더에 표시되는 추가 데이터 삭제
+        if (extraData.get(date) != null) {
+            extraData.remove(date);
+        }
+
+        //System.out.println("엑스트라: " + extraData);
 
         diaryService.delete(gid, date);
 

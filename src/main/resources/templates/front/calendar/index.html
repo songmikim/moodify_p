@@ -24,7 +24,8 @@
     </ul>
     <ul class="day-of-month">
         <li th:each="item: ${items}" th:object="${item}">
-            <div class="inner select-day" th:data-date="*{date}">
+            <div class="inner select-day" th:data-date="*{date}"
+                 th:classappend="${item.date.monthValue != month or item.date.year != year} ? 'not-current-month'">
                 <span class="day" th:text="*{dayWithZero}"></span>
                 <div class="extra" th:if="*{extra != null}" th:utext="*{extra}"></div>
             </div>

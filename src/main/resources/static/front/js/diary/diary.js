@@ -32,18 +32,36 @@ window.addEventListener("DOMContentLoaded", function () {
 
             if (proceed) {
                 clearInterval(window.intervalId);
+                done.value = true;
 
-                // 삭제가 필요한 경우
+                // 생성된 sentiment 데이터 삭제가 필요한 경우
                 if (!window.isSaved) {
                     const payload = JSON.stringify({ gid: window.gid });
                     navigator.sendBeacon(`/diary/delete`, new Blob([payload], {
                         type: "application/json"
                     }));
-                }
 
-                // 이탈은 허용
-                window.isSaved = true;
-                window.location.href = `/diary/${selectedDate}`;
+                    // 이탈은 허용
+                    window.isSaved = true;
+                    window.location.href = `/diary/${selectedDate}`;
+                }
+                // 이미 존재하는 일기면, done=true로 바꿔줌
+                else {
+                    commonLib.ajaxLoad(
+                        `/diary/sentiment/updateDone/${window.gid}`,
+                        () => {
+                            console.log("서버에 done 전송 완료");
+                            window.location.href = `/diary/${selectedDate}`;
+                        },
+                        (err) => {
+                            console.error("done 상태 업데이트 실패:", err);
+                            //alert("서버로 done 상태를 전송하지 못했습니다.");
+                        },
+                        'POST',
+                        JSON.stringify({ done: true }),
+                        { 'Content-Type': 'application/json' }
+                    );
+                }
             } else {
                 this.value = originalDate;
             }
@@ -71,10 +89,27 @@ window.addEventListener("DOMContentLoaded", function () {
                 type: "application/json"
             }));
         }
+        // 이미 존재하는 일기면, done=true로 바꿔줌
+        if (window.isSaved && window.gid) {
+            commonLib.ajaxLoad(
+                `/diary/sentiment/updateDone/${window.gid}`,
+                () => {
+                    console.log("서버에 done 전송 완료");
+                },
+                (err) => {
+                    console.error("done 상태 업데이트 실패:", err);
+                    alert("서버로 done 상태를 전송하지 못했습니다.");
+                },
+                'POST',
+                JSON.stringify({ done: true }),
+                { 'Content-Type': 'application/json' }
+            );
+        }
     });
 
     if (editBtn) {
         editBtn.addEventListener('click', () => {
+            // 수정 가능한 상태로 만들기
             editable.forEach(el => {
                 el.removeAttribute('disabled');
 
@@ -89,10 +124,29 @@ window.addEventListener("DOMContentLoaded", function () {
             });
 
             // done을 false로 설정
+            console.log("done1", done);
             if (done) {
                 done.value = 'false';
             }
+            console.log("done2", done);
 
+            if (window.gid) {
+                commonLib.ajaxLoad(
+                    `/diary/sentiment/updateDone/${window.gid}`,
+                    () => {
+                        console.log("서버에 done 전송 완료");
+                    },
+                    (err) => {
+                        console.error("done 상태 업데이트 실패:", err);
+                        alert("서버로 done 상태를 전송하지 못했습니다.");
+                    },
+                    'POST',
+                    JSON.stringify({ done: false }),
+                    { 'Content-Type': 'application/json' }
+                );
+            }
+
+            // 버튼 UI 처리
             saveBtn.textContent = '수정하기';  // 저장하기를 수정하기로 바꾸고
             editBtn.remove();                // 수정하기 버튼을 지움
             deleteBtn.style.right = 'calc(9.5% + 160px)';  // 삭제 버튼 위치를 기존 수정 버튼 위치로 옮김
@@ -103,13 +157,13 @@ window.addEventListener("DOMContentLoaded", function () {
         deleteBtn.addEventListener('click', () => {
             if (confirm('정말 삭제하시겠습니까?')) {
 
-                if (!gid || !date) return;
+                if (!window.gid || !date) return;
 
                 window.isSaved = true;  // 이탈 시 삭제 방지 + unload 알림 차단
                 clearInterval(window.intervalId);  // 감정 분석 중단
 
                 commonLib.ajaxLoad(
-                    `/diary/delete/${gid}`,
+                    `/diary/delete/${window.gid}`,
                     () => {
                         location.href = `/diary/${date}`;
                     },
