@@ -72,14 +72,8 @@ h2 {
     padding-bottom: 6px;
 }
 
-/* 월 선택 label 스타일 */
-label[for="month"] {
-    font-size: 14px;
-    font-weight: bold;
-    margin-right: 5px;
-}
-
 #month {
+    margin-left: 5px;
     padding: 6px;
     border-radius: 5px;
     border-color: #ccc;

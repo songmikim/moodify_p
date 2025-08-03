@@ -23,10 +23,11 @@ window.addEventListener('DOMContentLoaded', () => {
       `/api/mypage/emotion?type=MONTHLY&sDate=${start}&eDate=${end}`
     ).then(r => r.json());
 
-    // 감정별 통계 데이터 바로 사용
+    // 감정별 통계 데이터 바로 사용 - 키값이 없는 감정 제외
     const monthData = Object.values(res)[0] || {};
-    const emotions  = Object.keys(monthData);
-    const totals    = Object.values(monthData);
+    const entries   = Object.entries(monthData).filter(([emotion]) => emotion?.trim());
+    const emotions  = entries.map(([emotion]) => emotion);
+    const totals    = entries.map(([, total]) => total);
 
     // 기존 차트 제거 후 새로 그리기
     chart?.destroy();
