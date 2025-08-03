@@ -4,6 +4,7 @@
       layout:decorate="~{front/layouts/main}">
 <main layout:fragment="content" class="container mt-4">
     <h1 th:text="${pageTitle}"></h1>
+    <div th:if="${errorMessage}" class="error" th:text="${errorMessage}"></div>
 
     <h2 th:text="#{내_정보}"></h2>
     <div class="user-info">
@@ -23,7 +24,7 @@
     <div class="mt-4">
         <label for="month" th:text="#{월_선택}">월 선택</label>
         <input type="month" id="month" name="month">
-        <canvas id="emotionChart" height="100"></canvas>
+        <canvas id="emotionChart"></canvas>
     </div>
 
 

@@ -92,7 +92,13 @@ public class MyPageController {
      */
     @PostMapping("/delete")
     public String deleteRequest(Model model) {
-        service.requestDelete(memberUtil.getMember());
+        boolean result = service.requestDelete(memberUtil.getMember());
+        if (!result) {
+            commonProcess("index", model);
+            model.addAttribute("member", memberUtil.getMember());
+            model.addAttribute("errorMessage", "메일 발송에 실패했습니다. 잠시 후 다시 시도해주세요.");
+            return utils.tpl("mypage/index");
+        }
         commonProcess("delete", model);
         return utils.tpl("mypage/delete_requested");
     }
@@ -110,10 +116,17 @@ public class MyPageController {
     @GetMapping("/delete/confirm")
     public String deleteConfirm(@RequestParam("token") String token, Model model, HttpServletRequest request) {
         boolean result = service.confirmDelete(token);
+
+        commonProcess("delete", model);
+
         if (result) {
             request.getSession().invalidate();
+            model.addAttribute("success", true);
+        } else {
+            model.addAttribute("success", false);
+            model.addAttribute("errorMessage", utils.getMessage("Delete.token.invalid"));
         }
-        commonProcess("delete", model);
+
         return utils.tpl("mypage/deleted");
     }
 
