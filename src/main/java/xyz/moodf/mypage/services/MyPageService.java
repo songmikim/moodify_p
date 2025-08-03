@@ -40,12 +40,17 @@ public class MyPageService {
      * @param member 현재 로그인된 회원
      * @param currentPassword 입력한 현재 비밀번호
      * @param newPassword 새로운 비밀번호
-     * @return 성공 여부 (true: 변경 성공, false: 현재 비밀번호 불일치)
+     * @return 성공 여부 (true: 변경 성공, false: 실패)
      */
     public boolean changePassword(Member member, String currentPassword, String newPassword) {
         if (!passwordEncoder.matches(currentPassword, member.getPassword())) {
             return false;
         }
+
+        if (passwordEncoder.matches(newPassword, member.getPassword())) {
+            return false;
+        }
+
         member.setPassword(passwordEncoder.encode(newPassword));
         member.setCredentialChangedAt(LocalDateTime.now());
         repository.saveAndFlush(member);

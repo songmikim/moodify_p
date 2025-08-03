@@ -58,6 +58,12 @@ public class PasswordChangeValidator implements Validator, PasswordValidator {
             return;
         }
 
+        // 동일 비밀번호 사용 시 에러 메시지를 추가
+        if (passwordEncoder.matches(form.getPassword(), member.getPassword())) {
+            errors.rejectValue("password", "SameAsCurrent.password");
+            return;
+        }
+
         String password = form.getPassword();
 
         // 새로운 비밀번호 복잡도 체크 (영문자, 숫자, 특수문자 포함 여부)
