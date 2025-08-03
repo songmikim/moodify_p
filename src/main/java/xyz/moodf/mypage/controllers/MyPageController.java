@@ -116,10 +116,17 @@ public class MyPageController {
     @GetMapping("/delete/confirm")
     public String deleteConfirm(@RequestParam("token") String token, Model model, HttpServletRequest request) {
         boolean result = service.confirmDelete(token);
+
+        commonProcess("delete", model);
+
         if (result) {
             request.getSession().invalidate();
+            model.addAttribute("success", true);
+        } else {
+            model.addAttribute("success", false);
+            model.addAttribute("errorMessage", utils.getMessage("Delete.token.invalid"));
         }
-        commonProcess("delete", model);
+
         return utils.tpl("mypage/deleted");
     }
 
