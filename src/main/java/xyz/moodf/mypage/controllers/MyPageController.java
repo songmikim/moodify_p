@@ -92,7 +92,13 @@ public class MyPageController {
      */
     @PostMapping("/delete")
     public String deleteRequest(Model model) {
-        service.requestDelete(memberUtil.getMember());
+        boolean result = service.requestDelete(memberUtil.getMember());
+        if (!result) {
+            commonProcess("index", model);
+            model.addAttribute("member", memberUtil.getMember());
+            model.addAttribute("errorMessage", "메일 발송에 실패했습니다. 잠시 후 다시 시도해주세요.");
+            return utils.tpl("mypage/index");
+        }
         commonProcess("delete", model);
         return utils.tpl("mypage/delete_requested");
     }

@@ -1,7 +1,9 @@
 package xyz.moodf.mypage.services;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -13,12 +15,12 @@ import xyz.moodf.member.repositories.MemberRepository;
 import xyz.moodf.mypage.entities.DeleteAccountToken;
 import xyz.moodf.mypage.repositories.DeleteAccountTokenRepository;
 
-import jakarta.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -68,7 +70,7 @@ public class MyPageService {
      *
      * @param member 탈퇴 요청을 한 회원
      */
-    public void requestDelete(Member member) {
+    public boolean requestDelete(Member member) {
         // 기존 탈퇴 토큰 제거
         tokenRepository.deleteByMember(member);
 
@@ -94,8 +96,19 @@ public class MyPageService {
         );
         Map<String, Object> tplData = new HashMap<>();
         tplData.put("link", link);
-        // 이메일 발송
-        emailSendService.sendMail(emailMessage, "delete", tplData);
+
+
+        boolean result = false;
+        try {
+            result = emailSendService.sendMail(emailMessage, "delete", tplData);
+            if (!result) {
+                log.error("Failed to send delete confirmation email");
+            }
+        } catch (Exception e) {
+            log.error("Exception occurred while sending delete confirmation email", e);
+        }
+
+        return result;
     }
 
     /**
