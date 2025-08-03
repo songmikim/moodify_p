@@ -5,16 +5,20 @@ window.addEventListener("DOMContentLoaded", function () {
     const dateInput = document.getElementById('date');
     const editable = document.querySelectorAll('#title, #weather, #content, #btn-save');
 
-    let isSaved = false;
     const form = document.querySelector("form");
     const gid = document.querySelector('input[name="gid"]')?.value;
     const date = document.querySelector('input[name="date"]')?.value;
+    const done = document.querySelector('input[name="done"]');
     let originalDate = dateInput?.value ?? null;
+
+    window.isSaved = document.querySelector('main')?.dataset.saved === 'true';
+    window.gid = gid;
+    window.date = date;
 
     // 저장 버튼 클릭 시 저장 완료 처리
     form?.addEventListener("submit", function () {
-        isSaved = true;
-        clearInterval(intervalId);
+        window.isSaved = true;
+        clearInterval(window.intervalId);
     });
 
     // 날짜 변경 시 수동 확인 후 이동 or 취소 처리
@@ -27,7 +31,18 @@ window.addEventListener("DOMContentLoaded", function () {
             const proceed = window.confirm(confirmMessage);
 
             if (proceed) {
-                isSaved = true; // 이탈 허용 → 삭제 안 하도록 플래그 변경
+                clearInterval(window.intervalId);
+
+                // 삭제가 필요한 경우
+                if (!window.isSaved) {
+                    const payload = JSON.stringify({ gid: window.gid });
+                    navigator.sendBeacon(`/diary/delete`, new Blob([payload], {
+                        type: "application/json"
+                    }));
+                }
+
+                // 이탈은 허용
+                window.isSaved = true;
                 window.location.href = `/diary/${selectedDate}`;
             } else {
                 this.value = originalDate;
@@ -37,7 +52,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
     // 페이지 이탈 시 경고
     window.addEventListener("beforeunload", function (e) {
-        if (!isSaved) {
+        if (!window.isSaved) {
             const message = "작성 중인 내용을 저장하지 않고 나가시겠습니까?";
             e.preventDefault();
             e.returnValue = message;
@@ -45,20 +60,16 @@ window.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // 삭제 버튼 클릭 시 감정 분석 중단
-    if (deleteBtn) {
-        deleteBtn.addEventListener('click', () => {
-            clearInterval(window.intervalId);
-        });
-    }
-
     // 페이지 이탈 시 감정 분석 중단 및 삭제 요청
     window.addEventListener("beforeunload", (e) => {
         clearInterval(window.intervalId);
 
-        if (!window.isSaved && gid && date) {
-            const payload = JSON.stringify({ gid });
-            navigator.sendBeacon("/diary/delete", new Blob([payload], { type: "application/json" }));
+        // 저장 중이라면 삭제하지 않음
+        if (!window.isSaved && window.gid && window.date) {
+            const payload = JSON.stringify({ gid: window.gid });
+            navigator.sendBeacon(`/diary/delete`, new Blob([payload], {
+                type: "application/json"
+            }));
         }
     });
 
@@ -76,6 +87,12 @@ window.addEventListener("DOMContentLoaded", function () {
                     }
                 }
             });
+
+            // done을 false로 설정
+            if (done) {
+                done.value = 'false';
+            }
+
             saveBtn.textContent = '수정하기';  // 저장하기를 수정하기로 바꾸고
             editBtn.remove();                // 수정하기 버튼을 지움
             deleteBtn.style.right = 'calc(9.5% + 160px)';  // 삭제 버튼 위치를 기존 수정 버튼 위치로 옮김
@@ -87,6 +104,9 @@ window.addEventListener("DOMContentLoaded", function () {
             if (confirm('정말 삭제하시겠습니까?')) {
 
                 if (!gid || !date) return;
+
+                window.isSaved = true;  // 이탈 시 삭제 방지 + unload 알림 차단
+                clearInterval(window.intervalId);  // 감정 분석 중단
 
                 commonLib.ajaxLoad(
                     `/diary/delete/${gid}`,

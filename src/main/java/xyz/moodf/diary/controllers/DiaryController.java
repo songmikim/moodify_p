@@ -13,6 +13,7 @@ import xyz.moodf.diary.dtos.DiaryRequest;
 import xyz.moodf.diary.entities.Diary;
 import xyz.moodf.diary.entities.DiaryId;
 import xyz.moodf.diary.entities.RecMusic;
+import xyz.moodf.diary.entities.Sentiment;
 import xyz.moodf.diary.repositories.DiaryRepository;
 import xyz.moodf.diary.repositories.SentimentRepository;
 import xyz.moodf.diary.services.DiaryInfoService;
@@ -74,6 +75,13 @@ public class DiaryController {
 
         Diary diary = diaryRepository.findById(new DiaryId(member, date))
                 .orElse(null);
+
+        Sentiment sentiment = new Sentiment();
+        if (diary != null) {
+            sentiment = sentimentRepository.findById(diary.getGid())
+                    .orElse(null);
+        }
+
         boolean isSaved = false;
 
         if (diary == null) {
@@ -82,6 +90,7 @@ public class DiaryController {
             form.setDate(date);
             form.setWeather(Weather.NULL);
             form.setGid(UUID.randomUUID().toString());
+            form.setDone(false);
 
             model.addAttribute("diaryRequest", form);
 
@@ -93,7 +102,14 @@ public class DiaryController {
             request.setContent(diary.getContent());
             request.setGid(diary.getGid());
 
-            sentimentService.resetDone(diary.getGid());  // 다시 감정 분석할 수 있게 done을 false로 변환
+            if (sentiment != null)
+                request.setDone(sentiment.isDone());
+            else
+                request.setDone(false);
+
+            System.out.println(request);
+
+//            sentimentService.resetDone(diary.getGid());  // 다시 감정 분석할 수 있게 done을 false로 변환
 
             isSaved = true;
             model.addAttribute("diaryRequest", request);

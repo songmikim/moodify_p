@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
     layout:decorate="~{front/layouts/main}">
-<main layout:fragment="content">
+<main layout:fragment="content" th:attr="data-saved=${isSaved}">
     <h1 th:text="${pageTitle}"></h1>
 
     <div class="current-sentiment"></div>
@@ -12,6 +12,8 @@
 
         <input type="hidden" id="gid" name="gid" th:field="*{gid}" />
         <div class="error" th:each="err : ${#fields.errors('gid')}" th:text="${err}"></div>
+
+        <input type="hidden" name="done" th:value="*{done}" />
 
         <div class="date-wea flex">
             <div>
