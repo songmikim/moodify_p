@@ -240,10 +240,18 @@ public class DiaryController {
     @PostMapping("/delete/{gid}")
     @ResponseBody
     public ResponseEntity<?> deleteDiary(@PathVariable("gid") String gid,
-                              @RequestBody Map<String, String> payload) {
+                                         @ModelAttribute("extraData") Map<LocalDate, Object> extraData,
+                                         @RequestBody Map<String, String> payload) {
 
         String dateStr = payload.get("date");
         LocalDate date = LocalDate.parse(dateStr);
+
+        // 캘린더에 표시되는 추가 데이터 삭제
+        if (extraData.get(date) != null) {
+            extraData.remove(date);
+        }
+
+        //System.out.println("엑스트라: " + extraData);
 
         diaryService.delete(gid, date);
 
