@@ -5,11 +5,13 @@
 <main layout:fragment="content">
     <nav>
         <a th:href="@{/calendar(year=${prevYear}, month=${prevMonth})}">
-            <button type="button" th:text="#{이전달}"></button>
+            <i class="xi-angle-left-min"></i>
         </a>
-        <span th:text="${year}"></span>.<span th:text="${#numbers.formatInteger(month, 2)}"></span>
+        <span>
+            <span th:text="${year}"></span>.<span th:text="${#numbers.formatInteger(month, 2)}"></span>
+        </span>
         <a th:href="@{/calendar(year=${nextYear}, month=${nextMonth})}">
-            <button type="button" th:text="#{다음달}"></button>
+            <i class="xi-angle-right-min"></i>
         </a>
     </nav>
 
