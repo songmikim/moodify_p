@@ -14,12 +14,12 @@
   <div class="author-section" th:if="${!memberUtil.isLogin()}">
     <div class="form-group">
       <label th:text="#{작성자}">작성자</label>
-      <input type="text" name="commenter" th:field="*{commenter}"
+      <input type="text" name="commenter" th:field="*{commenter}" maxlength="60"
              th:placeholder="#{작성자명을_입력하세요}" required>
     </div>
     <div class="form-group">
       <label th:text="#{비밀번호}">비밀번호</label>
-      <input type="password" name="guestPw" th:field="*{guestPw}"
+      <input type="password" name="guestPw" th:field="*{guestPw}" maxlength="65"
              th:placeholder="#{비밀번호를_입력하세요}" required>
     </div>
   </div>
