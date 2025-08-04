@@ -3,12 +3,6 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
-:root {
-	--ck-sample-base-spacing: 2em;
-	--ck-sample-color-white: #fff;
-	--ck-sample-color-green: #279863;
-}
-
 body, html {
 	padding: 0;
 	margin: 0;
@@ -43,7 +37,7 @@ abbr {
 .centered {
 	max-width: 960px;
 	margin: 0 auto;
-	padding: 0 var(--ck-sample-base-spacing);
+	padding: 0 2em;
 }
 
 /* --------- HEADER ---------------------------------------------------------------------------- */
@@ -116,9 +110,9 @@ header label {
 /* --------- MAIN ------------------------------------------------------------------------------- */
 
 main .message {
-	padding: 0 0 var(--ck-sample-base-spacing);
-	background: var(--ck-sample-color-green);
-	color: var(--ck-sample-color-white);
+	padding: 0 0 2em;
+	background: #279863;
+	color: #fff;
 }
 
 main .message::after {
@@ -127,13 +121,13 @@ main .message::after {
 	display: block;
 	height: 10em;
 	width: 100%;
-	background: var(--ck-sample-color-green);
+	background: #279863;
 	position: absolute;
 	left: 0;
 }
 
 main .message h1 {
-	padding-top: var(--ck-sample-base-spacing);
+	padding-top: 2em;
 	margin: 0 0 1em;
 	font-size: 2.2em;
 }
@@ -144,11 +138,11 @@ main .message p {
 }
 
 main .message p a {
-	color: var(--ck-sample-color-white);
+	color: #fff;
 }
 
 main #editor {
-	background: var(--ck-sample-color-white);
+	background: #fff;
 	box-shadow: 2px 2px 2px rgba(0,0,0,.1);
 	border: 1px solid #DFE4E6;			
 	border-bottom-color: #cdd0d2;
@@ -168,17 +162,17 @@ main .ck.ck-content {
 }
 
 main #references {
-	margin: 4em 0 var(--ck-sample-base-spacing);
+	margin: 4em 0 2em;
 	display: grid;
 	grid-template-columns: repeat( auto-fit, minmax(320px, 1fr) );
-	grid-gap: var(--ck-sample-base-spacing);
+	grid-gap: 2em;
 }
 
 main #references > section {
-	background: var(--ck-sample-color-white);
+	background: #fff;
 	border-radius: 2px;
 	border: 1px solid #DFE4E6;			
-	padding: var(--ck-sample-base-spacing);
+	padding: 2em;
 	line-height: 1.8em;
 
 	display: flex;
@@ -195,14 +189,14 @@ main #references > section p:first-of-type {
 }
 
 main #references > section p:last-child {
-	margin: calc(.25*var(--ck-sample-base-spacing)) 0 0;
+	margin: 0.5em 0 0;
 }
 
 main #references > section p:last-child a {
 	background: #38A5EE;
 	border-radius: 5px;
 	padding: .4em 1em;
-	color: var(--ck-sample-color-white);
+	color: #fff;
 	text-decoration: none;
 	font-weight: bold;
 	display: block;
@@ -240,7 +234,8 @@ main .toolbar-container .ck.ck-toolbar {
 }
 
 main .content-container {
-	padding: var(--ck-sample-base-spacing);
+	padding:2em;
+
 	background: #eee;
 	overflow-y: scroll;
 }
@@ -259,7 +254,7 @@ main .content-container #editor {
 /* --------- FOOTER ------------------------------------------------------------------------------- */
 
 footer {
-	margin: calc(2*var(--ck-sample-base-spacing)) var(--ck-sample-base-spacing);
+	margin: 4em 2em;
 	font-size: .8em;
 	text-align: center;
 	color: rgba(0,0,0,.4);
@@ -269,8 +264,8 @@ footer {
 
 @media (max-width: 900px) {
 	header .centered {
-		padding-top: var(--ck-sample-base-spacing);
-		padding-bottom: var(--ck-sample-base-spacing);
+		padding-top: 2em;
+		padding-bottom: 2em;
 		flex-flow: column nowrap;
 		align-items: stretch;
 		min-height: unset;
@@ -278,7 +273,7 @@ footer {
 
 	header h1 {
 		text-align: center;
-		margin-bottom: var(--ck-sample-base-spacing);
+		margin-bottom: 2em;
 	}
 
 	header nav ul {

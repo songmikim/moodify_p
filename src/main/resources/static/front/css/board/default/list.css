@@ -69,8 +69,8 @@ button{width:82px; margin-top:0 !important;}
 
 .write-btn {
     display: inline-block;
-    background-color: var(--mainc);
-    color: var(--fontc);
+    background-color: #FFB6B9;
+    color:  #2E2E2E;
     border: none;
     padding: 10px 16px;
     font-size: 14px;

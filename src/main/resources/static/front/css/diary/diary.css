@@ -67,14 +67,14 @@ form>button[type="submit"] {
 
 form > button#btn-save {
     right: 9.5%;
-    background-color: var(--mainc);
-    color: var(--fontc);
+    background-color: #FFB6B9;
+    color:  #2E2E2E;
 }
 
 form > button#btn-edit {
     right: calc(9.5% + 160px);
-    background-color: var(--mainc);
-    color: var(--fontc);
+    background-color: #FFB6B9;
+    color:  #2E2E2E;
 }
 
 form > button#btn-delete {

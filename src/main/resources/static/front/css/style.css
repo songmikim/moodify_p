@@ -274,22 +274,11 @@ main {
     }
 }
 
-:root {
-    --fontc: #2E2E2E;
-    --mainc: #FFB6B9;
-    --subc: #FF8C42;
-    --hlc: #FFFACD;
-    --bgc: #FFF4E6;
-    --bghc: #FFF0ED;
-    --dangerc: #9c4444;
-    --fontf: 'Pretendard', sans-serif;
-}
-
 /* 전체 바디 스타일 */
 body {
-    background-color: var(--bgc);
-    font-family: var(--fontf);
-    color: var(--fontc);
+    background-color: #FFF4E6;
+    font-family: 'Pretendard', sans-serif;
+    color:  #2E2E2E;
     margin-top: 62px;
 }
 
@@ -325,8 +314,8 @@ body {
 /* 제출 버튼 및 비밀번호 변경 링크 스타일 */
 button[type="submit"], a[href*="/password"] {
     display: inline-block;
-    background-color: var(--mainc);
-    color: var(--fontc);
+    background-color: #FFB6B9;
+    color:  #2E2E2E;
     border: none;
     padding: 10px 16px;
     font-size: 14px;
@@ -342,7 +331,7 @@ h2 {
     font-size: 20px;
     margin-top: 40px;
     margin-bottom: 12px;
-    border-bottom: 2px solid var(--mainc);
+    border-bottom: 2px solid #FFB6B9;
     padding-bottom: 6px;
 }
 

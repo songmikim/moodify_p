@@ -68,7 +68,7 @@
 /* 캘린더 클릭 S */
 .select-day:hover {
     cursor: pointer;
-    background-color: var(--mainc);
+    background-color: #FFB6B9;
 }
 
 .select-day.disabled {

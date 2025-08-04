@@ -1,27 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
-:root {
-    --fontc: #2E2E2E;
-    --mainc: #FFB6B9;
-    --subc: #FF8C42;
-    --hlc: #FFFACD;
-    --bgc: #FFF4E6;
-    --bghc: #FFF0ED;
-    --fontf: 'Pretendard', sans-serif;
-    /* 살구핑크 (#FFB6B9) → 메인 포인트
-    * 선셋 오렌지 (#FF8C42) → 서브 포인트
-    * 차콜 블랙 (#2E2E2E) → 텍스트/배경
-    * 라이트 옐로우 (#FFFACD) → 하이 라이트
-    * 밀키 베이지 (#FFF4E6) → 배경색
-    * 페일 살몬 (#FFF0ED) → 배경색 하이 라이트
-    */
-}
 
 /* 페이지 전체 배경색 */
 body {
-    background-color: var(--bgc);
-    font-family: var(--fontf);
-    color: var(--fontc);
+    background-color: #FFF4E6;
+    font-family: 'Pretendard', sans-serif;
+    color: #2E2E2E;
 }
 
 /* 회원가입 페이지 전체 레이아웃 */
@@ -130,20 +112,20 @@ span.confirmed {
     padding: 10px 14px;
     font-size: 14px;
     border: none;
-    background-color: var(--mainc);
-    color: var(--fontc);
+    background-color: #FFB6B9;
+    color: #2E2E2E;
     border-radius: 6px;
     cursor: pointer;
     transition: background 0.3s;
 }
 
 .join-page button:hover {
-    background-color: var(--subc);
+    background-color: #FF8C42;
 }
 
 /* 약관 동의 영역 */
 .join-page .terms {
-    background: var(--bghc);
+    background: #FFF0ED;
     padding: 10px;
     font-size: 13px;
     border-radius: 6px;
@@ -157,7 +139,7 @@ span.confirmed {
     padding: 20px;
     text-align: center;
     border-radius: 8px;
-    background: var(--bghc);
+    background: #FFF0ED;
     cursor: pointer;
     position:relative;
 }
