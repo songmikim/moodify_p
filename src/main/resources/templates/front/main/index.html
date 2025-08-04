@@ -3,9 +3,9 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{front/layouts/main}">
 <main layout:fragment="content">
-    <div class="buttons">
-        <a th:href="@{/diary}"></a>
-        <a th:href="@{/login}"></a>
+    <div class="buttons flex">
+        <a th:href="@{/login}">로그인</a>
+        <a th:href="@{/diary}">일기 쓰기</a>
     </div>
 </main>
 </html>
