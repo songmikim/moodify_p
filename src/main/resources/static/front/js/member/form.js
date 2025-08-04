@@ -25,6 +25,7 @@ function fileUploadCallback(items) {
     const el = dom.querySelector(".file-image");
     targetEl.append(el);
     targetEl.parentElement.classList.add("uploaded")
+    el.querySelector(".file-upload-btn").va;
     const removeEl = el.querySelector(".remove");
     const { fileManager } = commonLib;
     removeEl.addEventListener("click", function () {

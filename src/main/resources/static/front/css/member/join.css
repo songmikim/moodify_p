@@ -152,17 +152,23 @@ span.confirmed {
 }
 
 /* 프로필 이미지 업로드 박스 */
-.profile-image.file-upload-btn {
+.profile-image {
     border: 1px dashed #aaa;
     padding: 20px;
     text-align: center;
     border-radius: 8px;
     background: var(--bghc);
     cursor: pointer;
+    position:relative;
 }
-.profile-image{position:relative;}
+.profile-image.uploaded .file-upload-btn {
+    text-indent: -9999px;
+     line-height:0;
+    overflow: hidden;
+    white-space: nowrap;
+}
 .remove{
      position:absolute;
-     right:20px; bottom:-53px;
+     right:20px; bottom:15px;
 }
 #image_tpl{margin-bottom:63px;}
