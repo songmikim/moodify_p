@@ -4,7 +4,7 @@
     <dl class="ib flex">
         <dt th:text="#{작성자}"></dt>
         <dd>
-            <input type="text" name="poster" th:field="*{poster}">
+            <input type="text" name="poster" th:field="*{poster}" maxlength="60">
 
             <span class="checkbox">
                 <input type="checkbox" name="secret" th:field="*{secret}" value="true" id="secret">
@@ -23,7 +23,7 @@
     <dl th:if="*{guest}" class="ib flex">
         <dt th:text="#{비밀번호}"></dt>
         <dd>
-            <input type="password" name="guestPw" th:field="*{guestPw}">
+            <input type="password" name="guestPw" th:field="*{guestPw}" maxlength="65">
             <div class="error" th:each="err : ${#fields.errors('guestPw')}" th:text="${err}"></div>
         </dd>
     </dl>
