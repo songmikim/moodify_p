@@ -1,11 +1,15 @@
 package xyz.moodf.diary.services;
 
+import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import xyz.moodf.diary.dtos.DiaryRequest;
+import xyz.moodf.diary.entities.QDiary;
+import xyz.moodf.diary.entities.QSentiment;
 import xyz.moodf.diary.entities.Sentiment;
 import xyz.moodf.diary.repositories.SentimentRepository;
 import xyz.moodf.global.codevalue.services.CodeValueService;
@@ -24,6 +28,7 @@ public class SentimentService {
     private final SentimentRepository sentimentRepository;
     private final CodeValueService codeValueService;
     private final FileInfoService fileInfoService;
+    private final JPAQueryFactory jpaQueryFactory;
 
     public void update(DiaryRequest form) {
         
@@ -64,6 +69,16 @@ public class SentimentService {
         }
 
         return items;
+    }
+
+    public void deleteOrphanSentiments() {
+        QSentiment sentiment = QSentiment.sentiment;
+        QDiary diary = QDiary.diary;
+
+        // Diary에 없는 gid만 찾아 삭제
+        jpaQueryFactory.delete(sentiment)
+                .where(sentiment.gid.notIn(JPAExpressions.select(diary.gid).from(diary)))
+                .execute();
     }
 
     public void setDone(String gid, boolean done) {
