@@ -8,6 +8,7 @@ window.addEventListener("DOMContentLoaded", function() {
         emailVerifyEl.addEventListener("click", function() {
             const { ajaxLoad, sendEmailVerify } = commonLib;
             const email = frmJoin.email.value.trim();
+            let verifiedEmail = frmJoin.email.value.trim();
             showEmailMessage(" ");
             if (!email) {
                 showEmailMessage('이메일을 입력하세요.', true);
@@ -31,11 +32,13 @@ window.addEventListener("DOMContentLoaded", function() {
                         sendEmailVerify(email); // 이메일 인증 코드 전송
 
                         this.disabled = frmJoin.email.readonly = true;
+                        verifiedEmail = frmJoin.email.value.trim();
 
                         /* 인증코드 재전송 처리 S */
                         if (emailReVerifyEl) {
                             emailReVerifyEl.addEventListener("click", function() {
                                 sendEmailVerify(email);
+                                const email = frmJoin.email.value.trim();
                             });
                         }
 
@@ -50,6 +53,8 @@ window.addEventListener("DOMContentLoaded", function() {
                                 authNumEl.focus();
                                 return;
                              }
+
+                             frmJoin.email.value = verifiedEmail;
 
                               // 인증코드 확인 요청
                               const { sendEmailVerifyCheck } = commonLib;
@@ -130,6 +135,8 @@ function callbackEmailVerifyCheck(data) {
 
         // 1. 인증 카운트 멈추기
         if (authCount.intervalId) clearInterval(authCount.intervalId);
+
+        verifiedEmail = frmJoin.email.value.trim();
 
         // 2. 인증코드 전송 버튼 제거
         const emailVerifyEl = document.getElementById("email_verify");
