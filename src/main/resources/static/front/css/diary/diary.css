@@ -79,6 +79,6 @@ form > button#btn-edit {
 
 form > button#btn-delete {
     right: calc(9.5% + 320px);
-    background-color: var(--dangerc);
+    background-color: #9c4444;
     color: #fff;
 }
