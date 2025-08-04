@@ -1,35 +1,33 @@
 window.addEventListener('DOMContentLoaded', function() {
 
-    // 이미지 변경 예정..
+    const { ajaxLoad } = commonLib;
     const emotions = [
-        { emotion: 'happiness', imagePath: '/common/images/sentiments/happiness.png', altText: '기쁨' },
-        { emotion: 'sadness', imagePath: '/common/images/sentiments/sadness.png', altText: '슬픔' },
-        { emotion: 'anger', imagePath: '/common/images/sentiments/anger.png', altText: '분노' },
-        { emotion: 'fear', imagePath: '/common/images/sentiments/fear.png', altText: '불안' },
-        { emotion: 'hurt', imagePath: '/common/images/sentiments/hurt.png', altText: '상처' },
-        { emotion: 'surprise', imagePath: '/common/images/sentiments/surprise.png', altText: '당황' }
+        { emotion: 'happiness', code: '기쁨' },
+        { emotion: 'surprise', code: '당황' },
+        { emotion: 'anger', code: '분노' },
+        { emotion: 'fear', code: '불안' },
+        { emotion: 'hurt', code: '상처' },
+        { emotion: 'sadness', code: '슬픔' }
     ];
 
     const tabs = document.getElementById('songTabs');
     const contents = document.getElementById('tabContents');
 
+    const images = window.emotionImages || {};
     if (tabs) {
-        emotions.forEach(({ emotion, imagePath, altText }) => {
+        emotions.forEach(({ emotion, code }) => {
             const button = document.createElement('button');
             button.type = 'button';
-            button.dataset.emotion = emotion; // 영문 코드 보관
-            button.dataset.sentiment = altText; // 한글 감정명 저장
+            button.dataset.emotion = emotion;
+            button.dataset.sentiment = code;
 
             const img = document.createElement('img');
-            img.src = imagePath;
-            img.alt = altText;
-            img.title = altText;
-            button.title = altText;
+            img.src = images[code];
+            img.alt = code;
 
             button.appendChild(img);
             tabs.appendChild(button);
 
-            // 버튼 클릭 시 탭 활성화 및 곡 로드
             button.addEventListener('click', function() {
                 tabs.querySelectorAll('button').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
@@ -37,7 +35,6 @@ window.addEventListener('DOMContentLoaded', function() {
             });
         });
 
-        // 첫 번째 버튼 활성화 및 곡 로드
         const firstButton = tabs.querySelector('button');
         if (firstButton) {
             firstButton.classList.add('active');

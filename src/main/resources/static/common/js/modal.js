@@ -133,7 +133,7 @@ iframe으로 로딩된 컨텐츠 높이에 따른 모달창 사이즈 조정
 */
 function resizeModalHeight(height) {
     height = Math.ceil(height);
-    const modalHeight = height + 80;
+    const modalHeight = height + 150;
     const ypos = (innerHeight - modalHeight) / 2;
 
     const modalContent = document.querySelector(".modal-content.iframe");
