@@ -30,7 +30,7 @@
     <dl class="ib flex">
         <dt th:text="#{글제목}"></dt>
         <dd>
-            <input type="text" name="subject" th:field="*{subject}">
+            <input type="text" name="subject" th:field="*{subject}" maxlength="200">
             <div class="error" th:each="err : ${#fields.errors('subject')}" th:text="${err}"></div>
         </dd>
     </dl>

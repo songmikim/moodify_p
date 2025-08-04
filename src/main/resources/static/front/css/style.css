@@ -3,6 +3,7 @@
     box-sizing: border-box;
     outline: none;
     font-family: "Nanum Gothic", sans-serif;
+    word-break: break-all;
 }
 
 .melody {
