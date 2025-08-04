@@ -1,3 +1,16 @@
+window.addEventListener("DOMContentLoaded", function() {
+    const { fileManager } = commonLib;
+    const removeEl = document.querySelector(".profile-image .remove");
+    if (removeEl) {
+        removeEl.addEventListener("click", function() {
+            if (confirm('정말 삭제하겠습니까?')) {
+                const { seq } = this.dataset;
+                fileManager.delete(seq);
+            }
+        });
+    }
+});
+
 /* 파일 업로드 후속 처리 */
 function fileUploadCallback(items) {
     if (!items || items.length === 0) return;
@@ -10,12 +23,25 @@ function fileUploadCallback(items) {
     const domParser = new DOMParser();
     const dom = domParser.parseFromString(html, "text/html");
     const el = dom.querySelector(".file-image");
-    targetEl.innerHTML = "";
     targetEl.append(el);
     targetEl.parentElement.classList.add("uploaded")
     const removeEl = el.querySelector(".remove");
+    const { fileManager } = commonLib;
     removeEl.addEventListener("click", function () {
-        targetEl.innerHTML = "";
-        targetEl.parentElement.classList.remove("uploaded");
+            if (confirm('정말 삭제하겠습니까?')) {
+                fileManager.delete(seq);
+            }
     });
+}
+
+/**
+* 삭제 후속 처리
+*
+*/
+function fileDeleteCallback() {
+    const el = document.querySelector(".profile-image .inner");
+    if (el) {
+        el.innerHTML = "";
+        document.querySelector(".profile-image").classList.remove("uploaded");
+    }
 }

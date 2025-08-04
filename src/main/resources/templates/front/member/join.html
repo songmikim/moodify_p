@@ -7,7 +7,7 @@
         <h1 th:text="${pageTitle}"></h1>
         <input type="hidden" name="socialType" th:field="*{socialType}">
         <input type="hidden" name="socialToken" th:field="*{socialToken}">
-        <input type="hidden" name="gid" th:value="${gid}" />
+        <input type="hidden" name="gid" th:field="*{gid}" />
         <div class="error global" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
 
         <div th:if="*{social}">
@@ -55,9 +55,15 @@
                 <div class="error" th:each="err : ${#fields.errors('mobile')}" th:text="${err}"></div>
             </li>
             <li>
-                <div class="profile-image file-upload-btn" th:data-gid="${gid}" data-single="true" data-image-only="true">
-                    <div th:text="#{프로필_이미지를_등록하세요.}"></div>
-                    <div class="inner"></div>
+                <div class="profile-image" th:classappend="*{profileImage != null} ? 'uploaded'">
+                    <div class="file-upload-btn" th:data-gid="*{gid}" data-single="true" data-image-only="true" th:text="#{프로필_이미지를_등록하세요.}"></div>
+                    <div class="inner">
+                        <div th:if="*{profileImage != null}"  class="file-image" th:id="*{'file-' + profileImage.seq}"><img th:src="@{/file/thumb?width=250&height=250&crop=true(seq=*{profileImage.seq})}" class="image show-image" th:data-seq="*{profileImage.seq}">
+                            <button type="button" class="remove" th:data-seq="*{profileImage.seq}">
+                                삭제
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
             </li>

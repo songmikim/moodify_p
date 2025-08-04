@@ -9,6 +9,9 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import xyz.moodf.global.annotations.ApplyCommonController;
+import xyz.moodf.global.file.constants.FileStatus;
+import xyz.moodf.global.file.entities.FileInfo;
+import xyz.moodf.global.file.services.FileInfoService;
 import xyz.moodf.global.libs.Utils;
 import xyz.moodf.member.services.FindPwService;
 import xyz.moodf.member.services.JoinService;
@@ -33,7 +36,7 @@ public class MemberController {
     private final JoinService joinService;
     private final KakaoLoginService kakaoLoginService;
     private final NaverLoginService naverLoginService;
-
+    private final FileInfoService fileInfoService;
     private final FindPwService findPwService;
 
     @ModelAttribute("addCss")
@@ -56,9 +59,8 @@ public class MemberController {
 
         form.setSocialType(type);
         form.setSocialToken(socialToken);
+        form.setGid(UUID.randomUUID().toString());
 
-        String gid = UUID.randomUUID().toString();
-        model.addAttribute("gid", gid);
         // 이메일 인증 여부 false로 초기화
         model.addAttribute("EmailAuthVerified", false);
 
@@ -74,10 +76,14 @@ public class MemberController {
 
         if (emailVerified == null || !emailVerified) {
             errors.reject("email", "이메일 인증을 완료해야 회원가입이 가능합니다.");
-            return utils.tpl("member/join");
         }
 
         if (errors.hasErrors()) {
+
+            // 프로필 이미지 유지 처리
+            List<FileInfo> items = fileInfoService.getList(form.getGid(), null, FileStatus.ALL);
+            form.setProfileImage(items == null || items.isEmpty() ? null : items.getFirst());
+
             return utils.tpl("member/join");
         }
 
