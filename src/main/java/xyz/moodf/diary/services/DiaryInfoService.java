@@ -14,9 +14,11 @@ import xyz.moodf.diary.entities.QDiary;
 import xyz.moodf.diary.entities.QSentiment;
 import xyz.moodf.diary.exceptions.DiaryNotFoundException;
 import xyz.moodf.diary.repositories.DiaryRepository;
+import xyz.moodf.global.codevalue.services.CodeValueService;
+import xyz.moodf.global.file.entities.FileInfo;
+import xyz.moodf.global.file.services.FileInfoService;
 import xyz.moodf.member.entities.Member;
 import xyz.moodf.member.libs.MemberUtil;
-import xyz.moodf.member.repositories.MemberRepository;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -30,8 +32,9 @@ public class DiaryInfoService {
 
     private final DiaryRepository diaryRepository;
     private final JPAQueryFactory jpaQueryFactory;
-    private final MemberRepository memberRepository;
     private final MemberUtil memberUtil;
+    private final CodeValueService codeValueService;
+    private final FileInfoService fileInfoService;
 
     /**
      * 현재 로그인된 회원이 특정 날짜에 작성한 일기가 있는가?
@@ -192,6 +195,27 @@ public class DiaryInfoService {
 
     public Map<LocalDate, Map<String, Integer>> getStatistics(LocalDate sDate,  StatisticType type) {
         return getStatistics(sDate, null, type);
+    }
+
+    public String getStrongestEmotionImg(String gid) {
+        // gid로 Diary 찾기
+        QDiary diary_ = QDiary.diary;
+        Diary diary = jpaQueryFactory
+                .selectFrom(diary_)
+                .where(diary_.gid.eq(gid))
+                .fetchOne();
+        if (diary == null || !StringUtils.hasText(diary.getStrongest())) return "";
+
+        // strongest 감정 코드로 이미지 GID 찾기
+        String iconGid = codeValueService.get(diary.getStrongest(), String.class);
+        FileInfo file = fileInfoService.get(iconGid);
+
+        // 이미지 태그 생성
+        if (file != null) {
+            return String.format("<img src='%s' class='sent-icon' width='100' height='100'>", file.getFileUrl());
+        }
+
+        return "";
     }
 
     /**
