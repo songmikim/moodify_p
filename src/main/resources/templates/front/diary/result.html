@@ -5,6 +5,8 @@
 <main layout:fragment="content" class="diary-result-page">
     <h1 th:text="${pageTitle}"></h1>
 
+    <div class="emotionImg" th:utext="${emotionImg}"></div>
+
     <ul class="items">
         <li th:if="*{items == null || items.isEmpty()}" class="no-data" th:text="#{추천_콘텐츠가_없습니다.}"></li>
         <li th:unless="*{items == null or items.isEmpty()}"
@@ -16,8 +18,8 @@
             data-width="500"
             data-height="500">
             <div th:text="*{song}"></div>
-            <div th:text="*{artist}"></div>
-            <div th:text="*{text}"></div>
+            <div th:text="'아티스트: ' + *{artist}"></div>
+            <div th:text="'장르: ' + *{genre}"></div>
         </li>
     </ul>
 
