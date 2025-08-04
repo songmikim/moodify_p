@@ -12,7 +12,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
     const tabs = document.getElementById('songTabs');
     const contents = document.getElementById('tabContents');
-
+    let currentEmotion;
     const images = window.emotionImages || {};
     if (tabs) {
         emotions.forEach(({ emotion, code }) => {
@@ -43,11 +43,14 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     // 곡 로드 함수
-    function loadSongs(emotion) {
+    function loadSongs(emotion, page = 1) {
+        currentEmotion = emotion;
         const { ajaxLoad } = commonLib;
-        ajaxLoad(`/api/mypage/recommend-songs?emotion=${emotion}`, (res) => {
-            const songs = Array.isArray(res.data) ? res.data : [];
+        ajaxLoad(`/api/mypage/recommend-songs?emotion=${emotion}&page=${page}`, (res) => {
+            const data = res.data || {};
+            const songs = Array.isArray(data.items) ? data.items : [];
             renderSongs(songs, res.message);
+            renderPagination(data.pagination);
         }, (err) => console.error(err));
     }
 
@@ -78,5 +81,38 @@ window.addEventListener('DOMContentLoaded', function() {
         }
 
         contents.appendChild(ul);
+    }
+
+
+    function renderPagination(pagination) {
+        if (!pagination) return;
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'pagination-wrapper';
+
+        const div = document.createElement('div');
+        div.className = 'pagination';
+
+        const { page, pages = [], prevRangePage, nextRangePage } = pagination;
+
+        const addLink = (p, text) => {
+            if (!p) return;
+            const a = document.createElement('a');
+            a.href = '#';
+            a.textContent = text || p;
+            if (p === page) a.classList.add('on');
+            a.addEventListener('click', function(e) {
+                e.preventDefault();
+                loadSongs(currentEmotion, p);
+            });
+            div.appendChild(a);
+        };
+
+        addLink(prevRangePage, '이전');
+        pages.forEach(pg => addLink(parseInt(pg[0])));
+        addLink(nextRangePage, '다음');
+
+        wrapper.appendChild(div);
+        contents.appendChild(wrapper);
     }
 });

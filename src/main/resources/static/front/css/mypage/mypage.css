@@ -137,3 +137,28 @@ h2 + .recommendation-section {
 #tabContents li:hover {
     background: #FFF0ED;
 }
+
+/* 페이징 스타일 */
+.pagination-wrapper {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.pagination {
+    display: inline-flex;
+    gap: 4px;
+}
+
+.pagination a {
+    display: block;
+    padding: 4px 8px;
+    border: 1px solid #FFB6B9;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #2E2E2E;
+}
+
+.pagination a.on {
+    background: #FFB6B9;
+    color: #fff;
+}
