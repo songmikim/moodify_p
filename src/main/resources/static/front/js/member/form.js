@@ -10,10 +10,12 @@ function fileUploadCallback(items) {
     const domParser = new DOMParser();
     const dom = domParser.parseFromString(html, "text/html");
     const el = dom.querySelector(".file-image");
+    targetEl.innerHTML = "";
     targetEl.append(el);
     targetEl.parentElement.classList.add("uploaded")
     const removeEl = el.querySelector(".remove");
     removeEl.addEventListener("click", function () {
-
+        targetEl.innerHTML = "";
+        targetEl.parentElement.classList.remove("uploaded");
     });
 }
