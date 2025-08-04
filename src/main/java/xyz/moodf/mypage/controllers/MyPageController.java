@@ -96,7 +96,7 @@ public class MyPageController {
         if (!result) {
             commonProcess("index", model);
             model.addAttribute("member", memberUtil.getMember());
-            model.addAttribute("errorMessage", "메일 발송에 실패했습니다. 잠시 후 다시 시도해주세요.");
+            model.addAttribute("errorMessage", utils.getMessage("mail.send.fail"));
             return utils.tpl("mypage/index");
         }
         commonProcess("delete", model);

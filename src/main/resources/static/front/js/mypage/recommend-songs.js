@@ -23,6 +23,8 @@ window.addEventListener('DOMContentLoaded', function() {
             const img = document.createElement('img');
             img.src = imagePath;
             img.alt = altText;
+            img.title = altText;
+            button.title = altText;
 
             button.appendChild(img);
             tabs.appendChild(button);
