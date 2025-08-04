@@ -78,14 +78,12 @@ public class SecurityConfig {
                             "/board/**",
                             "/diary/**",
                             "/calendar/**",
-                            // 2. 그 외 API는 인증 필요
-                            "/api/**"
+                            "/api/**" // API는 인증 필요
                     ).authenticated()
-                    // 3. 관리자 API는 권한 필요
                     .requestMatchers(
                             "/admin/**",
                             "/email/**",
-                            "/api/admin/**"
+                            "/api/admin/**"// 관리자 API는 권한 필요
                     ).hasAnyAuthority("ADMIN")
                     .anyRequest().permitAll();
         });
