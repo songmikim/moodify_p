@@ -297,7 +297,6 @@ public class DiaryController {
             addCss.add("diary/diary");
         } else if (mode.equals("result")) {
             pageTitle = utils.getMessage("일기_분석_결과");
-            addScript.add("diary/calendar");
             addCss.add("diary/result");
             addCommonScript.add("modal");
         } else if (mode.equals("calendar")) {

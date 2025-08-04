@@ -15,9 +15,10 @@
                  data-title=*{song}"
             data-width="500"
             data-height="500">
-        <div th:text="*{song}"></div>
-        <div th:text="*{artist}"></div>
-        <div th:text="*{text}"></div>
+            <div th:text="*{song}"></div>
+            <div th:text="*{artist}"></div>
+            <div th:text="*{text}"></div>
+        </li>
     </ul>
 
     <a th:href="@{/diary/calendar(year=${year}, month=${month})}" class="btn">일기 캘린더 보기</a>
