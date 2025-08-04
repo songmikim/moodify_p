@@ -153,11 +153,15 @@ span.confirmed {
 }
 
 /* 프로필 이미지 업로드 박스 */
-.profile-image.file-upload-btn {
+.profile-image  {
     border: 1px dashed #aaa;
     padding: 20px;
     text-align: center;
     border-radius: 8px;
     background: var(--bghc);
     cursor: pointer;
+}
+
+.profile-image.uploaded .file-upload-btn {
+    display: none;
 }

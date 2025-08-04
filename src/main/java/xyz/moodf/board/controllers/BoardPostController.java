@@ -62,9 +62,15 @@ public class BoardPostController {
     @GetMapping("/write/{bid}")
     public String write(@PathVariable("bid") String bid, RequestPostBoard form, Model model) {
         commonProcess(bid, "write", model);
+
         form.setBid(bid);
         form.setGid(UUID.randomUUID().toString());
         model.addAttribute("requestPostBoard", form);
+        Board board = configInfoService.get(bid);
+
+        if (!permissionService.canPost(board)) {
+            return "redirect:/board/list/" + bid + "?error=unauthorized";
+        }
 
         if (memberUtil.isLogin()) {
             form.setPoster(memberUtil.getMember().getName());
@@ -102,6 +108,8 @@ public class BoardPostController {
     public String update(@PathVariable("seq") Long seq, HttpSession session, Model model) {
         BoardData boardData = infoService.get(seq);
         commonProcess(seq, "update", model);
+
+
 
         if (!permissionService.canEdit(boardData)) {
             return "redirect:/board/view/" + seq + "?error=unauthorized";
