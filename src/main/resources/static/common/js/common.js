@@ -24,7 +24,7 @@ var commonLib = {
             method = method.toUpperCase();
             if (typeof body === 'string') body = body.trim();
 
-            if (['POST', 'PUT', 'PATH'].includes(method) && body) {
+            if (['POST', 'PUT', 'PATCH'].includes(method) && body) {
                 options.body = body;
             }
 
@@ -92,6 +92,16 @@ commonLib.loadEditor = function(el, height = 350) {
     });
 };
 
+// source : 이미지 경로, 배열 또는 문자열(경로 1개)
+commonLib.insertEditorImage = function(source, editor) {
+    editor = editor ?? window.editor;
+    if (!editor || !source || (Array.isArray(source) && source.length === 0)) return;
+
+    source = Array.isArray(source) ? source : [source];
+
+    editor.execute('insertImage', { source })
+
+};
 
 /* window.alert를 SweetAlert2로 교체 */
 window.alert = function(message, callback) {
