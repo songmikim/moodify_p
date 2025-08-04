@@ -66,8 +66,7 @@ public class SecurityConfig {
                             "/error/**",
                             "/common/**",
                             "terms/**",
-                            "/api/oauth/**",// 로그인 관련 public API는 누구나 접근 가능
-                            "/api/auth/**",
+                            "/api/**",// 로그인 관련 public API는 누구나 접근 가능
                             "/file/**"
                     ).permitAll()
                     .requestMatchers(
@@ -77,8 +76,7 @@ public class SecurityConfig {
                     .requestMatchers(
                             "/board/**",
                             "/diary/**",
-                            "/calendar/**",
-                            "/api/**" // API는 인증 필요
+                            "/calendar/**"
                     ).authenticated()
                     .requestMatchers(
                             "/admin/**",
