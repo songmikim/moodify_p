@@ -1,21 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
-
-:root {
-    --fontc: #2E2E2E;
-    --mainc: #FFB6B9;
-    --subc: #FF8C42;
-    --hlc: #FFFACD;
-    --bgc: #FFF4E6;
-    --bghc: #FFF0ED;
-    --fontf: 'Pretendard', sans-serif;
-}
-
 /* 전체 바디 스타일 */
 body {
-    background-color: var(--bgc);
-    font-family: var(--fontf);
-    color: var(--fontc);
+    background-color: #FFF4E6;
+    font-family: 'Pretendard', sans-serif;
+    color: #2E2E2E;
 }
 
 /* 페이지 전체 */
@@ -32,7 +19,7 @@ body {
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,0.05);
     margin-bottom: 30px;
-    border: 1px solid var(--mainc);
+    border: 1px solid #FFB6B9;
 }
 
 /* 사용자 정보 텍스트 */
@@ -51,8 +38,8 @@ body {
 /* 제출 버튼 및 비밀번호 변경 링크 스타일 */
 button[type="submit"], a[href*="/password"] {
     display: inline-block;
-    background-color: var(--mainc);
-    color: var(--fontc);
+    background-color: #FFB6B9;
+    color: #2E2E2E;
     border: none;
     padding: 10px 16px;
     font-size: 14px;
@@ -68,7 +55,7 @@ h2 {
     font-size: 20px;
     margin-top: 40px;
     margin-bottom: 12px;
-    border-bottom: 2px solid var(--mainc);
+    border-bottom: 2px solid #FFB6B9;
     padding-bottom: 6px;
 }
 
@@ -89,7 +76,7 @@ canvas#emotionChart {
     border-radius: 10px;
     box-shadow: 0 0 6px rgba(0,0,0,0.03);
     padding: 10px;
-    border: 1px solid var(--mainc);
+    border: 1px solid #FFB6B9;
 }
 
 /* 감정별 추천곡 섹션 스타일 */
@@ -118,7 +105,7 @@ h2 + .recommendation-section {
 }
 
 #songTabs button.active {
-    border-bottom: 2px solid var(--mainc);
+    border-bottom: 2px solid #FFB6B9;
     opacity: 1;
 }
 
@@ -132,7 +119,7 @@ h2 + .recommendation-section {
     padding: 15px;
     background: #fff;
     border-radius: 10px;
-    border: 1px solid var(--mainc);
+    border: 1px solid #FFB6B9;
 }
 
 #tabContents ul {
@@ -148,5 +135,5 @@ h2 + .recommendation-section {
 }
 
 #tabContents li:hover {
-    background: var(--bghc);
+    background: #FFF0ED;
 }
