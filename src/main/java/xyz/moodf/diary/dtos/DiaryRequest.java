@@ -24,4 +24,6 @@ public class DiaryRequest {
     private Weather weather = Weather.NULL;
 
     private String gid;
+
+    private boolean done;
 }

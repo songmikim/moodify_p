@@ -1,7 +1,5 @@
 package xyz.moodf.global.menus;
 
-import lombok.Data;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,9 +10,9 @@ public class Menus {
 
     static {
         // 사이트 설정 메뉴
-        menus.put("config", List.of(
-                new Menu("basic", "기본설정", "/admin/config"),
-                new Menu("terms", "약관설정", "/admin/config/terms")
+        menus.put("basic", List.of(
+                new Menu("basic", "기본설정", "/admin/basic"),
+                new Menu("terms", "약관설정", "/admin/basic/terms")
         ));
 
         // 회원 관리 메뉴

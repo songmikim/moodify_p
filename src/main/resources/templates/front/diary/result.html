@@ -2,9 +2,24 @@
 <html xmlns:th="http://www.thymeleaf.org"
     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
     layout:decorate="~{front/layouts/main}">
-<main layout:fragment="content">
+<main layout:fragment="content" class="diary-result-page">
     <h1>음악추천 및 결과</h1>
 
-    <a th:href="@{/diary/calendar}" class="btn">일기 캘린더 보기</a>
+    <ul class="items">
+        <li th:if="*{items == null || items.isEmpty()}" class="no-data" th:text="#{추천_콘텐츠가_없습니다.}"></li>
+        <li th:unless="*{items == null or items.isEmpty()}"
+            class="item modal-open"
+            th:each="item : ${items}"
+            th:object="${item}"
+            th:attr="data-url=@{/diary/recommend/{seq}(seq=${item.seq})},
+                 data-title=*{song}"
+            data-width="500"
+            data-height="500">
+        <div th:text="*{song}"></div>
+        <div th:text="*{artist}"></div>
+        <div th:text="*{text}"></div>
+    </ul>
+
+    <a th:href="@{/diary/calendar(year=${year}, month=${month})}" class="btn">일기 캘린더 보기</a>
 </main>
 </html>

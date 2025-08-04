@@ -25,13 +25,14 @@
                     </div>
                     <div class="auth_box">
                         <th:block th:if="${session.EmailAuthVerified == null || !session.EmailAuthVerified}">
-                            <input type="text" id="auth_num" th:placeholder="#{인증코드_입력}">
+                            <input type="text"
+                                   oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="auth_num" th:placeholder="#{인증코드_입력}">
                             <span id="auth_count">03:00</span>
                             <button type="button" id="email_confirm" th:text="#{확인}" disabled></button>
                             <button type="button" id="email_re_verify" th:text="#{재전송}" disabled></button>
                         </th:block>
                         <th:block th:unless="${session.EmailAuthVerified == null || !session.EmailAuthVerified}">
-                            <span class='confirmed' th:text="#{확인된_이메일_입니다.}"></span>
+                            <span class='confirmed' th:text="#{인증에_성공하셨습니다}"></span>
                         </th:block>
                     </div>
                     <div class="error" th:each="err : ${#fields.errors('email')}" th:text="${err}"></div>

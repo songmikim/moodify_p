@@ -10,8 +10,9 @@ public class Menus {
     static {
         // 사이트 설정 메뉴
         menus.put("basic", List.of(
-                new Menu("basic", "기본설정", "/admin/config"),
-                new Menu("terms", "약관설정", "/admin/config/terms")
+                new Menu("basic", "기본설정", "/admin/basic"),
+                new Menu("terms", "약관설정", "/admin/basic/terms"),
+                new Menu("image", "이미지 관리", "/admin/basic/image")
         ));
 
         // 회원 관리 메뉴
@@ -21,18 +22,8 @@ public class Menus {
 
         // 공지 게시판 관리 메뉴
         menus.put("noticeBoard", List.of(
-                new Menu("noticeList", "게시판 목록", "/admin/board/notice"),
-                new Menu("noticeRegister", "게시판 등록", "/admin/board/notice/register"),
-                new Menu("noticePosts", "게시글 관리", "/admin/board/notice/posts")
+                new Menu("noticeList", "게시판 목록", "/admin/board")
         ));
-
-        // 건의 게시판 관리 메뉴
-        menus.put("suggestionBoard", List.of(
-                new Menu("suggestionList", "게시판 목록", "/admin/board/suggestion"),
-                new Menu("suggestionRegister", "게시판 등록", "/admin/board/suggestion/register"),
-                new Menu("suggestionPosts", "게시글 관리", "/admin/board/suggestion/posts")
-        ));
-
     }
 
     /**

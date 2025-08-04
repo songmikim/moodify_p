@@ -1,18 +1,12 @@
 package xyz.moodf.board.services;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import xyz.moodf.board.entities.BoardData;
 import xyz.moodf.board.entities.GuestAuth;
-import xyz.moodf.global.entities.BaseEntity;
-import xyz.moodf.global.exceptions.UnAuthorizedException;
 import xyz.moodf.member.entities.Member;
 import xyz.moodf.member.libs.MemberUtil;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 @Service

@@ -3,6 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{front/layouts/main}">
 <main layout:fragment="content" class="container mt-4">
-  <p th:text="#{탈퇴_완료}"></p>
+  <p th:if="${success}" th:text="#{탈퇴_완료}"></p>
+  <p th:unless="${success}" th:text="${errorMessage}"></p>
 </main>
 </html>

@@ -14,7 +14,9 @@
               th:href="@{/common/css/{css}.css?v={v}(css=${cssFile}, v=${@utils.version()})}">
         <th:block layout:fragment="addCommonCss"></th:block>
 
-        <link rel="stylesheet" type="text/css" th:href="@{/front/css/style.css?v={v}(v=${@utils.version()})}">
+        <link th:if="${param.popup == null || !param.popup}" rel="stylesheet" type="text/css" th:href="@{/front/css/style.css?v={v}(v=${@utils.version()})}">
+        <link th:unless="${param.popup == null || !param.popup}" rel="stylesheet" type="text/css" th:href="@{/common/css/popup.css?v={v}(v=${@utils.version()})}">
+
         <link rel="stylesheet" type="text/css" th:each="cssFile : ${addCss}"
               th:href="@{/front/css/{css}.css?v={v}(css=${cssFile}, v=${@utils.version()})}">
         <th:block layout:fragment="addCss"></th:block>
@@ -30,10 +32,16 @@
         <title th:if="${pageTitle != null}" th:text="${pageTitle}"></title>
     </head>
     <body>
-        <header th:replace="~{front/outlines/_header::common}"></header>
-        <aside th:replace="~{front/outlines/_menu::common}"></aside>
+        <th:block th:if="${param.popup == null || !param.popup}">
+            <header th:replace="~{front/outlines/_header::common}"></header>
+            <aside th:replace="~{front/outlines/_menu::common}"></aside>
+        </th:block>
+
         <main layout:fragment="content"></main>
-        <footer th:replace="~{front/outlines/_footer::common}"></footer>
+
+        <th:block th:if="${param.popup == null || !param.popup}">
+            <footer th:replace="~{front/outlines/_footer::common}"></footer>
+        </th:block>
         <iframe name="ifrmProcess" class="dn"></iframe>
     </body>
 </html>

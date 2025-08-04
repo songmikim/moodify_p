@@ -39,4 +39,19 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
     /* 더보기 메뉴 클릭 처리 E */
+
+    /* textarea 자동 늘리기 S */
+    const textareas = document.querySelectorAll('textarea');
+    textareas.forEach(function (textarea) {
+        // 처음 로드 시에도 높이 조절
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
+
+        // 입력 시 자동 높이 조절
+        textarea.addEventListener('input', function () {
+            this.style.height = 'auto';               // 높이 초기화
+            this.style.height = this.scrollHeight + 'px'; // 내용에 따라 높이 조절
+        });
+    });
+    /* textarea 자동 늘리기 E */
 });

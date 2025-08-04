@@ -1,0 +1,63 @@
+.terms-policy {
+    max-width: 860px;
+    margin: 80px auto 20px;
+    padding: 30px 20px;
+    border-radius: 20px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 16px;
+    line-height: 1.8;
+    color: #2e2e2e;
+    background-color: #fff;
+}
+
+.terms-policy h1 {
+    font-size: 32px;
+    text-align: center;
+}
+
+.terms-policy h2 {
+    font-size: 22px;
+    margin-top: 40px;
+    margin-bottom: 16px;
+    color: #333;
+    font-weight: 600;
+    border-left: 4px solid #ffb6b9;
+    padding-left: 12px;
+}
+
+.terms-policy h3 {
+    font-size: 18px;
+    margin-top: 20px;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #555;
+}
+
+.terms-policy p {
+    margin-bottom: 12px;
+}
+
+.terms-policy ul {
+    margin: 0 0 20px 20px;
+    padding: 0;
+}
+
+.terms-policy li {
+    margin-bottom: 10px;
+    list-style-type: disc;
+}
+
+@media screen and (max-width: 600px) {
+    .terms-policy {
+        padding: 20px 12px;
+        font-size: 15px;
+    }
+
+    .terms-policy h1 {
+        font-size: 26px;
+    }
+
+    .terms-policy h2 {
+        font-size: 20px;
+    }
+}
