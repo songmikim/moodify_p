@@ -8,6 +8,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import xyz.moodf.global.annotations.ApplyCommonController;
+import xyz.moodf.global.codevalue.services.CodeValueService;
+import xyz.moodf.global.file.entities.FileInfo;
+import xyz.moodf.global.file.services.FileInfoService;
 import xyz.moodf.global.libs.Utils;
 import xyz.moodf.member.libs.MemberUtil;
 import xyz.moodf.mypage.entities.RequestPasswordChange;
@@ -15,7 +18,9 @@ import xyz.moodf.mypage.services.MyPageService;
 import xyz.moodf.mypage.validators.PasswordChangeValidator;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/mypage")
@@ -27,6 +32,8 @@ public class MyPageController {
     private final MemberUtil memberUtil;
     private final MyPageService service;
     private final PasswordChangeValidator passwordChangeValidator;
+    private final CodeValueService codeValueService;
+    private final FileInfoService fileInfoService;
 
     /**
      * 마이페이지 메인 화면을 렌더링하는 메서드
@@ -40,7 +47,22 @@ public class MyPageController {
     public String index(Model model) {
         commonProcess("index", model);
         model.addAttribute("member", memberUtil.getMember());
+
+        Map<String, String> emotionImages = new LinkedHashMap<>();
+        List<String> codes = List.of("기쁨", "당황", "분노", "불안", "상처", "슬픔");
+        for (String code : codes) {
+            String gid = codeValueService.get(code, String.class);
+            if (StringUtils.hasText(gid)) {
+                FileInfo file = fileInfoService.get(gid);
+                if (file != null) {
+                    emotionImages.put(code, file.getFileUrl());
+                }
+            }
+        }
+        model.addAttribute("emotionImages", emotionImages);
+
         return utils.tpl("mypage/index");
+
     }
 
     /**
