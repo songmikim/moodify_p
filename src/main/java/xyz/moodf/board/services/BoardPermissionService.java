@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import xyz.moodf.board.entities.BoardData;
 import xyz.moodf.board.entities.GuestAuth;
-import xyz.moodf.global.exceptions.UnAuthorizedException;
 import xyz.moodf.member.entities.Member;
 import xyz.moodf.member.libs.MemberUtil;
 
@@ -82,13 +81,15 @@ public class BoardPermissionService {
             if (!memberUtil.isLogin() ||
                     !boardData.getMember().getEmail().equals(memberUtil.getMember().getEmail())) {
                 return false;
-            } else {return true;}
+            } else {
+                return true;
+            }
         }
 
         return false;
     }
 
-    public boolean isMember(BoardData boardData){
+    public boolean isGuest(BoardData boardData) {
         // 관리자는 멤버와 상관없음
         if (memberUtil.isAdmin()) {
             return false;
@@ -97,7 +98,9 @@ public class BoardPermissionService {
         // 회원인지 아닌지 판가름
         if (boardData.getMember() != null) {
             return false;
-            } else {return true;}
+        } else {
+            return true;
+        }
     }
 
     public boolean guestPwCheck(GuestAuth data, String guestPw) {
@@ -105,14 +108,8 @@ public class BoardPermissionService {
         if (data.getGuestPw() == null || guestPw == null) {
             return false;
         }
-
         // trim()으로 공백 제거 후 비교
         return guestPw.trim().equals(data.getGuestPw().trim());
     }
-
-
-
-
-
 
 }

@@ -40,4 +40,10 @@ public class Comment extends BaseEntity implements GuestAuth {
     private String ua;              // User-Agent
 
     private boolean deleted;
+
+    @Transient
+    private boolean canDelete;
+
+    @Transient
+    private boolean needAuth;
 }

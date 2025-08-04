@@ -1,0 +1,54 @@
+h1{margin-left:9.5%;}
+form{margin:20px 9.5%; position:relative;}
+span{display:inline-block;}
+input{
+    width: 100%;
+    padding: 10px 14px;
+}
+#content~button, .file-upload-btn, .btn{
+    width:110px; height:40px;
+    padding:10px 16px;
+    display: inline-block;
+    background-color: var(--mainc);
+    color: var(--fontc);
+    border: none;
+    font-size: 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+    text-decoration: none;
+}
+ck h2{
+    border-bottom: none;
+}
+.ib>dt, .ib>dd{
+    display:inline-block;
+}
+.ib>dt{width:10%; margin-top:13px;}
+.ib>dt::after{
+    width:30%;
+    margin:0 auto;
+    content: ':';
+    display: inline-block;
+    text-align:center;
+}
+.ib>dd{width:90%;}
+.contentBox{margin:20px 0;}
+.button-group{
+    position:absolute;
+    bottom:0; right:0;
+}
+.fileBtn, .button-group{
+    width:50%;
+    justify-content: space-around;
+}
+.button-group button{margin:0;}
+/*.fileBtn dd{
+    margin-right:calc(50% - 110px);
+}
+.fileBtn dd p {
+     position: absolute;
+     left: 120px;
+     top: 50%;
+     transform: translateY(-50%);
+ }*/

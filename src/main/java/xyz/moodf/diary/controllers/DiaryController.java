@@ -10,18 +10,23 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import xyz.moodf.diary.constants.Weather;
 import xyz.moodf.diary.dtos.DiaryRequest;
-import xyz.moodf.diary.dtos.SentimentRequest;
 import xyz.moodf.diary.entities.Diary;
 import xyz.moodf.diary.entities.DiaryId;
+import xyz.moodf.diary.entities.RecMusic;
+import xyz.moodf.diary.entities.Sentiment;
 import xyz.moodf.diary.repositories.DiaryRepository;
 import xyz.moodf.diary.repositories.SentimentRepository;
 import xyz.moodf.diary.services.DiaryInfoService;
 import xyz.moodf.diary.services.DiaryService;
+import xyz.moodf.diary.services.RecommendService;
 import xyz.moodf.diary.services.SentimentService;
+import xyz.moodf.diary.validators.DiaryValidator;
 import xyz.moodf.global.annotations.ApplyCommonController;
+import xyz.moodf.global.codevalue.services.CodeValueService;
 import xyz.moodf.global.libs.Utils;
 import xyz.moodf.member.entities.Member;
 import xyz.moodf.member.libs.MemberUtil;
+import xyz.moodf.spotify.entities.Music;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -35,11 +40,18 @@ public class DiaryController {
 
     private final Utils utils;
     private final MemberUtil memberUtil;
+
+    private final DiaryRepository diaryRepository;
+    private final SentimentRepository sentimentRepository;
+
+    private final CodeValueService codeValueService;
+
     private final DiaryService diaryService;
     private final DiaryInfoService infoService;
     private final SentimentService sentimentService;
-    private final DiaryRepository diaryRepository;
-    private final SentimentRepository sentimentRepository;
+    private final RecommendService recommendService;
+
+    private final DiaryValidator diaryValidator;
 
     @ModelAttribute("extraData")
     public Map<LocalDate, Object> getExtraData() {
@@ -60,48 +72,67 @@ public class DiaryController {
         commonProcess("diary", model);
 
         Member member = memberUtil.getMember();
-        DiaryRequest form = new DiaryRequest();
 
-        Optional<Diary> optional = diaryRepository.findById(new DiaryId(member, date));
-        boolean isSaved;
+        Diary diary = diaryRepository.findById(new DiaryId(member, date))
+                .orElse(null);
 
-        if (!optional.isPresent()) {
+        Sentiment sentiment = new Sentiment();
+        if (diary != null) {
+            sentiment = sentimentRepository.findById(diary.getGid())
+                    .orElse(null);
+        }
 
+        boolean isSaved = false;
+
+        if (diary == null) {
+
+            DiaryRequest form = new DiaryRequest();
             form.setDate(date);
             form.setWeather(Weather.NULL);
             form.setGid(UUID.randomUUID().toString());
+            form.setDone(false);
 
-            isSaved = true;
+            model.addAttribute("diaryRequest", form);
 
         } else {
 
-            Diary diary = optional.get();
             request.setDate(diary.getDate());
             request.setTitle(diary.getTitle());
             request.setWeather(diary.getWeather());
             request.setContent(diary.getContent());
             request.setGid(diary.getGid());
 
-            isSaved = false;
+            if (sentiment != null) {
+                request.setDone(true);
+            }
+            else {
+                request.setDone(false);
+            }
 
+            isSaved = true;
+            model.addAttribute("diaryRequest", request);
         }
 
         model.addAttribute("today", LocalDate.now());
         model.addAttribute("weatherValues", Weather.values());
-        model.addAttribute("diaryRequest", request);
         model.addAttribute("isSaved", isSaved);
-        model.addAttribute("weatherValues", Weather.values());
         model.addAttribute("date", request.getDate());
 
 
         return utils.tpl("diary/diary");
     }
 
-    @PostMapping
-    public String process(@Valid DiaryRequest form, Errors errors, Model model) {
+    @PostMapping("/{date}")
+    public String process(@Valid @ModelAttribute("diaryRequest") DiaryRequest form, Errors errors, Model model) {
         commonProcess("diary", model);
 
+        diaryValidator.validate(form, errors);
+
         if (errors.hasErrors()) {
+            model.addAttribute("isSaved", false);
+            model.addAttribute("today", LocalDate.now());
+            model.addAttribute("date", form.getDate());
+            model.addAttribute("weatherValues", Weather.values());
             return utils.tpl("diary/diary");
         }
 
@@ -124,11 +155,40 @@ public class DiaryController {
         return sentimentService.get(gid);
     }
 
+    @PostMapping("sentiment/updateDone/{gid}")
+    @ResponseBody
+    public ResponseEntity<?> updateDone(@PathVariable("gid") String gid,
+                                        @RequestBody Map<String, Object> payload) {
+        Boolean done = (Boolean) payload.get("done");
+
+        if (done == null) {
+            return ResponseEntity.badRequest().body(Map.of("error", "done 값이 없습니다."));
+        }
+
+        Sentiment sentiment = sentimentRepository.findById(gid)
+                .orElse(null);
+        if (sentiment != null) {
+            sentimentService.setDone(gid, done);
+            return ResponseEntity.ok(Map.of("status", "updated"));
+        } else {
+            return ResponseEntity.status(404).body(Map.of("error", "해당 gid의 감정 정보가 없습니다."));
+        }
+    }
+
     @GetMapping("/result/{date}")
     public String result(@PathVariable("date") LocalDate date, Model model) {
         commonProcess("result", model);
 
-        // 캘린더로 이동할 때 쿼리스트링 구하기
+        // 감정 분석에 따른 추천 콘텐츠 리스트
+        Diary diary = infoService.get(date);
+        String sentiment = diary.getStrongest();
+
+        // 추천 콘텐츠 리스트 저장 후 불러오기
+        RecMusic recMusic = recommendService.process(diary.getGid(), sentiment);
+        List<Music> items = recommendService.recMusicToMusicList(recMusic);
+        model.addAttribute("items", items);
+
+        // 캘린더로 이동 시 사용할 쿼리스트링 구하기
         Integer year = date.getYear();
         Integer month = date.getMonthValue();
 
@@ -150,51 +210,19 @@ public class DiaryController {
         month = Objects.requireNonNullElse(month, today.getMonthValue());
 
         List<Diary> items = infoService.getList(year, month);
-        items.forEach(item -> extraData.put(item.getDate(), item.getStrongest()));
+        items.forEach(item -> {
+            String emo = item.getStrongest();
+            String gid = codeValueService.get(emo, String.class);
+            if (StringUtils.hasText(gid)) {
+                emo = utils.printThumb(gid, 50, 50);
+            }
+            extraData.put(item.getDate(), emo);
+        });
 
         model.addAttribute("year", year);
         model.addAttribute("month", month);
 
-//        Member member = memberUtil.getMember();
-//        List<Diary> diaryList = infoService.getList(member);
-//
-//        /* 날짜마다 감정 이미지 삽입 */
-//        for (Diary diary : diaryList) {
-//            String sentimentString = "";
-//            String diarySentiment = infoService.getMostFrequentSentiment(member, diary.getDate());
-//
-//            /* 추후에 수정 필요 - 감정 결과에 따라 이미지 다르게 띄우기 */
-//            switch (diarySentiment) {
-//                case "기쁨": sentimentString = "happiness"; break;
-//                default: break;
-//            }
-//
-//            extraData.put(diary.getDate(), "<img src='/common/images/sentiments/" + sentimentString + ".png'>");
-//        }
-
         return utils.tpl("diary/calendar");
-    }
-
-    @PostMapping("/update")
-    public ResponseEntity<?> updateDiary(
-            @RequestParam("gid") String gid,
-            @RequestBody SentimentRequest request) {
-
-        // 임시...
-        request.setSentiments("기쁨");
-
-        System.out.println("sentiments: " + request.getSentiments());
-        System.out.println("content: " + request.getContent());
-
-//        sentimentService.update(gid, request);
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/result")
-    public String result(Model model) {
-        commonProcess("diary", model);
-
-        return utils.tpl("diary/result");
     }
 
     @PostMapping("/save")
@@ -209,11 +237,43 @@ public class DiaryController {
         return "redirect:/diary/result";
     }
 
+    @PostMapping("/delete/{gid}")
+    @ResponseBody
+    public ResponseEntity<?> deleteDiary(@PathVariable("gid") String gid,
+                                         @ModelAttribute("extraData") Map<LocalDate, Object> extraData,
+                                         @RequestBody Map<String, String> payload) {
+
+        String dateStr = payload.get("date");
+        LocalDate date = LocalDate.parse(dateStr);
+
+        // 캘린더에 표시되는 추가 데이터 삭제
+        if (extraData.get(date) != null) {
+            extraData.remove(date);
+        }
+
+        //System.out.println("엑스트라: " + extraData);
+
+        diaryService.delete(gid, date);
+
+        return ResponseEntity.ok(Map.of("status", "ok"));
+    }
+
     @PostMapping("/delete")
-    public ResponseEntity<?> deleteSentiment(@RequestParam String gid) {
-        System.out.println("삭제요청");
+    @ResponseBody
+    public ResponseEntity<?> deleteSentiment(@RequestBody Map<String, String> payload) {
+        String gid = payload.get("gid");
+        System.out.println("삭제요청: " + gid);
         sentimentRepository.deleteById(gid);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/recommend/{seq}")
+    public String content(@PathVariable("seq") Long seq, Model model) {
+        Music item = recommendService.get(seq);
+
+        model.addAttribute("item", item);
+
+        return utils.tpl("diary/recommend");
     }
 
     /**
@@ -238,6 +298,8 @@ public class DiaryController {
         } else if (mode.equals("result")) {
             pageTitle = utils.getMessage("일기_분석_결과");
             addScript.add("diary/calendar");
+            addCss.add("diary/result");
+            addCommonScript.add("modal");
         } else if (mode.equals("calendar")) {
             pageTitle = utils.getMessage("일기_목록");
             addScript.add("diary/calendar");

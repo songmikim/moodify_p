@@ -15,7 +15,7 @@
             <a th:href="@{/mypage}">
                 <th:block th:if="${profile != null}" th:utext="${@utils.printThumb(profile.seq, 40, 40, 'profile-image')}"></th:block>
                 <th:block th:unless="${profile != null}">
-                    <img th:src="@{/common/images/profile/no_profile.jpg}" alt="profile-image" class="profile-image">
+                    <img th:src="@{/common/images/profile/no_profile.png}" alt="profile-image" class="profile-image">
                 </th:block>
             </a>
             <a th:href="@{/logout}">

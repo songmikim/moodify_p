@@ -1,0 +1,130 @@
+main{margin-right:9.5%; margin-left:9.5%;}
+button{width:82px; margin-top:0 !important;}
+.search-box select{
+    width:120px; text-align:center;
+}
+.search-box input{
+    margin:0 10px;
+    padding:10px 16px;
+}
+.board-list {
+    margin-top: 20px;
+}
+
+.board-list .table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 15px;
+}
+
+.board-list .table th,
+.board-list .table td {
+    text-align:center;
+    padding: 12px 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.board-list .table th {
+    background-color: #f8f8f8;
+    font-weight: bold;
+}
+
+.post-title {
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.post-title:hover {
+    text-decoration: underline;
+}
+
+.secret-icon {
+    margin-left: 5px;
+    color: #888;
+}
+
+.category-tag {
+    margin-left: 5px;
+    background: #f0f0f0;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #666;
+}
+
+/* 게시글 없을 때 */
+.no-data {
+    text-align: center;
+    color: #999;
+    padding: 20px 0;
+}
+
+/* 글쓰기 버튼 */
+.board-actions {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.write-btn {
+    display: inline-block;
+    background-color: var(--mainc);
+    color: var(--fontc);
+    border: none;
+    padding: 10px 16px;
+    font-size: 14px;
+    border-radius: 6px;
+    margin-top: 12px;
+    cursor: pointer;
+    transition: background 0.3s;
+    text-decoration: none;
+}
+
+/* 페이징 */
+.pagination-wrapper {
+    text-align: center;
+    margin: 40px 0 20px;
+}
+
+.pagination {
+    display: inline-flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+.pagination a {
+    display: inline-block;
+    padding: 8px 14px;
+    border: 1px solid #ffb6b9;
+    border-radius: 6px;
+    color: #2e2e2e;
+    background-color: #fff;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.pagination a:hover {
+    background-color: #ffe3e4; /* hover 시 연한 핑크 배경 */
+    color: #2e2e2e;
+    border-color: #ff9ea2;
+}
+
+.pagination a.on {
+    background-color: #ffb6b9;
+    border-color: #ffb6b9;
+    font-weight: bold;
+}
+
+.pagination i {
+    font-size: 14px;
+    vertical-align: middle;
+    color: #ffb6b9;
+}
+
+/* 공통 텍스트 정렬 */
+.text-center {
+    text-align: center;
+}

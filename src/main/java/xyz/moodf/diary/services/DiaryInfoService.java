@@ -199,7 +199,7 @@ public class DiaryInfoService {
      *
      * @param item
      */
-    private void addInfo(Diary item) {
+    public void addInfo(Diary item) {
         String sentiments = item.getSentiments();
         if (StringUtils.hasText(sentiments)) {
             Map<String, Integer> statistics = new HashMap<>();

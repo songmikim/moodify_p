@@ -11,6 +11,8 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.servlet.LocaleResolver;
 import xyz.moodf.global.configs.FileProperties;
+import xyz.moodf.global.file.entities.FileInfo;
+import xyz.moodf.global.file.services.FileInfoService;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -26,6 +28,7 @@ public class Utils {
     private final HttpServletRequest request;
     private final MessageSource messageSource;
     private final LocaleResolver localeResolver;
+    private final FileInfoService fileInfoService;
 
     public int version() {
         return 1;
@@ -167,6 +170,12 @@ public class Utils {
      */
     public String printThumb(Long seq) {
         return printThumb(seq, 100, 100);
+    }
+
+    public String printThumb(String gid, int width, int height) {
+        FileInfo item = fileInfoService.get(gid);
+        if (item == null) return "";
+        return printThumb(item.getSeq(), width, height);
     }
 
     public String printNoImage(){

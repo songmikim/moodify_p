@@ -38,7 +38,6 @@ body {
     width: 100%;
     max-width: 450px;
     min-width: 300px;
-    height: 850px;
     background: white;
     padding: 30px 20px;
     border-radius: 10px;
@@ -161,3 +160,9 @@ span.confirmed {
     background: var(--bghc);
     cursor: pointer;
 }
+.profile-image{position:relative;}
+.remove{
+     position:absolute;
+     right:20px; bottom:-53px;
+}
+#image_tpl{margin-bottom:63px;}

@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{front/layouts/main}">
+<main layout:fragment="content">
+    <h1 th:text="${pageTitle}"></h1>
+    <div th:if="${item == null}" class="no-data" th:text="#{콘텐츠가_없습니다!}"></div>
+    <div th:if="${item != null}" class="recommended-content">
+        <iframe width="450" height="auto" th:src="${'https://www.youtube.com/embed/' + item.youtubeId + '?autoplay=1'}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </div>
+</main>
+</html>
