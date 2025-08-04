@@ -139,8 +139,7 @@ function callbackEmailVerifyCheck(data) {
         frmJoin.email.readOnly = true;
 
         // 4. 인증 성공시 인증코드 입력 영역 제거, 5. 인증 코드 입력 영역에 "확인된 이메일 입니다."라고 출력 처리
-        const authBoxEl = document.querySelector(".auth_box");
-        authBoxEl.innerHTML = "<span class='confirmed'>인증에 성공하였습니다.</span>";
+        showEmailMessage("인증에 성공하였습니다.");
 
     } else { // 인증 실패
         showEmailMessage("인증확인에 실패하였습니다.", true);

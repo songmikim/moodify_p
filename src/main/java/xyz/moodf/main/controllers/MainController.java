@@ -28,7 +28,7 @@ public class MainController {
         if (isLogin) {
             return "redirect:/diary"; // 로그인 되어 있으면 일기 페이지로 리다이렉트
         } else {
-            return utils.tpl("/login");
+            return "redirect:/login";
         }
     }
 

@@ -183,7 +183,7 @@ public class MemberController {
      * @param model
      * @return
      */
-        @GetMapping("/find_pw")
+    @GetMapping("/find_pw")
     public String findPw(@ModelAttribute RequestFindPw form, Model model) {
         commonProcess("find_pw", model);
 
