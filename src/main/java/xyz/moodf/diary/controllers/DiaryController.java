@@ -258,12 +258,11 @@ public class DiaryController {
         return ResponseEntity.ok(Map.of("status", "ok"));
     }
 
-    @PostMapping("/delete")
+    @PostMapping("/delete/sentiments")
     @ResponseBody
-    public ResponseEntity<?> deleteSentiment(@RequestBody Map<String, String> payload) {
-        String gid = payload.get("gid");
-        System.out.println("삭제요청: " + gid);
-        sentimentRepository.deleteById(gid);
+    public ResponseEntity<?> deleteSentiments() {
+        System.out.println("고아객체 삭제 중...");
+        sentimentService.deleteOrphanSentiments();
         return ResponseEntity.ok().build();
     }
 
@@ -294,6 +293,7 @@ public class DiaryController {
             pageTitle = utils.getMessage("일기_작성하기");
             addScript.add("diary/sentiment");
             addScript.add("diary/diary");
+            addScript.add("diary/diary-api");  // diary.js에서 필요한 함수 정의
             addCss.add("diary/diary");
         } else if (mode.equals("result")) {
             pageTitle = utils.getMessage("일기_분석_결과");

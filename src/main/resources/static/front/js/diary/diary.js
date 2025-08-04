@@ -36,10 +36,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
                 // 생성된 sentiment 데이터 삭제가 필요한 경우
                 if (!window.isSaved) {
-                    const payload = JSON.stringify({ gid: window.gid });
-                    navigator.sendBeacon(`/diary/delete`, new Blob([payload], {
-                        type: "application/json"
-                    }));
+                    window.deleteOrphanSentiments();
 
                     // 이탈은 허용
                     window.isSaved = true;
@@ -47,20 +44,8 @@ window.addEventListener("DOMContentLoaded", function () {
                 }
                 // 이미 존재하는 일기면, done=true로 바꿔줌
                 else {
-                    commonLib.ajaxLoad(
-                        `/diary/sentiment/updateDone/${window.gid}`,
-                        () => {
-                            console.log("서버에 done 전송 완료");
-                            window.location.href = `/diary/${selectedDate}`;
-                        },
-                        (err) => {
-                            console.error("done 상태 업데이트 실패:", err);
-                            //alert("서버로 done 상태를 전송하지 못했습니다.");
-                        },
-                        'POST',
-                        JSON.stringify({ done: true }),
-                        { 'Content-Type': 'application/json' }
-                    );
+                    window.updateDoneStatus(true, window.gid);
+                    window.location.href = `/diary/${selectedDate}`;
                 }
             } else {
                 this.value = originalDate;
@@ -84,26 +69,11 @@ window.addEventListener("DOMContentLoaded", function () {
 
         // 저장 중이라면 삭제하지 않음
         if (!window.isSaved && window.gid && window.date) {
-            const payload = JSON.stringify({ gid: window.gid });
-            navigator.sendBeacon(`/diary/delete`, new Blob([payload], {
-                type: "application/json"
-            }));
+            window.deleteOrphanSentiments();
         }
         // 이미 존재하는 일기면, done=true로 바꿔줌
         if (window.isSaved && window.gid) {
-            commonLib.ajaxLoad(
-                `/diary/sentiment/updateDone/${window.gid}`,
-                () => {
-                    console.log("서버에 done 전송 완료");
-                },
-                (err) => {
-                    console.error("done 상태 업데이트 실패:", err);
-                    alert("서버로 done 상태를 전송하지 못했습니다.");
-                },
-                'POST',
-                JSON.stringify({ done: true }),
-                { 'Content-Type': 'application/json' }
-            );
+            window.updateDoneStatus(true, window.gid);
         }
     });
 
@@ -124,26 +94,12 @@ window.addEventListener("DOMContentLoaded", function () {
             });
 
             // done을 false로 설정
-            console.log("done1", done);
             if (done) {
                 done.value = 'false';
             }
-            console.log("done2", done);
 
             if (window.gid) {
-                commonLib.ajaxLoad(
-                    `/diary/sentiment/updateDone/${window.gid}`,
-                    () => {
-                        console.log("서버에 done 전송 완료");
-                    },
-                    (err) => {
-                        console.error("done 상태 업데이트 실패:", err);
-                        alert("서버로 done 상태를 전송하지 못했습니다.");
-                    },
-                    'POST',
-                    JSON.stringify({ done: false }),
-                    { 'Content-Type': 'application/json' }
-                );
+                window.updateDoneStatus(false, window.gid);
             }
 
             // 버튼 UI 처리
