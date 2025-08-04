@@ -123,6 +123,7 @@ window.addEventListener("DOMContentLoaded", function() {
 
         fileManager.upload(files, gid, location, imageOnly, single);
 
+        fileEl.value = '';
     });
     /* 파일 선택시 처리 E */
 });

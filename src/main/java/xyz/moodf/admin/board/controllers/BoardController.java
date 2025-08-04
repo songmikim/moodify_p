@@ -93,6 +93,7 @@ public class BoardController extends CommonController {
     public String update(@PathVariable("bid") String bid, Model model) {
         commonProcess("update", model);
         RequestBoard item = configInfoService.getForm(bid);
+        System.out.println(item);
 
         model.addAttribute("requestBoard", item);
 
