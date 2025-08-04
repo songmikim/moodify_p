@@ -9,7 +9,9 @@
     <div class="board-view">
         <!-- 게시글 헤더 -->
         <div class="post-header">
-            <h2 th:text="${boardData.subject}">게시글 제목</h2>
+            <div class="board-title-block">
+                <h2 th:text="${boardData.subject}">게시글 제목</h2>
+            </div>
             <div class="post-info">
                 <span>작성자: <strong th:text="${boardData.poster}">작성자명</strong></span>
                 <span>작성일: <span th:text="${#temporals.format(boardData.createdAt, 'yyyy-MM-dd HH:mm')}">2024-01-01 12:00</span></span>
