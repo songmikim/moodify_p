@@ -27,7 +27,7 @@ Mood + Modify = 일기를 통해 감정을 변화시키는 웹 서비스
 
 ---
 
-## 3. 기능별 페이지 링크
+## 3. 기능별 설명 링크 및 사이트 캡쳐
 
 - 🔐 [로그인/회원가입 기능](https://wave-bearberry-431.notion.site/2448accfef5380a0bbb7dda0d7c59641)
 - 📘 [일기 CRUD 기능](https://wave-bearberry-431.notion.site/CRUD-2448accfef5380efb54dd22f23c12358)
@@ -36,6 +36,91 @@ Mood + Modify = 일기를 통해 감정을 변화시키는 웹 서비스
 - 📎 [파일 공통 기능](https://wave-bearberry-431.notion.site/2448accfef53801f962dd05a041624db)
 - 💬 [게시판 기능](https://wave-bearberry-431.notion.site/2448accfef5380a0afc9c8195754fa6f)
 - 🎨 [UX/UI 디자인](https://wave-bearberry-431.notion.site/UX-UI-2448accfef538032b002d937fb14f9c0)
+
+**[최상준]** - 회원가입/로그인
+<p align="center">
+  <img src="./images/csj/join_k_1.png" width="300" alt="join_k_1"/>
+  <img src="./images/csj/join_k_2.png" width="300" alt="join_k_2"/>
+</p>
+
+<p align="center">
+  <img src="./images/csj/join_k_3.png" width="300" alt="join_k_3"/>
+  <img src="./images/csj/login.png" width="300" alt="login"/>
+</p>
+
+<p align="center">
+  <img src="./images/csj/findPw_1.png" width="300" alt="findPw_1"/>
+  <img src="./images/csj/findPw_2.png" width="300" alt="findPw_2"/>
+</p>
+
+<p align="center">
+  <img src="./images/csj/mail_join.png" width="300" alt="mail_join"/>
+  <img src="./images/csj/mail_pw.png" width="300" alt="mail_pw"/>
+</p>
+
+**[오다은]** - 일기 페이지 + 음악 추천 기능
+<p align="center">
+  <img src="./images/ode/diary_1.png" width="300" alt="diary_1"/>
+  <img src="./images/ode/diary_2.png" width="300" alt="diary_2"/>
+</p>
+
+<p align="center">
+    <img src="./images/ode/result_1.png" width="300" alt="result_1"/>
+    <img src="./images/ode/result_2.png" width="300" alt="result_2"/>
+</p>
+
+<p align="center">
+  <img src="./images/ode/diary_3.png" width="300" alt="join_k_3"/>
+  <img src="./images/ode/diary_update.png" width="300" alt="login"/>
+</p>
+
+<p align="center">
+  <img src="./images/ode/diary_delete.png" width="300" alt="findPw_1"/>
+  <img src="./images/ode/calendar.png" width="300" alt="findPw_2"/>
+</p>
+
+**[김송미]** - 마이페이지
+<p align="center">
+  <img src="./images/ksm/mypage_1.png" width="300" alt="diary_1"/>
+  <img src="./images/ksm/mypage_2.png" width="300" alt="diary_2"/>
+</p>
+
+<p align="center">
+    <img src="./images/ksm/mem_delete.png" width="300" alt="result_1"/>
+    <img src="./images/ksm/mem_delete_2.png" width="300" alt="result_2"/>
+</p>
+
+<p align="center">
+  <img src="./images/ksm/mail_delete.png" width="300" alt="join_k_3"/>
+  <img src="./images/ksm/deleted_at.png" width="300" alt="login"/>
+</p>
+
+**[김용준]** - 파일 공통 기능(프로필 썸네일 등), 사이드 메뉴, 전반적인 CSS
+<p align="center">
+  <img src="./images/kyj/profile.png" width="300" alt="diary_1"/>
+  <img src="./images/kyj/side.png" width="300" alt="diary_2"/>
+</p>
+
+**[안슬기]** - 게시판 기능
+
+<p align="center">
+  <img src="./images/asg/board_create.png" width="300" alt="diary_1"/>
+  <img src="./images/asg/board_create_2.png" width="300" alt="diary_2"/>
+</p>
+
+<p align="center">
+  <img src="./images/asg/board_list.png" width="300" alt="diary_1"/>
+</p>
+
+<p align="center">
+  <img src="./images/asg/board_1.png" width="300" alt="diary_1"/>
+  <img src="./images/asg/board_2.png" width="300" alt="diary_2"/>
+</p>
+
+<p align="center">
+  <img src="./images/asg/board_3.png" width="300" alt="diary_1"/>
+  <img src="./images/asg/board_4.png" width="300" alt="diary_2"/>
+</p>
 
 ---
 
