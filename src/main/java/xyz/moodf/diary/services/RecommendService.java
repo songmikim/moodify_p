@@ -98,7 +98,7 @@ public class RecommendService {
 
         QMusic music = QMusic.music;
         List<Music> items = queryFactory.selectFrom(music)
-                .where(music.emotion.in(sentiments))
+                .where(music.emotion.in(sentiments), music.youtubeUrl.isNotEmpty())
                 .orderBy(Expressions.numberTemplate(Double.class, "function('rand')").asc())
                 .limit(limit)
                 .fetch();
@@ -164,7 +164,6 @@ public class RecommendService {
      * @param item
      */
     private void addInfo(Music item) {
-        item.setYoutubeUrl("https://www.youtube.com/watch?v=iEfIcJHEb70&pp=ygUK7Jyk7ZWYIDQ4Ng%3D%3D");
 
         String ytbUrl = item.getYoutubeUrl();
 
