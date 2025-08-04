@@ -59,12 +59,35 @@ public class SecurityConfig {
          * anyRequest().authenticated() : 회원 전용 페이지가 기본, 일부 페이지 -> 비회원 사이트
          */
         http.authorizeHttpRequests(c -> {
-            c.requestMatchers("/login", "/join", "/board/**", "/diary/**", "/error/**", "/calendar/**").permitAll()
-                    .requestMatchers("/front/**", "/mobile/**", "/member/**", "/common/**").permitAll()
-                    .requestMatchers("/file/**").permitAll()
-                    .requestMatchers("/api/**").permitAll()
-                    .requestMatchers("/admin/**").permitAll()
-                    .anyRequest().authenticated();
+            c.requestMatchers(
+                            "/front/**",
+                            "/mobile/**",
+                            "/member/**",
+                            "/error/**",
+                            "/common/**",
+                            "terms/**",
+                            "/api/oauth/**",// 로그인 관련 public API는 누구나 접근 가능
+                            "/api/auth/**",
+                            "/file/**"
+                    ).permitAll()
+                    .requestMatchers(
+                    "/login",
+                            "/join"
+                    ).anonymous()
+                    .requestMatchers(
+                            "/board/**",
+                            "/diary/**",
+                            "/calendar/**",
+                            // 2. 그 외 API는 인증 필요
+                            "/api/**"
+                    ).authenticated()
+                    // 3. 관리자 API는 권한 필요
+                    .requestMatchers(
+                            "/admin/**",
+                            "/email/**",
+                            "/api/admin/**"
+                    ).hasAnyAuthority("ADMIN")
+                    .anyRequest().permitAll();
         });
 
 
