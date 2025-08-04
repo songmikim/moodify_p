@@ -290,19 +290,22 @@ public class DiaryController {
         List<String> addCommonCss = new ArrayList<>();
 
         if (mode.equals("diary")) {
-            pageTitle = utils.getMessage("일기_작성하기");
+            pageTitle = utils.getMessage("일기_쓰기");
             addScript.add("diary/sentiment");
             addScript.add("diary/diary");
             addScript.add("diary/diary-api");  // diary.js에서 필요한 함수 정의
             addCss.add("diary/diary");
         } else if (mode.equals("result")) {
-            pageTitle = utils.getMessage("일기_분석_결과");
+            pageTitle = utils.getMessage("음악_추천");
             addCss.add("diary/result");
             addCommonScript.add("modal");
         } else if (mode.equals("calendar")) {
             pageTitle = utils.getMessage("일기_목록");
             addScript.add("diary/calendar");
+            addCss.add("diary/calendar");
         }
+
+        addCss.add("diary/style");
 
         model.addAttribute("addCommonScript", addCommonScript);
         model.addAttribute("addScript", addScript);

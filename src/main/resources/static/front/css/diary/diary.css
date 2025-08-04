@@ -1,18 +1,20 @@
-h1{text-align:center;}
-.date-wea{
+.date-wea {
     flex-direction:row-reverse;
     margin:0 9.5% 10px 0;
 }
-.date-wea>div{
+
+.date-wea>div {
     margin-left:10px;
 }
-.date-wea>div>select,.date-wea>div>input{
+
+.date-wea>div>select,.date-wea>div>input {
     height:25px;
     line-height:25px;
     border-radius:3px;
     width:100px;
     text-align:center
 }
+
 input#title,textarea{
     width:90%;
     margin: 0 5%;
@@ -81,4 +83,16 @@ form > button#btn-delete {
     right: calc(9.5% + 320px);
     background-color: #9c4444;
     color: #fff;
+}
+
+.current-sentiment {
+    padding-bottom: 31px;
+}
+
+.current-sentiment img {
+    width: 100px;
+    height: 100px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }

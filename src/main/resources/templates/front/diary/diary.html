@@ -5,8 +5,6 @@
 <main layout:fragment="content" th:attr="data-saved=${isSaved}">
     <h1 th:text="${pageTitle}"></h1>
 
-    <div class="current-sentiment"></div>
-
     <form name="frmSave" th:action="@{'/diary/' + ${diaryRequest.date}}" method="post" th:object="${diaryRequest}" autocomplete="off">
         <div class="error global" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
 
@@ -57,5 +55,10 @@
         <button type="button" id="btn-edit" class="btn btn-primary" th:text="#{수정하기}" th:if="${isSaved}"></button>
         <button type="submit" id="btn-save" class="btn btn-primary" th:text="#{저장하기}" th:disabled="${isSaved}"></button>
     </form>
+
+    <div class="current-sentiment">
+<!--        <img src="/common/images/loading.gif" class="loading-icon">-->
+    </div>
+
 </main>
 </html>

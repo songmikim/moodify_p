@@ -1,3 +1,14 @@
+nav {
+    display: flex;
+    align-items: center;
+    height: 30px;
+    width: fit-content;
+    margin: 0 auto;
+    font-size: 1.3rem;
+    font-weight: bold;
+    gap: 10px;
+}
+
 .day-of-week,
 .day-of-month {
     display: flex;

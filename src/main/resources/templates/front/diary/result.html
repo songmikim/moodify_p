@@ -3,7 +3,7 @@
     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
     layout:decorate="~{front/layouts/main}">
 <main layout:fragment="content" class="diary-result-page">
-    <h1>음악추천 및 결과</h1>
+    <h1 th:text="${pageTitle}"></h1>
 
     <ul class="items">
         <li th:if="*{items == null || items.isEmpty()}" class="no-data" th:text="#{추천_콘텐츠가_없습니다.}"></li>
