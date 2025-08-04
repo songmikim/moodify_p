@@ -7,7 +7,7 @@
         <tr>
             <th width="150">게시판 아이디</th>
             <td th:if="${subCode == 'update'}">
-                <input type="hidden" name="bid" th:field="*{bid}">
+                <input type="hidden" name="bid" th:field="*{bid}" maxlength="45">
                 <th:block th:text="*{bid}"></th:block>
             </td>
             <td th:unless="${subCode == 'update'}">
@@ -18,7 +18,7 @@
          <tr>
              <th>게시판 이름</th>
              <td>
-                 <input type="text" name="name" th:field="*{name}">
+                 <input type="text" name="name" th:field="*{name}" maxlength="100">
                  <div class="error" th:each="err : ${#fields.errors('name')}" th:text="${err}"></div>
              </td>
          </tr>

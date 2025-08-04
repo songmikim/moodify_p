@@ -94,7 +94,7 @@ public class BoardPostController {
 
         // 에러가 있으면 저장하지 말고 바로 폼으로 돌아가기
         if (errors.hasErrors()) {
-            return utils.tpl("board/" + mode); // utils.tpl() 사용
+            return utils.tpl("board/" + (mode.equals("update") ? "update" : "write")); // utils.tpl() 사용
         }
 
         // 에러가 없을 때만 저장
