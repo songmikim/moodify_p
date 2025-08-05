@@ -1,4 +1,4 @@
-FROM ksm0200/ubuntu:1.0.0
+FROM openjdk:21-jdk
 ARG JAR_PATH=build/libs/moodify-0.0.1-SNAPSHOT.jar
 ARG PORT=5000
 COPY ${JAR_PATH} app.jar
