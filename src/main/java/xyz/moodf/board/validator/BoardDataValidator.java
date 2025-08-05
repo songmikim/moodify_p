@@ -4,15 +4,12 @@ package xyz.moodf.board.validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
-import xyz.moodf.admin.board.entities.Board;
 import xyz.moodf.admin.board.repositories.BoardRepository;
-import xyz.moodf.admin.board.exceptions.BoardNotFoundException;
 import xyz.moodf.board.controllers.RequestPostBoard;
 import xyz.moodf.global.validators.PasswordValidator;
-import xyz.moodf.member.constants.Authority;
 import xyz.moodf.member.libs.MemberUtil;
 
 
@@ -39,31 +36,25 @@ public class BoardDataValidator implements Validator, PasswordValidator {
 
         // 글 수정이면 seq 필수
         if (mode.equals("update") && (form.getSeq() == null || form.getSeq() < 1L)) {
-            errors.rejectValue("seq", "NotNull");
+//            errors.rejectValue("seq", "NotNull.board.seq");
         }
 
         // 제목 필수
-        if (!StringUtils.hasText(form.getSubject())) {
-            errors.rejectValue("subject", "NotBlank");
-        }
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "subject", "NotBlank.board.subject");
 
         // 내용 필수
-        if (!StringUtils.hasText(form.getContent())) {
-            errors.rejectValue("content", "NotBlank");
-        }
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "content", "NotBlank.board.content");
 
         // 비회원인 경우 작성자명 필수
         if (form.isGuest()) {
-            if (!StringUtils.hasText(form.getPoster())) {
-            errors.rejectValue("poster", "NotBlank");
-            }
+            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "poster", "NotBlank.board.poster");
 
             String guestPw=form.getGuestPw();
-        // 비회원인 경우 비밀번호 필수
-            if (!StringUtils.hasText(guestPw)) {
-                errors.rejectValue("guestPw", "NotBlank");
-            } else if (!checkAlpha(guestPw, true) || !checkNumber(guestPw) || guestPw.length() < 4){ // 비밀번호 복잡성도 체크
-                errors.rejectValue("Complexity", "guestPw");
+            // 비회원인 경우 비밀번호 필수
+            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "guestPw", "NotBlank.board.guestPw");
+
+            if (!checkAlpha(guestPw, true) || !checkNumber(guestPw) || guestPw.length() < 4){ // 비밀번호 복잡성도 체크
+                errors.rejectValue("Complexity", "Format.board.guestPw");
             }
         }
     }
