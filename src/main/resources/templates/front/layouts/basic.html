@@ -8,6 +8,7 @@
     <meta name="csrf_header" th:content="${_csrf.headerName}">
 
     <link rel="icon" th:href="@{/common/images/favicon.ico}" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/xeicon/2/xeicon.min.css">
     <link rel="stylesheet" type="text/css" th:href="@{/common/css/style.css?v={v}(v=${@utils.version()})}">
     <link rel="stylesheet" type="text/css" th:each="cssFile : ${addCommonCss}"
           th:href="@{/common/css/{css}.css?v={v}(css=${cssFile}, v=${@utils.version()})}">

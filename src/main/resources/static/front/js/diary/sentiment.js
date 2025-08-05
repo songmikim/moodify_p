@@ -1,3 +1,11 @@
+function createLoadingIcon() {
+    const icon = document.createElement("img");
+    icon.src = "/common/images/loading.gif";
+    icon.className = "loading-icon";
+    icon.alt = "로딩 중...";
+    return icon;
+}
+
 window.addEventListener("DOMContentLoaded", function () {
     const { ajaxLoad } = commonLib;
     const contentInput = document.getElementById('content');
@@ -14,7 +22,21 @@ window.addEventListener("DOMContentLoaded", function () {
     const gid = frmSave.gid.value;
     const el = document.querySelector(".current-sentiment");
     let prevText = "";  // 일단 임시로 텍스트. 추후에 이미지로 바꾸자.
+
+
     setInterval(() => {
+        const done = document.querySelector('input[name="done"]');
+
+        if (!done || done.value === "true") return;
+
+        const loading = document.querySelector(".loading-icon");
+        const sentImg = document.querySelector(".sent-icon");
+
+        if (!sentImg && !loading) {
+            const loadingIcon = createLoadingIcon();
+            el.appendChild(loadingIcon);
+        }
+
         ajaxLoad(`/diary/sentiment/${gid}`, (items) => {
             let text = "";
             let timeoutId = null;
@@ -22,12 +44,23 @@ window.addEventListener("DOMContentLoaded", function () {
                 const item = items.pop();
                 text = item.startsWith("<img") ? item : item.split(" ")[0];  // 감정 단어 중 대분류 6개만 사용
 
-                console.log("text");
+                console.log("text:", text);
                 if (text && text !== prevText) {
+                    if (loading) loading.remove();  // 로딩은 지우기
+
                     el.classList.add("show");
+
                     el.innerHTML = text;
                     timeoutId = setTimeout(() => {
                         el.classList.remove("show");
+
+                        if (el.querySelector(".sent-icon")) el.querySelector(".sent-icon").remove();
+
+                        if (!el.querySelector(".loading-icon")) {
+                            const loadingIcon = createLoadingIcon();
+                            el.appendChild(loadingIcon);
+                        }
+
                         clearTimeout(timeoutId);
                     }, 3500);
 
@@ -36,4 +69,5 @@ window.addEventListener("DOMContentLoaded", function () {
             }
         });
     }, 3500);
+
 });

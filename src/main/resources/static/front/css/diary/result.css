@@ -69,3 +69,12 @@ a.btn {
 a.btn:hover {
     background-color: #ff9ea2;
 }
+
+.emotionImg {
+    width: 100px;
+    height: 100px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+}

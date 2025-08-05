@@ -3,7 +3,9 @@
     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
     layout:decorate="~{front/layouts/main}">
 <main layout:fragment="content" class="diary-result-page">
-    <h1>음악추천 및 결과</h1>
+    <h1 th:text="${pageTitle}"></h1>
+
+    <div class="emotionImg" th:utext="${emotionImg}"></div>
 
     <ul class="items">
         <li th:if="*{items == null || items.isEmpty()}" class="no-data" th:text="#{추천_콘텐츠가_없습니다.}"></li>
@@ -15,9 +17,10 @@
                  data-title=*{song}"
             data-width="500"
             data-height="500">
-        <div th:text="*{song}"></div>
-        <div th:text="*{artist}"></div>
-        <div th:text="*{text}"></div>
+            <div th:text="*{song}"></div>
+            <div th:text="'아티스트: ' + *{artist}"></div>
+            <div th:text="'장르: ' + *{genre}"></div>
+        </li>
     </ul>
 
     <a th:href="@{/diary/calendar(year=${year}, month=${month})}" class="btn">일기 캘린더 보기</a>

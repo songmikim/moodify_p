@@ -181,16 +181,20 @@ public class DiaryController {
 
         // 감정 분석에 따른 추천 콘텐츠 리스트
         Diary diary = infoService.get(date);
-        String sentiment = diary.getStrongest();
+        String sentimentStr = diary.getStrongest();
 
         // 추천 콘텐츠 리스트 저장 후 불러오기
-        RecMusic recMusic = recommendService.process(diary.getGid(), sentiment);
+        RecMusic recMusic = recommendService.process(diary.getGid(), sentimentStr);
         List<Music> items = recommendService.recMusicToMusicList(recMusic);
         model.addAttribute("items", items);
 
         // 캘린더로 이동 시 사용할 쿼리스트링 구하기
         Integer year = date.getYear();
         Integer month = date.getMonthValue();
+
+        // 이미지 정보 전달
+        String imgTag = infoService.getStrongestEmotionImg(diary.getGid());
+        model.addAttribute("emotionImg", imgTag);
 
         model.addAttribute("year", year);
         model.addAttribute("month", month);
@@ -290,20 +294,22 @@ public class DiaryController {
         List<String> addCommonCss = new ArrayList<>();
 
         if (mode.equals("diary")) {
-            pageTitle = utils.getMessage("일기_작성하기");
+            pageTitle = utils.getMessage("일기_쓰기");
             addScript.add("diary/sentiment");
             addScript.add("diary/diary");
             addScript.add("diary/diary-api");  // diary.js에서 필요한 함수 정의
             addCss.add("diary/diary");
         } else if (mode.equals("result")) {
-            pageTitle = utils.getMessage("일기_분석_결과");
-            addScript.add("diary/calendar");
+            pageTitle = utils.getMessage("감정_결과_및_음악_추천");
             addCss.add("diary/result");
             addCommonScript.add("modal");
         } else if (mode.equals("calendar")) {
             pageTitle = utils.getMessage("일기_목록");
             addScript.add("diary/calendar");
+            addCss.add("diary/calendar");
         }
+
+        addCss.add("diary/style");
 
         model.addAttribute("addCommonScript", addCommonScript);
         model.addAttribute("addScript", addScript);

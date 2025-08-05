@@ -71,11 +71,12 @@ commonLib.modal = {
         modalContent.style.width = `${_width}px`;
         modalContent.style.height = `${_height}px`;
 
-        const xpos = Math.round((innerWidth - _width) / 2);
+//        const xpos = Math.round((innerWidth - _width) / 2);
         const ypos = Math.round((innerHeight - _height) / 2);
 
         modalContent.style.top = `${ypos}px`;
-        modalContent.style.left = `${xpos}px`;
+        modalContent.style.left = `50vw`;
+        modalContent.style.transform = `translateX(-50%)`;
 
         // 팝업 상단 제목
         if (_title) {
@@ -132,7 +133,7 @@ iframe으로 로딩된 컨텐츠 높이에 따른 모달창 사이즈 조정
 */
 function resizeModalHeight(height) {
     height = Math.ceil(height);
-    const modalHeight = height + 150;
+    const modalHeight = height + 80;
     const ypos = (innerHeight - modalHeight) / 2;
 
     const modalContent = document.querySelector(".modal-content.iframe");
