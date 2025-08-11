@@ -64,7 +64,7 @@ public class SentimentService {
             String iconGid = codeValueService.get(code, String.class);
             FileInfo fileItem = fileInfoService.get(iconGid);
             if (fileItem != null) {
-                items.set(i, String.format("<img src='%s' class=\"sent-icon\" width=100 height=100>", fileItem.getFileUrl()));
+                items.set(i, String.format("<img src='%s' class='sent-icon' width=100 height=100>", fileItem.getFileUrl()));
             }
         }
 
