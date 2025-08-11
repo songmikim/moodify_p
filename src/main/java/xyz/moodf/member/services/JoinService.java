@@ -8,7 +8,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import xyz.moodf.global.file.services.FileUploadService;
-import xyz.moodf.member.constants.Authority;
 import xyz.moodf.member.controllers.RequestJoin;
 import xyz.moodf.member.entities.Member;
 import xyz.moodf.member.repositories.MemberRepository;
@@ -16,7 +15,6 @@ import xyz.moodf.member.social.constants.SocialType;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.regex.Pattern;
 
 @Lazy
 @Service
@@ -45,11 +43,6 @@ public class JoinService {
         }
 
         Member member = modelMapper.map(form, Member.class);
-
-        String pattern = "^a.*";
-        if (Pattern.matches(pattern, member.getName())) {
-            member.setAuthority(Authority.ADMIN);
-        }
 
         member.setPassword(hash);
         member.setMobile(mobile);
